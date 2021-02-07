@@ -6,10 +6,12 @@ import thunk from 'redux-thunk';
 
 import generalReducer from './generalDucks';
 import erroresReducer from './erroresDucks';
+import personaDetReducer from './personaDetalleDucks'
 
 const rootReducer = combineReducers({
     error: erroresReducer,
-    general: generalReducer
+    general: generalReducer,
+    personaDetalle: personaDetReducer
 
 })
 

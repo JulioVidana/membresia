@@ -15,13 +15,13 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const NuevaIglesia = () => {
+const NuevaPersona = () => {
     const classes = useStyles();
 
     return (
         <Page
             className={classes.root}
-            title="Agregar Iglesia"
+            title="Agregar Persona"
         >
             <Container maxWidth="lg">
                 <Registro />
@@ -30,4 +30,4 @@ const NuevaIglesia = () => {
     );
 };
 
-export default NuevaIglesia;
+export default NuevaPersona;

@@ -14,6 +14,8 @@ import UsuariosView from './views/usuarios/UsuariosView'
 import IglesiasView from './views/iglesias/IglesiasView'
 import AgregarIglesia from './views/iglesias/IglesiasView/NuevaIglesias'
 import PersonasView from './views/personas/PersonasView'
+import AgregarPersona from './views/personas/PersonasView/NuevaPersona'
+import PersonaDetalle from './views/personaDetalle'
 
 
 const routes = [
@@ -31,7 +33,8 @@ const routes = [
       { path: 'iglesias', element: <IglesiasView /> },
       { path: 'addiglesia', element: <AgregarIglesia /> },
       { path: 'personas', element: <PersonasView /> },
-      { path: 'home', element: <InicioView /> },
+      { path: 'addpersona', element: <AgregarPersona /> },
+      { path: 'personadetalle', element: <PersonaDetalle /> },
       { path: '/', element: <Navigate to="/app/home" /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]

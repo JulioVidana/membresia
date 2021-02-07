@@ -16,6 +16,8 @@ import {
     Divider,
     Grid
 } from '@material-ui/core';
+import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
+import DateFnsUtils from '@date-io/moment'
 import BackspaceIcon from '@material-ui/icons/Backspace';
 //import { agregaUsuarioAccion, actualizaUsuarioAccion } from 'src/redux/usuariosDucks';
 import { clearErrors } from 'src/redux/erroresDucks';
@@ -59,25 +61,63 @@ NumberFormatCustom.propTypes = {
 
 const initialFValues = {
     _id: 0,
-    pastor: '',
     nombre: '',
-    cobertura: '',
+    aPaterno: '',
+    aMaterno: '',
+    email: '',
+    phone: '',
+    calle: '',
+    colonia: '',
     ciudad: '',
-    pais: '',
-    telefono: '',
+    zip: '',
     msg: null
 }
+
+const generos = [
+    {
+        value: 1,
+        label: 'Feminino'
+    },
+    {
+        value: 2,
+        label: 'Masculino'
+    }
+];
+
+const civil = [
+    {
+        value: 1,
+        label: 'Soltero'
+    },
+    {
+        value: 2,
+        label: 'Casado'
+    },
+    {
+        value: 3,
+        label: 'Viudo'
+    },
+    {
+        value: 4,
+        label: 'Unión Libre'
+    },
+    {
+        value: 5,
+        label: 'Divorciado'
+    },
+]
 
 const RegistroView = (props) => {
     //const classes = useStyles();
     //const dispatch = useDispatch()
     const [values, setValues] = useState(initialFValues);
+    const [selectedDate, handleDateChange] = useState(new Date());
     const [editar, setEditar] = useState(false)
     //const [msg, setMsg] = useState(null);
     const { setOpenPopup, setNotify, recordForEdit, error, usuarios } = props;
 
     //console.log('popupConsole', recordForEdit)
-
+    //console.log('Fecha', Date())
     useEffect(() => {
         // Check for register error
         /*  if (usuarios.regis) {
@@ -132,8 +172,8 @@ const RegistroView = (props) => {
                 <form onSubmit={handleSubmit}>
                     <Card>
                         <CardHeader
-                            subheader="Datos Iglesia"
-                            title="Iglesia"
+                            title="Agregar Persona"
+                            subheader="Datos Básicos"
                         />
                         <Divider />
                         <CardContent>
@@ -143,14 +183,14 @@ const RegistroView = (props) => {
                             >
                                 <Grid
                                     item
-                                    md={6}
+                                    md={4}
                                     xs={12}
                                 >
                                     <TextField
                                         error={Boolean(touched.nombre && errors.nombre)}
                                         fullWidth
                                         helperText={touched.nombre && errors.nombre}
-                                        label="Nombre Iglesia"
+                                        label="Nombre"
                                         margin="normal"
                                         name="nombre"
                                         onBlur={handleBlur}
@@ -161,19 +201,37 @@ const RegistroView = (props) => {
                                 </Grid>
                                 <Grid
                                     item
-                                    md={6}
+                                    md={4}
                                     xs={12}
                                 >
                                     <TextField
-                                        error={Boolean(touched.cobertura && errors.cobertura)}
+                                        error={Boolean(touched.aPaterno && errors.aPaterno)}
                                         fullWidth
-                                        helperText={touched.cobertura && errors.cobertura}
-                                        label="Cobertura"
+                                        helperText={touched.aPaterno && errors.aPaterno}
+                                        label="Apellido Paterno"
                                         margin="normal"
-                                        name="cobertura"
+                                        name="aPaterno"
                                         onBlur={handleBlur}
                                         onChange={handleChange}
-                                        value={values.cobertura}
+                                        value={values.aPaterno}
+                                        variant="outlined"
+                                    />
+                                </Grid>
+                                <Grid
+                                    item
+                                    md={4}
+                                    xs={12}
+                                >
+                                    <TextField
+                                        error={Boolean(touched.aMaterno && errors.aMaterno)}
+                                        fullWidth
+                                        helperText={touched.aMaterno && errors.aMaterno}
+                                        label="Apellido Materno"
+                                        margin="normal"
+                                        name="aMaterno"
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        value={values.aMaterno}
                                         variant="outlined"
                                     />
                                 </Grid>
@@ -183,15 +241,15 @@ const RegistroView = (props) => {
                                     xs={12}
                                 >
                                     <TextField
-                                        error={Boolean(touched.pastor && errors.pastor)}
+                                        error={Boolean(touched.email && errors.email)}
                                         fullWidth
-                                        helperText={touched.pastor && errors.pastor}
-                                        label="Pastor"
+                                        helperText={touched.email && errors.email}
+                                        label="Correo Electónico"
                                         margin="normal"
-                                        name="pastor"
+                                        name="email"
                                         onBlur={handleBlur}
                                         onChange={handleChange}
-                                        value={values.pastor}
+                                        value={values.email}
                                         variant="outlined"
                                     />
                                 </Grid>
@@ -201,15 +259,15 @@ const RegistroView = (props) => {
                                     xs={12}
                                 >
                                     <TextField
-                                        error={Boolean(touched.telefono && errors.telefono)}
+                                        error={Boolean(touched.phone && errors.phone)}
                                         fullWidth
-                                        helperText={touched.telefono && errors.telefono}
+                                        helperText={touched.phone && errors.phone}
                                         label="Teléfono"
                                         margin="normal"
-                                        name="telefono"
+                                        name="phone"
                                         onBlur={handleBlur}
                                         onChange={handleChange}
-                                        value={values.telefono}
+                                        value={values.phone}
                                         variant="outlined"
                                         InputProps={{
                                             inputComponent: NumberFormatCustom,
@@ -218,7 +276,43 @@ const RegistroView = (props) => {
                                 </Grid>
                                 <Grid
                                     item
-                                    md={6}
+                                    md={4}
+                                    xs={12}
+                                >
+                                    <TextField
+                                        error={Boolean(touched.calle && errors.calle)}
+                                        fullWidth
+                                        helperText={touched.calle && errors.calle}
+                                        label="Calle"
+                                        margin="normal"
+                                        name="calle"
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        value={values.calle}
+                                        variant="outlined"
+                                    />
+                                </Grid>
+                                <Grid
+                                    item
+                                    md={3}
+                                    xs={12}
+                                >
+                                    <TextField
+                                        error={Boolean(touched.colonia && errors.colonia)}
+                                        fullWidth
+                                        helperText={touched.colonia && errors.colonia}
+                                        label="Colonia"
+                                        margin="normal"
+                                        name="colonia"
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        value={values.colonia}
+                                        variant="outlined"
+                                    />
+                                </Grid>
+                                <Grid
+                                    item
+                                    md={3}
                                     xs={12}
                                 >
                                     <TextField
@@ -236,23 +330,98 @@ const RegistroView = (props) => {
                                 </Grid>
                                 <Grid
                                     item
-                                    md={6}
+                                    md={2}
                                     xs={12}
                                 >
                                     <TextField
-                                        error={Boolean(touched.pais && errors.pais)}
+                                        error={Boolean(touched.zip && errors.zip)}
                                         fullWidth
-                                        helperText={touched.pais && errors.pais}
-                                        label="Pais"
+                                        helperText={touched.zip && errors.zip}
+                                        label="CP"
                                         margin="normal"
-                                        name="pais"
+                                        name="zip"
                                         onBlur={handleBlur}
                                         onChange={handleChange}
-                                        value={values.pais}
+                                        value={values.zip}
                                         variant="outlined"
                                     />
                                 </Grid>
+                                <Grid
+                                    item
+                                    md={4}
+                                    xs={12}
+                                >
+                                    <TextField
+                                        fullWidth
+                                        label="Género"
+                                        margin="normal"
+                                        name="genero"
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        select
+                                        SelectProps={{ native: true }}
+                                        value={values.genero}
+                                        variant="outlined"
+                                    >
+                                        {generos.map((option) => (
+                                            <option
+                                                key={option.value}
+                                                value={option.value}
+                                            >
+                                                {option.label}
+                                            </option>
+                                        ))}
+                                    </TextField>
+                                </Grid>
+                                <Grid
+                                    item
+                                    md={4}
+                                    xs={12}
+                                >
+                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                        <KeyboardDatePicker
+                                            fullWidth
+                                            margin="normal"
+                                            autoOk
+                                            variant="inline"
+                                            inputVariant="outlined"
+                                            label="Fecha de Nacimiento"
+                                            format="MM/DD/YYYY"
+                                            value={selectedDate}
+                                            InputAdornmentProps={{ position: "start" }}
+                                            onChange={date => handleDateChange(date)}
+                                        />
+                                    </MuiPickersUtilsProvider>
 
+
+                                </Grid>
+                                <Grid
+                                    item
+                                    md={4}
+                                    xs={12}
+                                >
+                                    <TextField
+                                        fullWidth
+                                        label="Estado civil"
+                                        margin="normal"
+                                        name="civil"
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        select
+                                        SelectProps={{ native: true }}
+                                        value={values.civil}
+                                        variant="outlined"
+                                    >
+                                        {civil.map((option) => (
+                                            <option
+                                                key={option.value}
+                                                value={option.value}
+                                            >
+                                                {option.label}
+                                            </option>
+                                        ))}
+                                    </TextField>
+                                </Grid>
 
                             </Grid>
                         </CardContent>
@@ -299,7 +468,7 @@ const RegistroView = (props) => {
                                         size="large"
                                         variant="contained"
                                         component={NavLink}
-                                        to='/app/iglesias'
+                                        to='/app/personas'
                                     >
                                         {<BackspaceIcon />}
                                     </Button>

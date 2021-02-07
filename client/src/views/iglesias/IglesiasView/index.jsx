@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import {
     makeStyles,
@@ -67,7 +67,7 @@ const IglesiasView = () => {
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } });
     const [openPopup, setOpenPopup] = useState(false);
     const [notify, setNotify] = useState({ isOpen: false, message: '', type: '' });
-    const [recordForEdit, setRecordForEdit] = useState(null)
+    const [recordForEdit] = useState(null)
     const usuariosList = data;
 
     const {
