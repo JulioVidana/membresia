@@ -7,12 +7,15 @@ import thunk from 'redux-thunk';
 import generalReducer from './generalDucks';
 import erroresReducer from './erroresDucks';
 import personaDetReducer from './personaDetalleDucks'
+import iglesiasReducer from './iglesiasDucks';
+import notifyReducer from './notifyDucks';
 
 const rootReducer = combineReducers({
     error: erroresReducer,
     general: generalReducer,
-    personaDetalle: personaDetReducer
-
+    personaDetalle: personaDetReducer,
+    iglesias: iglesiasReducer,
+    notificacion: notifyReducer
 })
 
 //extensión de google chrome para visualizar la tienda en navegador

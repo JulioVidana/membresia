@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux'
-import { NavLink } from 'react-router-dom';
+import { useDispatch } from 'react-redux'
+import { agregarIglesia, actualizaIglesia } from 'src/redux/iglesiasDucks';
+import { addNotificacion } from 'src/redux/notifyDucks'
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import NumberFormat from 'react-number-format';
 import PropTypes from 'prop-types';
-
 import {
     Box,
     Button,
@@ -17,9 +18,6 @@ import {
     Grid
 } from '@material-ui/core';
 import BackspaceIcon from '@material-ui/icons/Backspace';
-//import { agregaUsuarioAccion, actualizaUsuarioAccion } from 'src/redux/usuariosDucks';
-import { clearErrors } from 'src/redux/erroresDucks';
-
 
 /* const useStyles = makeStyles((theme) => ({
     root: {
@@ -64,39 +62,39 @@ const initialFValues = {
     cobertura: '',
     ciudad: '',
     pais: '',
-    telefono: '',
+    contacto: '',
     msg: null
 }
 
 const RegistroView = (props) => {
     //const classes = useStyles();
-    //const dispatch = useDispatch()
+    const dispatch = useDispatch()
     const [values, setValues] = useState(initialFValues);
     const [editar, setEditar] = useState(false)
+    //const { state } = useLocation();
+    const location = useLocation();
+    const navigate = useNavigate();
+    // const { recordForEdit } = state
     //const [msg, setMsg] = useState(null);
-    const { setOpenPopup, setNotify, recordForEdit, error, usuarios } = props;
 
-    //console.log('popupConsole', recordForEdit)
+    //console.log('datos', location)
+
 
     useEffect(() => {
         // Check for register error
         /*  if (usuarios.regis) {
              console.log('puedes registrar e ignora el error', usuarios.regis)
          } else { console.log('hubo un error no se cierra modal', usuarios.regis) } */
-        if (error.id === 'REGISTRO_ERROR') {
 
-            //setNotify({ isOpen: true, message: error.msg.msg, type: 'error' })
-            console.log(error.msg.msg)
-        } else {
-            //console.log('pruebilla')
+        if (location.state != null) {
+            if (location.state.recordForEdit != null)
+                setEditar(true);
+            setValues({
+                ...location.state.recordForEdit
+            })
         }
 
-        if (recordForEdit != null)
-            setEditar(true);
-        setValues({
-            ...recordForEdit
-        })
-    }, [error, recordForEdit, usuarios])
+    }, [location.state])
 
     return (
 
@@ -109,15 +107,22 @@ const RegistroView = (props) => {
                     pastor: Yup.string().max(255).min(6, 'Mínimo 6 caracteres').required('Falta Pastor'),
                     ciudad: Yup.string().max(255).min(6, 'Mínimo 6 caracteres').required('Falta Ciudad'),
                     cobertura: Yup.string().max(255).min(3, 'Mínimo 3 caracteres'),
-                    telefono: Yup.string().max(255).min(10, 'Mínimo 10 caracteres')
+                    contacto: Yup.string().max(255).min(10, 'Mínimo 10 caracteres')
                 })
             }
             onSubmit={(values) => {
-                //values.preventDefault();
-                //editar ? dispatch(actualizaUsuarioAccion(values)) : dispatch(agregaUsuarioAccion(values))
-                setOpenPopup(false);
-                setNotify({ isOpen: true, message: 'Se agregó usuario', type: 'success' })
-                //dispatch(obtenerUsuariosAccion())
+                editar
+                    ?
+                    dispatch(actualizaIglesia(values))
+                        .then(() => {
+                            dispatch(addNotificacion('Se actualizó correctamente', true, 'success'))
+                            navigate('/app/iglesias')
+                        })
+                    : dispatch(agregarIglesia(values))
+                        .then(() => {
+                            dispatch(addNotificacion('Se agregó correctamente', true, 'success'))
+                            navigate('/app/iglesias')
+                        })
             }}
         >
             {({
@@ -201,15 +206,15 @@ const RegistroView = (props) => {
                                     xs={12}
                                 >
                                     <TextField
-                                        error={Boolean(touched.telefono && errors.telefono)}
+                                        error={Boolean(touched.contacto && errors.contacto)}
                                         fullWidth
-                                        helperText={touched.telefono && errors.telefono}
+                                        helperText={touched.contacto && errors.contacto}
                                         label="Teléfono"
                                         margin="normal"
-                                        name="telefono"
+                                        name="contacto"
                                         onBlur={handleBlur}
                                         onChange={handleChange}
-                                        value={values.telefono}
+                                        value={values.contacto}
                                         variant="outlined"
                                         InputProps={{
                                             inputComponent: NumberFormatCustom,
@@ -314,9 +319,5 @@ const RegistroView = (props) => {
     );
 };
 
-const mapStateToProps = state => ({
-    error: state.error,
-    usuarios: state.usuarios
-})
 
-export default connect(mapStateToProps, { clearErrors })(RegistroView);
+export default RegistroView;

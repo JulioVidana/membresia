@@ -16,7 +16,19 @@ const theme = createMuiTheme({
       contrastText: '#fff',
     },
     secondary: {
-      main: colors.grey[600]
+      light: colors.grey[400],
+      main: colors.grey[600],
+      dark: colors.grey[800]
+    },
+    error: {
+      light: colors.red[300],
+      main: colors.red[500],
+      dark: colors.red[700]
+    },
+    warning: {
+      light: colors.orange[300],
+      main: colors.orange[500],
+      dark: colors.orange[700]
     },
     text: {
       primary: colors.blueGrey[900],

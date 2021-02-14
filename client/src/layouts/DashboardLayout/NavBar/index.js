@@ -11,7 +11,8 @@ import {
   Hidden,
   List,
   Typography,
-  makeStyles
+  makeStyles,
+  ListSubheader
 } from '@material-ui/core';
 import {
   BarChart as BarChartIcon,
@@ -30,19 +31,86 @@ import NavItem from './NavItem';
 
 const items = [
   {
-    href: '/app/home',
-    icon: DiscIcon,
-    title: 'Home'
+    _id: 1,
+    grupo: 'Administración',
+    items: [
+      {
+        href: '/app/usuarios',
+        icon: UserPlusIcon,
+        title: 'Usuarios'
+      },
+      {
+        href: '/app/iglesias',
+        icon: HomeIcon,
+        title: 'Iglesias',
+      }
+    ]
   },
   {
-    href: '/app/iglesias',
-    icon: HomeIcon,
-    title: 'Iglesias'
+    _id: 2,
+    grupo: 'Personas',
+    items: [
+      {
+        href: '/app/personas',
+        icon: UsersIcon,
+        title: 'Lista de Personas'
+      },
+      {
+        href: '/app/addpersona',
+        icon: UserPlusIcon,
+        title: 'Agregar Persona'
+      }
+    ]
   },
+  {
+    _id: 3,
+    grupo: 'Plantilla',
+    items: [
+      {
+        href: '/app/dashboard',
+        icon: BarChartIcon,
+        title: 'Dashboard'
+      },
+      {
+        href: '/app/customers',
+        icon: ListIcon,
+        title: 'Customers'
+      },
+      {
+        href: '/app/products',
+        icon: ShoppingBagIcon,
+        title: 'Products'
+      },
+      {
+        href: '/app/account',
+        icon: UserIcon,
+        title: 'Account'
+      },
+      {
+        href: '/app/settings',
+        icon: SettingsIcon,
+        title: 'Settings'
+      },
+      {
+        href: '/login',
+        icon: LockIcon,
+        title: 'Login'
+      }
+    ]
+  }
+
+];
+
+const items2 = [
   {
     href: '/app/usuarios',
     icon: UserPlusIcon,
     title: 'Usuarios'
+  },
+  {
+    href: '/app/iglesias',
+    icon: HomeIcon,
+    title: 'Iglesias',
   },
   {
     href: '/app/personas',
@@ -81,7 +149,7 @@ const items = [
   }
 ];
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   mobileDrawer: {
     width: 256
   },
@@ -113,7 +181,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
       onMobileClose();
     }
     setMenu(items);
-    dispatch(cargaMenuAccion(items));
+    dispatch(cargaMenuAccion(items2));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname, dispatch]);
 
@@ -152,15 +220,40 @@ const NavBar = ({ onMobileClose, openMobile }) => {
       <Divider />
       <Box p={2}>
         <List>
-          {menu.map((item) => (
-            <NavItem
-              href={item.href}
-              key={item.title}
-              title={item.title}
-              icon={item.icon}
-            />
-          ))}
+          <NavItem
+            href='/app/home'
+            title='Home'
+            icon={DiscIcon}
+          />
         </List>
+
+        {menu.map((item) => (
+          <List
+            key={item._id}
+            subheader={
+              <ListSubheader
+                disableGutters
+                disableSticky
+              >
+                {item.grupo}
+              </ListSubheader>
+            }
+          >
+            {
+              item.items.map((orale) => (
+                <NavItem
+                  href={orale.href}
+                  key={orale.title}
+                  title={orale.title}
+                  icon={orale.icon}
+                />
+
+              ))
+            }
+
+          </List>
+        ))}
+
       </Box>
 
     </Box>
