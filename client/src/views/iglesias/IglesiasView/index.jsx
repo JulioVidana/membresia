@@ -9,18 +9,17 @@ import {
     TableRow,
     InputAdornment,
     SvgIcon,
-    Fab,
     Box,
     Container,
     Card,
-    CardContent
+    Grid
 } from '@material-ui/core';
 import Page from 'src/components/Page';
 import Titulo from 'src/components/Toolbar';
 import Tabla from 'src/components/Tabla';
 import Controls from 'src/components/controls/Controls';
 import { Search as SearchIcon } from 'react-feather';
-import AddIcon from '@material-ui/icons/Add';
+//import AddIcon from '@material-ui/icons/Add';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import CloseIcon from '@material-ui/icons/Close';
 import PerfectScrollbar from 'react-perfect-scrollbar';
@@ -113,35 +112,50 @@ const IglesiasView = () => {
             className={classes.root}
             title="Usuarios"
         >
-            <Titulo title="Catálogos de Iglesias" />
+            <Titulo
+                title="Catálogos de Iglesias"
+                btnText="NUEVA IGLESIA"
+                to="/app/addiglesia"
+            />
             <Container maxWidth={false}>
                 <Box mt={3}>
                     <Card>
-                        <CardContent>
-                            <Box maxWidth={500}>
-                                <Controls.Input
-                                    fullWidth
-                                    placeholder="Buscar Iglesia"
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <SvgIcon
-                                                    fontSize="small"
-                                                    color="action"
-                                                >
-                                                    <SearchIcon />
-                                                </SvgIcon>
-                                            </InputAdornment>
-                                        )
-                                    }}
-                                    onChange={handleSearch}
-                                />
-                            </Box>
-                        </CardContent>
-                    </Card>
-                </Box>
-                <Box mt={3}>
-                    <Card>
+                        <Box p={2}>
+                            <Grid
+                                container
+                                spacing={2}
+                                justify="space-between"
+                                alignItems="center"
+                            >
+                                <Grid
+                                    item
+                                    md={6}
+                                    xs={12}
+                                >
+                                    <Controls.Input
+                                        fullWidth
+                                        placeholder="Buscar Iglesia"
+                                        InputProps={{
+                                            startAdornment: (
+                                                <InputAdornment position="start">
+                                                    <SvgIcon
+                                                        fontSize="small"
+                                                        color="action"
+                                                    >
+                                                        <SearchIcon />
+                                                    </SvgIcon>
+                                                </InputAdornment>
+                                            )
+                                        }}
+                                        onChange={handleSearch}
+                                    />
+                                </Grid>
+                                <Grid>
+
+                                </Grid>
+
+                            </Grid>
+                        </Box>
                         <PerfectScrollbar>
                             <Box >
                                 <TblContainer>
@@ -190,13 +204,13 @@ const IglesiasView = () => {
 
                     </Card>
                 </Box>
-                <Fab color="primary"
+                {/*  <Fab color="primary"
                     aria-label="add"
                     className={classes.fab}
                     onClick={() => { navigate('/app/addiglesia', { state: { recordForEdit: null } }) }}
                 >
                     <AddIcon />
-                </Fab>
+                </Fab> */}
             </Container>
 
             <ConfirmDialog

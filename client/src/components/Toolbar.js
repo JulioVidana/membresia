@@ -9,7 +9,8 @@ import Controls from './controls/Controls'
 const useStyles = makeStyles((theme) => ({
     root: {
         marginLeft: theme.spacing(3),
-        marginRight: theme.spacing(3)
+        paddingRight: 27
+        //marginRight: theme.spacing(4)
     },
     Titulo: {
         marginBottom: theme.spacing(0),

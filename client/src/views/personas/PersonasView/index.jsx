@@ -98,11 +98,16 @@ const PeronasView = () => {
             className={classes.root}
             title="Lista de Personas"
         >
-            <Titulo title="Lista de Personas" />
+            <Titulo
+                title="Lista de Persona"
+                btnText="NUEVA PERSONA"
+                icono='add'
+                to='/app/addpersona'
+            />
             <Container maxWidth={false}>
                 <Box mt={3}>
                     <Card>
-                        <CardContent>
+                        <Box p={2}>
                             <Grid
                                 container
                                 spacing={2}
@@ -116,7 +121,7 @@ const PeronasView = () => {
                                 >
                                     <Controls.Input
                                         fullWidth
-                                        placeholder="Buscar persona"
+                                        placeholder="Buscar Persona"
                                         InputProps={{
                                             startAdornment: (
                                                 <InputAdornment position="start">
@@ -132,30 +137,12 @@ const PeronasView = () => {
                                         onChange={handleSearch}
                                     />
                                 </Grid>
-                                <Grid
-                                    item
-                                    md={2}
-                                    xs={12}
-                                >
-                                    <Controls.Button
-                                        fullWidth
-                                        text="Agregar"
-                                        variant="contained"
-                                        startIcon={<AddIcon />}
-                                        component={NavLink}
-                                        to='/app/addpersona'
-                                    />
+                                <Grid>
+
                                 </Grid>
 
                             </Grid>
-
-
-                        </CardContent>
-                    </Card>
-                </Box>
-
-                <Box mt={3}>
-                    <Card>
+                        </Box>
                         <PerfectScrollbar>
                             <Box >
                                 <TblContainer>

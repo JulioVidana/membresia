@@ -1,6 +1,7 @@
 //  CONSTANTES
 const dataInicial = {
-    menu: []
+    menu: [],
+    iglesia: { _id: "6024878b19e804be07b07462", nombre: "1a de Chandler" }
 }
 
 //  TYPES

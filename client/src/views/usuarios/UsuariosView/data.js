@@ -1,6 +1,6 @@
 import { v4 as uuid } from 'uuid';
 
-export default [
+export const usuarios = [
     {
         _id: uuid(),
         nombre: "Julio Vidana",
@@ -26,3 +26,22 @@ export default [
         password: uuid()
     }
 ]
+
+export const roles = [
+    {
+        _id: 1,
+        rol: 'SuperAdmin'
+    },
+    {
+        _id: 2,
+        rol: 'Admin'
+    },
+    {
+        _id: 3,
+        rol: 'Editor'
+    },
+    {
+        _id: 4,
+        rol: 'Consulta'
+    }
+];

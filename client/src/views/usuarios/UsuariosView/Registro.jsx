@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch, connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { addNotificacion } from 'src/redux/notifyDucks'
+import { obtenerIglesias } from 'src/redux/iglesiasDucks';
+import { agregaUsuario, actualizaUsuario } from 'src/redux/usuariosDucks'
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import {
@@ -10,11 +13,13 @@ import {
     FormHelperText,
     TextField,
     Typography,
-    makeStyles
+    makeStyles,
+    Switch
 } from '@material-ui/core';
 import Page from 'src/components/Page';
 //import { agregaUsuarioAccion, actualizaUsuarioAccion } from 'src/redux/usuariosDucks';
-import { clearErrors } from 'src/redux/erroresDucks';
+import { roles } from './data';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -26,20 +31,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const roles = [
-    {
-        value: 1,
-        label: 'Administrador'
-    },
-    {
-        value: 2,
-        label: 'Agente'
-    },
-    {
-        value: 3,
-        label: 'Editor'
-    }
-];
+
 
 const initialFValues = {
     _id: 0,
@@ -51,36 +43,42 @@ const initialFValues = {
     rol: 2
 }
 
+
+
 const RegistroView = (props) => {
     const classes = useStyles();
     const dispatch = useDispatch()
     const [values, setValues] = useState(initialFValues);
     const [editar, setEditar] = useState(false)
-    //const [msg, setMsg] = useState(null);
-    const { setOpenPopup, setNotify, recordForEdit, error, usuarios } = props;
+    const iglesias = useSelector(store => store.iglesias.datos);
+    const { setOpenPopup, recordForEdit } = props;
+    const [passSwitch, setPassSwitch] = useState(false);
 
     //console.log('popupConsole', recordForEdit)
 
-    useEffect(() => {
-        // Check for register error
-        /*  if (usuarios.regis) {
-             console.log('puedes registrar e ignora el error', usuarios.regis)
-         } else { console.log('hubo un error no se cierra modal', usuarios.regis) } */
-        if (error.id === 'REGISTRO_ERROR') {
 
-            //setNotify({ isOpen: true, message: error.msg.msg, type: 'error' })
-            console.log(error.msg.msg)
+    useEffect(() => {
+        const fetchData = () => {
+            dispatch(obtenerIglesias())
+        }
+        fetchData()
+
+        if (recordForEdit != null) {
+            setEditar(true);
+            setValues({
+                ...recordForEdit, password: ''
+            })
         } else {
-            //console.log('pruebilla')
+            setPassSwitch(true)
         }
 
-        if (recordForEdit != null)
-            setEditar(true);
-        setValues({
-            ...recordForEdit
-        })
-    }, [error, recordForEdit, usuarios])
 
+    }, [recordForEdit, dispatch])
+
+    const switchChange = (event) => {
+        //console.log('evento', event)
+        setPassSwitch(event.target.checked);
+    };
     return (
         <Page
             className={classes.root}
@@ -100,15 +98,22 @@ const RegistroView = (props) => {
                             Yup.object().shape({
                                 email: Yup.string().email('Dirección de correo invalido').max(255).required('Falta Email'),
                                 nombre: Yup.string().max(255).min(6, 'Mínimo 6 caracteres').required('Falta Nombre'),
-                                password: Yup.string().min(6, 'Mínimo 6 caracteres').max(255).required('Falta password ')
+                                password: !editar ? Yup.string().min(6, 'Mínimo 6 caracteres').max(255).required('Falta password ') : ''
                             })
                         }
                         onSubmit={(values) => {
-                            //values.preventDefault();
-                            //editar ? dispatch(actualizaUsuarioAccion(values)) : dispatch(agregaUsuarioAccion(values))
-                            setOpenPopup(false);
-                            setNotify({ isOpen: true, message: 'Se agregó usuario', type: 'success' })
-                            //dispatch(obtenerUsuariosAccion())
+                            editar
+                                ?
+                                dispatch(actualizaUsuario(values))
+                                    .then(() => {
+                                        dispatch(addNotificacion('Se actualizó correctamente', true, 'success'))
+                                        setOpenPopup(false);
+                                    })
+                                : dispatch(agregaUsuario(values))
+                                    .then(() => {
+                                        dispatch(addNotificacion('Se agregó correctamente', true, 'success'))
+                                        setOpenPopup(false);
+                                    })
                         }}
                     >
                         {({
@@ -134,8 +139,8 @@ const RegistroView = (props) => {
                                     value={values.nombre}
                                     variant="outlined"
                                 />
+
                                 <TextField
-                                    disabled={editar}
                                     error={Boolean(touched.email && errors.email)}
                                     fullWidth
                                     helperText={touched.email && errors.email}
@@ -148,8 +153,21 @@ const RegistroView = (props) => {
                                     value={values.email}
                                     variant="outlined"
                                 />
+                                {
+                                    editar &&
+                                    <Switch
+                                        checked={passSwitch}
+                                        onChange={switchChange}
+                                        color='primary'
+                                        name="checkedA"
+                                        label='contraseña'
+                                        inputProps={{ 'aria-label': 'primary checkbox' }}
+                                    />
+                                }
+
                                 <TextField
                                     error={Boolean(touched.password && errors.password)}
+                                    disabled={!passSwitch}
                                     fullWidth
                                     helperText={touched.password && errors.password}
                                     label="Password"
@@ -161,6 +179,7 @@ const RegistroView = (props) => {
                                     value={values.password}
                                     variant="outlined"
                                 />
+
 
                                 <TextField
                                     fullWidth
@@ -176,10 +195,31 @@ const RegistroView = (props) => {
                                 >
                                     {roles.map((option) => (
                                         <option
-                                            key={option.value}
-                                            value={option.value}
+                                            key={option._id}
+                                            value={option._id}
                                         >
-                                            {option.label}
+                                            {option.rol}
+                                        </option>
+                                    ))}
+                                </TextField>
+                                <TextField
+                                    fullWidth
+                                    label="Iglesia"
+                                    margin="normal"
+                                    name="iglesia"
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    select
+                                    SelectProps={{ native: true }}
+                                    value={values.iglesia}
+                                    variant="outlined"
+                                >
+                                    {iglesias.map((option) => (
+                                        <option
+                                            key={option._id}
+                                            value={option._id}
+                                        >
+                                            {option.nombre}
                                         </option>
                                     ))}
                                 </TextField>
@@ -222,13 +262,9 @@ const RegistroView = (props) => {
                     </Formik>
                 </Container>
             </Box>
-        </Page>
+        </Page >
     );
 };
 
-const mapStateToProps = state => ({
-    error: state.error,
-    usuarios: state.usuarios
-})
 
-export default connect(mapStateToProps, { clearErrors })(RegistroView);
+export default RegistroView;

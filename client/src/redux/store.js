@@ -9,13 +9,19 @@ import erroresReducer from './erroresDucks';
 import personaDetReducer from './personaDetalleDucks'
 import iglesiasReducer from './iglesiasDucks';
 import notifyReducer from './notifyDucks';
+import usuariosReducer from './usuariosDucks';
+import catalogosPersonas from './CatalogosPersonasDucks'
+import personas from './personasDucks'
 
 const rootReducer = combineReducers({
     error: erroresReducer,
     general: generalReducer,
     personaDetalle: personaDetReducer,
     iglesias: iglesiasReducer,
-    notificacion: notifyReducer
+    notificacion: notifyReducer,
+    usuarios: usuariosReducer,
+    catalogos: catalogosPersonas,
+    personas: personas
 })
 
 //extensión de google chrome para visualizar la tienda en navegador

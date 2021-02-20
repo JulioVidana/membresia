@@ -13,11 +13,11 @@ import {
 const useStyles = makeStyles(theme => ({
     table: {
         marginTop: theme.spacing(1),
-        '& thead th': {
-            fontWeight: '600',
-            color: theme.palette.text.extra,
-            backgroundColor: theme.palette.secondary.main,
-        },
+        /*  '& thead th': {
+             fontWeight: '600',
+             color: theme.palette.text.extra,
+             backgroundColor: theme.palette.secondary.main,
+         }, */
         '& tbody td': {
             fontWeight: '400',
         },
@@ -38,6 +38,7 @@ const Tabla = (records, headCells, filterFn) => {
 
     const TblContainer = props => (
         <Table className={classes.table}>
+
             {props.children}
         </Table>
     )

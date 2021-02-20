@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux'
-import { NavLink } from 'react-router-dom';
+import React from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux'
+import { agregaPersona, actualizaPersona } from 'src/redux/personasDucks'
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import NumberFormat from 'react-number-format';
 import PropTypes from 'prop-types';
-
 import {
     Box,
     Button,
@@ -19,18 +19,7 @@ import {
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
 import DateFnsUtils from '@date-io/moment'
 import BackspaceIcon from '@material-ui/icons/Backspace';
-//import { agregaUsuarioAccion, actualizaUsuarioAccion } from 'src/redux/usuariosDucks';
-import { clearErrors } from 'src/redux/erroresDucks';
 
-
-/* const useStyles = makeStyles((theme) => ({
-    root: {
-        backgroundColor: theme.palette.background.default,
-        height: '100%',
-        paddingBottom: theme.spacing(3),
-        paddingTop: theme.spacing(3)
-    }
-})); */
 
 function NumberFormatCustom(props) {
     const { inputRef, onChange, ...other } = props;
@@ -59,85 +48,13 @@ NumberFormatCustom.propTypes = {
     onChange: PropTypes.func.isRequired,
 };
 
-const initialFValues = {
-    _id: 0,
-    nombre: '',
-    aPaterno: '',
-    aMaterno: '',
-    email: '',
-    phone: '',
-    calle: '',
-    colonia: '',
-    ciudad: '',
-    zip: '',
-    msg: null
-}
-
-const generos = [
-    {
-        value: 1,
-        label: 'Feminino'
-    },
-    {
-        value: 2,
-        label: 'Masculino'
-    }
-];
-
-const civil = [
-    {
-        value: 1,
-        label: 'Soltero'
-    },
-    {
-        value: 2,
-        label: 'Casado'
-    },
-    {
-        value: 3,
-        label: 'Viudo'
-    },
-    {
-        value: 4,
-        label: 'Unión Libre'
-    },
-    {
-        value: 5,
-        label: 'Divorciado'
-    },
-]
 
 const RegistroView = (props) => {
-    //const classes = useStyles();
-    //const dispatch = useDispatch()
-    const [values, setValues] = useState(initialFValues);
-    const [selectedDate, handleDateChange] = useState(new Date());
-    const [editar, setEditar] = useState(false)
-    //const [msg, setMsg] = useState(null);
-    const { setOpenPopup, setNotify, recordForEdit, error, usuarios } = props;
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { values, editar, generos, civil, escolaridad, notif, edades } = props;
 
-    //console.log('popupConsole', recordForEdit)
-    //console.log('Fecha', Date())
-    useEffect(() => {
-        // Check for register error
-        /*  if (usuarios.regis) {
-             console.log('puedes registrar e ignora el error', usuarios.regis)
-         } else { console.log('hubo un error no se cierra modal', usuarios.regis) } */
-        if (error.id === 'REGISTRO_ERROR') {
-
-            //setNotify({ isOpen: true, message: error.msg.msg, type: 'error' })
-            console.log(error.msg.msg)
-        } else {
-            //console.log('pruebilla')
-        }
-
-        if (recordForEdit != null)
-            setEditar(true);
-        setValues({
-            ...recordForEdit
-        })
-    }, [error, recordForEdit, usuarios])
-
+    //console.log({ values })
     return (
 
         <Formik
@@ -145,19 +62,30 @@ const RegistroView = (props) => {
             initialValues={values}
             validationSchema={
                 Yup.object().shape({
-                    nombre: Yup.string().max(255).min(6, 'Mínimo 3 caracteres').required('Falta Nombre de Iglesia'),
-                    pastor: Yup.string().max(255).min(6, 'Mínimo 6 caracteres').required('Falta Pastor'),
-                    ciudad: Yup.string().max(255).min(6, 'Mínimo 6 caracteres').required('Falta Ciudad'),
-                    cobertura: Yup.string().max(255).min(3, 'Mínimo 3 caracteres'),
-                    telefono: Yup.string().max(255).min(10, 'Mínimo 10 caracteres')
+                    nombre: Yup.string().max(255).min(3, 'Mínimo 3 caracteres').required('Falta Nombre'),
+                    aPaterno: Yup.string().max(255).min(3, 'Mínimo 3 caracteres').required('Falta Apellido Paterno'),
+                    genero: Yup.string().required('Falta Genero'),
+                    grupoEdad: Yup.string().required('Falta Grupo Edad'),
+                    telefono: Yup.string().max(11).min(10, 'al menos 10')
                 })
             }
             onSubmit={(values) => {
-                //values.preventDefault();
-                //editar ? dispatch(actualizaUsuarioAccion(values)) : dispatch(agregaUsuarioAccion(values))
-                setOpenPopup(false);
-                setNotify({ isOpen: true, message: 'Se agregó usuario', type: 'success' })
-                //dispatch(obtenerUsuariosAccion())
+                editar
+                    ?
+                    //console.log({ values })
+                    dispatch(actualizaPersona(values))
+                        .then(() => {
+                            dispatch(notif('Se actualizó correctamente', true, 'success'))
+                            navigate('/app/personas')
+                        })
+                    :
+                    //console.log({ values })
+                    dispatch(agregaPersona(values))
+                        .then(() => {
+                            dispatch(notif('Se agregó correctamente', true, 'success'))
+                            navigate('/app/personas')
+                        })
+
             }}
         >
             {({
@@ -167,7 +95,8 @@ const RegistroView = (props) => {
                 handleSubmit,
                 isSubmitting,
                 touched,
-                values
+                values,
+                setFieldValue
             }) => (
                 <form onSubmit={handleSubmit}>
                     <Card>
@@ -223,9 +152,7 @@ const RegistroView = (props) => {
                                     xs={12}
                                 >
                                     <TextField
-                                        error={Boolean(touched.aMaterno && errors.aMaterno)}
                                         fullWidth
-                                        helperText={touched.aMaterno && errors.aMaterno}
                                         label="Apellido Materno"
                                         margin="normal"
                                         name="aMaterno"
@@ -241,9 +168,7 @@ const RegistroView = (props) => {
                                     xs={12}
                                 >
                                     <TextField
-                                        error={Boolean(touched.email && errors.email)}
                                         fullWidth
-                                        helperText={touched.email && errors.email}
                                         label="Correo Electónico"
                                         margin="normal"
                                         name="email"
@@ -259,19 +184,37 @@ const RegistroView = (props) => {
                                     xs={12}
                                 >
                                     <TextField
-                                        error={Boolean(touched.phone && errors.phone)}
+                                        error={Boolean(touched.telefono && errors.telefono)}
                                         fullWidth
-                                        helperText={touched.phone && errors.phone}
+                                        helperText={touched.telefono && errors.telefono}
                                         label="Teléfono"
                                         margin="normal"
-                                        name="phone"
+                                        name="telefono"
                                         onBlur={handleBlur}
                                         onChange={handleChange}
-                                        value={values.phone}
+                                        value={values.telefono}
                                         variant="outlined"
                                         InputProps={{
                                             inputComponent: NumberFormatCustom,
                                         }}
+                                    />
+                                </Grid>
+                                <Grid
+                                    item
+                                    md={3}
+                                    xs={12}
+                                >
+                                    <TextField
+                                        error={Boolean(touched.ciudad && errors.ciudad)}
+                                        fullWidth
+                                        helperText={touched.ciudad && errors.ciudad}
+                                        label="Ciudad"
+                                        margin="normal"
+                                        name="ciudad"
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        value={values.ciudad}
+                                        variant="outlined"
                                     />
                                 </Grid>
                                 <Grid
@@ -310,49 +253,34 @@ const RegistroView = (props) => {
                                         variant="outlined"
                                     />
                                 </Grid>
-                                <Grid
-                                    item
-                                    md={3}
-                                    xs={12}
-                                >
-                                    <TextField
-                                        error={Boolean(touched.ciudad && errors.ciudad)}
-                                        fullWidth
-                                        helperText={touched.ciudad && errors.ciudad}
-                                        label="Ciudad"
-                                        margin="normal"
-                                        name="ciudad"
-                                        onBlur={handleBlur}
-                                        onChange={handleChange}
-                                        value={values.ciudad}
-                                        variant="outlined"
-                                    />
-                                </Grid>
+
                                 <Grid
                                     item
                                     md={2}
                                     xs={12}
                                 >
                                     <TextField
-                                        error={Boolean(touched.zip && errors.zip)}
+                                        error={Boolean(touched.cp && errors.cp)}
                                         fullWidth
-                                        helperText={touched.zip && errors.zip}
+                                        helperText={touched.cp && errors.cp}
                                         label="CP"
                                         margin="normal"
-                                        name="zip"
+                                        name="cp"
                                         onBlur={handleBlur}
                                         onChange={handleChange}
-                                        value={values.zip}
+                                        value={values.cp}
                                         variant="outlined"
                                     />
                                 </Grid>
                                 <Grid
                                     item
-                                    md={4}
+                                    md={3}
                                     xs={12}
                                 >
                                     <TextField
+                                        error={Boolean(touched.genero && errors.genero)}
                                         fullWidth
+                                        helperText={touched.genero && errors.genero}
                                         label="Género"
                                         margin="normal"
                                         name="genero"
@@ -363,6 +291,7 @@ const RegistroView = (props) => {
                                         value={values.genero}
                                         variant="outlined"
                                     >
+                                        <option aria-label="None" value="" />
                                         {generos.map((option) => (
                                             <option
                                                 key={option.value}
@@ -375,7 +304,37 @@ const RegistroView = (props) => {
                                 </Grid>
                                 <Grid
                                     item
-                                    md={4}
+                                    md={3}
+                                    xs={12}
+                                >
+                                    <TextField
+                                        error={Boolean(touched.grupoEdad && errors.grupoEdad)}
+                                        fullWidth
+                                        helperText={touched.grupoEdad && errors.grupoEdad}
+                                        label="Grupo Edad"
+                                        margin="normal"
+                                        name="grupoEdad"
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        select
+                                        SelectProps={{ native: true }}
+                                        value={values.grupoEdad}
+                                        variant="outlined"
+                                    >
+                                        <option aria-label="None" value="" />
+                                        {edades.map((option) => (
+                                            <option
+                                                key={option._id}
+                                                value={option.grupo}
+                                            >
+                                                {option.grupo}
+                                            </option>
+                                        ))}
+                                    </TextField>
+                                </Grid>
+                                <Grid
+                                    item
+                                    md={3}
                                     xs={12}
                                 >
                                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -387,9 +346,10 @@ const RegistroView = (props) => {
                                             inputVariant="outlined"
                                             label="Fecha de Nacimiento"
                                             format="MM/DD/YYYY"
-                                            value={selectedDate}
+                                            name="nacimiento"
+                                            value={values.nacimiento}
                                             InputAdornmentProps={{ position: "start" }}
-                                            onChange={date => handleDateChange(date)}
+                                            onChange={value => setFieldValue("nacimiento", value)}
                                         />
                                     </MuiPickersUtilsProvider>
 
@@ -397,11 +357,13 @@ const RegistroView = (props) => {
                                 </Grid>
                                 <Grid
                                     item
-                                    md={4}
+                                    md={3}
                                     xs={12}
                                 >
                                     <TextField
+                                        error={Boolean(touched.civil && errors.civil)}
                                         fullWidth
+                                        helperText={touched.civil && errors.civil}
                                         label="Estado civil"
                                         margin="normal"
                                         name="civil"
@@ -412,12 +374,57 @@ const RegistroView = (props) => {
                                         value={values.civil}
                                         variant="outlined"
                                     >
+                                        <option aria-label="None" value="" />
                                         {civil.map((option) => (
                                             <option
-                                                key={option.value}
-                                                value={option.value}
+                                                key={option._id}
+                                                value={option._id}
                                             >
-                                                {option.label}
+                                                {option.estado}
+                                            </option>
+                                        ))}
+                                    </TextField>
+                                </Grid>
+                                <Grid
+                                    item
+                                    md={6}
+                                    xs={12}
+                                >
+                                    <TextField
+                                        fullWidth
+                                        label="Oficio"
+                                        margin="normal"
+                                        name="oficio"
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        value={values.oficio}
+                                        variant="outlined"
+                                    />
+                                </Grid>
+                                <Grid
+                                    item
+                                    md={6}
+                                    xs={12}
+                                >
+                                    <TextField
+                                        fullWidth
+                                        label="Escolaridad"
+                                        margin="normal"
+                                        name="escolaridad"
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        select
+                                        SelectProps={{ native: true }}
+                                        value={values.escolaridad}
+                                        variant="outlined"
+                                    >
+                                        <option aria-label="None" value="" />
+                                        {escolaridad.map((option) => (
+                                            <option
+                                                key={option._id}
+                                                value={option._id}
+                                            >
+                                                {option.escolaridad}
                                             </option>
                                         ))}
                                     </TextField>
@@ -483,9 +490,6 @@ const RegistroView = (props) => {
     );
 };
 
-const mapStateToProps = state => ({
-    error: state.error,
-    usuarios: state.usuarios
-})
 
-export default connect(mapStateToProps, { clearErrors })(RegistroView);
+
+export default RegistroView;

@@ -1,4 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addNotificacion } from 'src/redux/notifyDucks'
+import { obtenerUsuarios, bajaUsuario } from 'src/redux/usuariosDucks';
+import ConfirmDialog from 'src/components/ConfirmDialog'
 import {
     makeStyles,
     TableBody,
@@ -10,7 +14,10 @@ import {
     Box,
     Container,
     Card,
-    CardContent
+    Avatar,
+    Grid,
+    Typography,
+    colors
 } from '@material-ui/core';
 import Page from 'src/components/Page';
 import Titulo from 'src/components/Toolbar';
@@ -24,7 +31,8 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import Registro from './Registro';
 import Notificacion from 'src/components/Notification';
 import Popup from 'src/components/Popup';
-import data from './data';
+import getInitials from 'src/utils/getInitials';
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -48,6 +56,11 @@ const useStyles = makeStyles((theme) => ({
         position: 'absolute',
         bottom: theme.spacing(2),
         right: theme.spacing(2),
+    },
+    avatar: {
+        marginRight: theme.spacing(2),
+        color: theme.palette.getContrastText(colors.deepOrange[500]),
+        backgroundColor: colors.deepOrange[500],
     }
 }));
 
@@ -61,11 +74,14 @@ const headCells = [
 
 const UsuariosView = () => {
     const classes = useStyles();
+    const dispatch = useDispatch();
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } });
     const [openPopup, setOpenPopup] = useState(false);
     const [notify, setNotify] = useState({ isOpen: false, message: '', type: '' });
     const [recordForEdit, setRecordForEdit] = useState(null)
-    const usuariosList = data;
+    const usuariosList = useSelector(store => store.usuarios.datos);
+    const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: '', type: '' })
+
 
     const {
         TblContainer,
@@ -74,6 +90,14 @@ const UsuariosView = () => {
         recordsAfterPagingAndSorting
     } = Tabla(usuariosList, headCells, filterFn);
 
+    useEffect(() => {
+
+        const fetchData = () => {
+            dispatch(obtenerUsuarios())
+        }
+        fetchData()
+
+    }, [dispatch])
 
     const handleSearch = e => {
         let target = e.target;
@@ -87,6 +111,25 @@ const UsuariosView = () => {
         })
     }
 
+    const openInPopup = item => {
+        //console.log(item)
+        setRecordForEdit(item)
+        setOpenPopup(true)
+    }
+
+    const onDelete = item => {
+        setConfirmDialog({
+            ...confirmDialog,
+            isOpen: false
+        })
+        dispatch(bajaUsuario(item))
+            .then(() => {
+                dispatch(
+                    addNotificacion(`Se dió de baja a usuario ${item.nombre}`, true, 'success')
+                )
+            })
+    }
+
     return (
         <Page
             className={classes.root}
@@ -96,41 +139,69 @@ const UsuariosView = () => {
             <Container maxWidth={false}>
                 <Box mt={3}>
                     <Card>
-                        <CardContent>
-                            <Box maxWidth={500}>
-                                <Controls.Input
-                                    fullWidth
-                                    placeholder="Buscar Usuario"
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <SvgIcon
-                                                    fontSize="small"
-                                                    color="action"
-                                                >
-                                                    <SearchIcon />
-                                                </SvgIcon>
-                                            </InputAdornment>
-                                        )
-                                    }}
-                                    onChange={handleSearch}
-                                />
+                        <Box p={2}>
+                            <Grid
+                                container
+                                spacing={2}
+                                justify="space-between"
+                                alignItems="center"
+                            >
+                                <Grid
+                                    item
+                                    md={6}
+                                    xs={12}
+                                >
+                                    <Controls.Input
+                                        fullWidth
+                                        placeholder="Buscar Usuario"
+                                        InputProps={{
+                                            startAdornment: (
+                                                <InputAdornment position="start">
+                                                    <SvgIcon
+                                                        fontSize="small"
+                                                        color="action"
+                                                    >
+                                                        <SearchIcon />
+                                                    </SvgIcon>
+                                                </InputAdornment>
+                                            )
+                                        }}
+                                        onChange={handleSearch}
+                                    />
+                                </Grid>
+                                <Grid>
 
-                            </Box>
-                        </CardContent>
-                    </Card>
-                </Box>
-                <Box mt={3}>
-                    <Card>
+                                </Grid>
+
+                            </Grid>
+                        </Box>
                         <PerfectScrollbar>
-                            <Box >
+                            <Box>
                                 <TblContainer>
                                     <TblHead />
                                     <TableBody>
                                         {
                                             recordsAfterPagingAndSorting().map(item =>
                                             (<TableRow key={item._id} >
-                                                <TableCell>{item.nombre}</TableCell>
+                                                <TableCell>
+                                                    <Box
+                                                        alignItems="center"
+                                                        display="flex"
+                                                    >
+                                                        <Avatar
+                                                            className={classes.avatar}
+                                                            src={item.img}
+                                                        >
+                                                            {getInitials(item.nombre)}
+                                                        </Avatar>
+                                                        <Typography
+                                                            color="textPrimary"
+                                                            variant="body1"
+                                                        >
+                                                            {item.nombre}
+                                                        </Typography>
+                                                    </Box>
+                                                </TableCell>
                                                 <TableCell>{item.email}</TableCell>
                                                 <TableCell>
                                                     {
@@ -142,20 +213,20 @@ const UsuariosView = () => {
                                                 <TableCell>
                                                     <Controls.ActionButton
                                                         color="secondary"
-                                                    /* onClick={() => { openInPopup(item) }} */
+                                                        onClick={() => { openInPopup(item) }}
                                                     >
                                                         <EditOutlinedIcon fontSize="small" />
                                                     </Controls.ActionButton>
                                                     <Controls.ActionButton
                                                         color="secondary"
-                                                    /* onClick={() => {
-                                                        setConfirmDialog({
-                                                            isOpen: true,
-                                                            title: 'Estas seguro de borrar el registro?',
-                                                            subTitle: "No podrás deshacer esta acción",
-                                                            onConfirm: () => { onDelete(item) }
-                                                        })
-                                                    }} */
+                                                        onClick={() => {
+                                                            setConfirmDialog({
+                                                                isOpen: true,
+                                                                title: 'Estas seguro de dar de baja a usuario?',
+                                                                type: "alerta",
+                                                                onConfirm: () => { onDelete(item) }
+                                                            })
+                                                        }}
                                                     >
                                                         <CloseIcon fontSize="small" />
                                                     </Controls.ActionButton>
@@ -194,6 +265,10 @@ const UsuariosView = () => {
             <Notificacion
                 notify={notify}
                 setNotify={setNotify}
+            />
+            <ConfirmDialog
+                confirmDialog={confirmDialog}
+                setConfirmDialog={setConfirmDialog}
             />
 
         </Page>

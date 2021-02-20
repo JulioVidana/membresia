@@ -7,6 +7,9 @@ const mongoose = require('mongoose');
 
 //IMPORTAR RUTAS
 const iglesiasRoutes = require('./routes/iglesias');
+const usuariosRoutes = require('./routes/usuarios');
+const catalogosPersonas = require('./routes/catalogosPersonas');
+const personas = require('./routes/personas');
 
 //conexión base de datos MONGODB LOCAL
 mongoose.connect("mongodb://localhost:27017/membresia", { useNewUrlParser: true, useUnifiedTopology: true })
@@ -24,6 +27,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 //route middelware
 app.use('/api/iglesias', iglesiasRoutes);
+app.use('/api/usuarios', usuariosRoutes);
+app.use('/api/catalogos', catalogosPersonas);
+app.use('/api/personas', personas);
 app.get('/', (req, res) => {
     res.send('Membresia API')
 })

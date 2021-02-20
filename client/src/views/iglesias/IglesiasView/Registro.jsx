@@ -19,15 +19,6 @@ import {
 } from '@material-ui/core';
 import BackspaceIcon from '@material-ui/icons/Backspace';
 
-/* const useStyles = makeStyles((theme) => ({
-    root: {
-        backgroundColor: theme.palette.background.default,
-        height: '100%',
-        paddingBottom: theme.spacing(3),
-        paddingTop: theme.spacing(3)
-    }
-})); */
-
 function NumberFormatCustom(props) {
     const { inputRef, onChange, ...other } = props;
 
@@ -67,24 +58,16 @@ const initialFValues = {
 }
 
 const RegistroView = (props) => {
-    //const classes = useStyles();
     const dispatch = useDispatch()
     const [values, setValues] = useState(initialFValues);
     const [editar, setEditar] = useState(false)
-    //const { state } = useLocation();
     const location = useLocation();
     const navigate = useNavigate();
-    // const { recordForEdit } = state
-    //const [msg, setMsg] = useState(null);
 
-    //console.log('datos', location)
+    console.log('datos', location)
 
 
     useEffect(() => {
-        // Check for register error
-        /*  if (usuarios.regis) {
-             console.log('puedes registrar e ignora el error', usuarios.regis)
-         } else { console.log('hubo un error no se cierra modal', usuarios.regis) } */
 
         if (location.state != null) {
             if (location.state.recordForEdit != null)
@@ -103,7 +86,7 @@ const RegistroView = (props) => {
             initialValues={values}
             validationSchema={
                 Yup.object().shape({
-                    nombre: Yup.string().max(255).min(6, 'Mínimo 3 caracteres').required('Falta Nombre de Iglesia'),
+                    nombre: Yup.string().max(255).min(3, 'Mínimo 3 caracteres').required('Falta Nombre de Iglesia'),
                     pastor: Yup.string().max(255).min(6, 'Mínimo 6 caracteres').required('Falta Pastor'),
                     ciudad: Yup.string().max(255).min(6, 'Mínimo 6 caracteres').required('Falta Ciudad'),
                     cobertura: Yup.string().max(255).min(3, 'Mínimo 3 caracteres'),

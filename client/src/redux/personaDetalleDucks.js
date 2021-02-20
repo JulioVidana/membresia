@@ -1,3 +1,8 @@
+import Axios from 'axios';
+import { returnErrors } from './erroresDucks'
+import { addNotificacion } from './notifyDucks'
+const host = 'http://localhost:3001';
+
 //CONSTANTES
 const dataInicial = {
     persona: []
