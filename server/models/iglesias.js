@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model } = require('mongoose')
 
 const iglesiaSchema = new Schema({
     _id: { type: Schema.ObjectId, auto: true },
@@ -9,6 +9,6 @@ const iglesiaSchema = new Schema({
     pastor: { type: String, required: true, min: 3, max: 255 },
     contacto: { type: String },
     activo: { type: Boolean, default: true }
-});
+})
 
-module.exports = model("Iglesia", iglesiaSchema);
+module.exports = model('Iglesia', iglesiaSchema)

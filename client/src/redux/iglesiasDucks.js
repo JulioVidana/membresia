@@ -1,7 +1,7 @@
 import Axios from 'axios';
+import backendUrl from './backendUrl'
 import { returnErrors } from './erroresDucks'
 import { addNotificacion } from './notifyDucks'
-const host = 'http://localhost:3001';
 
 
 //  CONSTANTES
@@ -46,7 +46,7 @@ export default function iglesiasReducer(state = dataInicial, action) {
 export const obtenerIglesias = () => async (dispatch, getState) => {
     dispatch({ type: IGLESIAS_LOADING })
 
-    Axios.get(`${host}/api/iglesias`)
+    Axios.get(`${backendUrl}/api/iglesias`)
         .then(res =>
             dispatch({
                 type: OBTENER_IGLESIAS,
@@ -66,7 +66,7 @@ export const obtenerIglesias = () => async (dispatch, getState) => {
 
 export const agregarIglesia = (datos) => async (dispatch, getState) => {
     dispatch({ type: IGLESIAS_LOADING })
-    Axios.post(`${host}/api/iglesias/add`, datos)
+    Axios.post(`${backendUrl}/api/iglesias/add`, datos)
         .then(result => {
             dispatch({ type: AGREGAR_IGLESIA, payload: result.data })
         })
@@ -82,7 +82,7 @@ export const agregarIglesia = (datos) => async (dispatch, getState) => {
 
 export const actualizaIglesia = (datos) => async (dispatch, getState) => {
     dispatch({ type: IGLESIAS_LOADING })
-    Axios.post(`${host}/api/iglesias/update`, datos)
+    Axios.post(`${backendUrl}/api/iglesias/update`, datos)
         .then(result => {
             dispatch({ type: ACTUALIZA_IGLESIA, payload: result.data })
         })
@@ -96,11 +96,11 @@ export const actualizaIglesia = (datos) => async (dispatch, getState) => {
 
 export const borraIglesia = (datos) => async (dispatch, getState) => {
 
-    Axios.post(`${host}/api/iglesias/delete`, datos)
+    Axios.post(`${backendUrl}/api/iglesias/delete`, datos)
         .then(result => {
             dispatch({ type: BORRA_IGLESIA, payload: result.data })
 
-            Axios.get(`${host}/api/iglesias`)
+            Axios.get(`${backendUrl}/api/iglesias`)
                 .then(res =>
                     dispatch({ type: OBTENER_IGLESIAS, payload: res.data }))
 

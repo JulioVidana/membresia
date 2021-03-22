@@ -214,6 +214,7 @@ const RegistroView = (props) => {
                                     value={values.iglesia}
                                     variant="outlined"
                                 >
+                                    <option aria-label="None" value="" />
                                     {iglesias.map((option) => (
                                         <option
                                             key={option._id}

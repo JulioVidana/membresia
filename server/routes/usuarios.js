@@ -1,27 +1,27 @@
-const router = require("express").Router();
-const Usuarios = require('../models/usuarios');
-const Joi = require('@hapi/joi');
-const bcrypt = require('bcrypt');
-Joi.objectId = require('joi-objectid')(Joi);
-const ObjectId = require('mongoose').Types.ObjectId;
+const router = require('express').Router()
+const Usuarios = require('../models/usuarios')
+const Joi = require('@hapi/joi')
+const bcrypt = require('bcrypt')
+Joi.objectId = require('joi-objectid')(Joi)
+const ObjectId = require('mongoose').Types.ObjectId
 
 router.route('/').get(async (req, res) => {
     await Usuarios.find()
         .then(result => res.json(result))
-        .catch(err => res.status(400).json('Error: ' + err));
+        .catch(err => res.status(400).json('Error: ' + err))
 })
 
 
 router.post('/register', async (req, res) => {
     try {
 
-        const existeEmail = await Usuarios.findOne({ email: req.body.email });
-        if (existeEmail) throw Error('User already exists');
+        const existeEmail = await Usuarios.findOne({ email: req.body.email })
+        if (existeEmail) throw Error('User already exists')
 
         // hash contraseña
-        const salt = await bcrypt.genSalt(10);
-        const hash = await bcrypt.hash(req.body.password, salt);
-        if (!hash) throw Error('Something went wrong hashing the password');
+        const salt = await bcrypt.genSalt(10)
+        const hash = await bcrypt.hash(req.body.password, salt)
+        if (!hash) throw Error('Something went wrong hashing the password')
 
         const usuario = new Usuarios({
             nombre: req.body.nombre,
@@ -29,9 +29,9 @@ router.post('/register', async (req, res) => {
             password: hash,
             iglesia: ObjectId(req.body.iglesia),
             rol: req.body.rol
-        });
+        })
 
-        const savedUser = await usuario.save();
+        const savedUser = await usuario.save()
         res.json({
             error: null,
             data: savedUser
@@ -46,9 +46,9 @@ router.post('/update', async (req, res) => {
     try {
 
         // hash contraseña
-        const salt = await bcrypt.genSalt(10);
-        const hash = await bcrypt.hash(req.body.password, salt);
-        if (!hash) throw Error('Something went wrong hashing the password');
+        const salt = await bcrypt.genSalt(10)
+        const hash = await bcrypt.hash(req.body.password, salt)
+        if (!hash) throw Error('Something went wrong hashing the password')
         let datos
 
         if (req.body.password === '') {
@@ -124,4 +124,4 @@ router.post('/baja', async (req, res) => {
     }
 }) */
 
-module.exports = router;
+module.exports = router

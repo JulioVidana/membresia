@@ -16,7 +16,9 @@ import {
 
 
 const useStyles = makeStyles((theme) => ({
-    root: {},
+    root: {
+        height: '100%'
+    },
     avatar: {
         height: 100,
         width: 100
@@ -31,8 +33,21 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Profile = ({ className, datos, ...rest }) => {
+const Profile = ({ className, datos, setOpenPopup, ...rest }) => {
     const classes = useStyles();
+    const { completo, civil, sexo, nacimiento } = datos
+
+    function getAge(dateString) {
+        let today = new Date();
+        let birthDate = new Date(dateString);
+        let age = today.getFullYear() - birthDate.getFullYear();
+        let m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        return age;
+    }
+
     return (
         <Card
             className={clsx(classes.root, className)}
@@ -46,14 +61,15 @@ const Profile = ({ className, datos, ...rest }) => {
                 >
                     <Avatar
                         className={classes.avatar}
-                        src={datos.avatarUrl}
+                        src={datos.imagen?.url}
                     />
                     <Typography
                         color="textPrimary"
                         gutterBottom
                         variant="h3"
+                        align="center"
                     >
-                        {datos.nombre}
+                        {completo}
                     </Typography>
 
                     <Grid item className={classes.statsItem}>
@@ -61,7 +77,7 @@ const Profile = ({ className, datos, ...rest }) => {
                             color="textSecondary"
                             variant="h5"
                         >
-                            {`${datos.eCivil} - ${datos.genero} - ${datos.edad} años`}
+                            {`${civil.estado} - ${sexo} - ${nacimiento === undefined || nacimiento === null ? 0 : getAge(nacimiento)} años`}
                         </Typography>
                     </Grid>
 
@@ -74,9 +90,10 @@ const Profile = ({ className, datos, ...rest }) => {
                     fullWidth
                     variant="text"
                     size="large"
+                    onClick={() => { setOpenPopup(true) }}
                 >
                     Editar Imagen
-        </Button>
+                </Button>
             </CardActions>
         </Card>
     );

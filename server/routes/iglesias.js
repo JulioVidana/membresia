@@ -1,13 +1,13 @@
-const router = require("express").Router();
-const Iglesias = require('../models/iglesias');
-const ObjectId = require('mongoose').Types.ObjectId;
+const router = require('express').Router()
+const Iglesias = require('../models/iglesias')
+const ObjectId = require('mongoose').Types.ObjectId
 
 
 router.route('/').get(async (req, res) => {
     await Iglesias.find()
         .then(result => res.json(result))
-        .catch(err => res.status(400).json('Error: ' + err));
-});
+        .catch(err => res.status(400).json('Error: ' + err))
+})
 
 router.post('/add', async (req, res) => {
     try {
@@ -21,7 +21,7 @@ router.post('/add', async (req, res) => {
             contacto: req.body.contacto
         })
 
-        const saveIglesia = await iglesia.save();
+        const saveIglesia = await iglesia.save()
         res.json({
             error: null,
             data: saveIglesia
@@ -30,7 +30,7 @@ router.post('/add', async (req, res) => {
     } catch (error) {
         res.status(400).json({ msg: error.message })
     }
-});
+})
 
 router.post('/update', async (req, res) => {
     try {

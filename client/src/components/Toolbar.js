@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Toolbar = (props) => {
     const classes = useStyles();
-    const { title, btnText, icono = 'add', to } = props;
+    const { title, btnText, btnType, icono = 'add', to, onClick } = props;
     return (
         <div className={classes.root}>
             <Grid
@@ -44,19 +44,32 @@ const Toolbar = (props) => {
 
                 </Grid>
                 {
-                    btnText &&
-                    <Grid
-                        item
-                    >
-                        <Controls.Button
-                            fullWidth
-                            text={btnText || "AGREGAR"}
-                            variant="contained"
-                            startIcon={icono === 'add' ? <AddIcon /> : <EditIcon />}
-                            component={NavLink}
-                            to={to || "null"}
-                        />
-                    </Grid>
+                    btnType === 'edit' ?
+                        <Grid
+                            item
+                        >
+                            <Controls.Button
+                                fullWidth
+                                text={btnText}
+                                variant="contained"
+                                startIcon={icono === 'add' ? <AddIcon /> : <EditIcon />}
+                                onClick={onClick}
+
+                            />
+                        </Grid>
+                        :
+                        <Grid
+                            item
+                        >
+                            <Controls.Button
+                                fullWidth
+                                text={btnText || "AGREGAR"}
+                                variant="contained"
+                                startIcon={icono === 'add' ? <AddIcon /> : <EditIcon />}
+                                component={NavLink}
+                                to={to || "null"}
+                            />
+                        </Grid>
                 }
 
 

@@ -1,5 +1,11 @@
 import React from 'react';
-import { Dialog, DialogContent, DialogTitle, makeStyles, Typography } from '@material-ui/core';
+import {
+    Dialog,
+    DialogContent,
+    DialogTitle,
+    makeStyles,
+    Typography
+} from '@material-ui/core';
 import Controls from './controls/Controls';
 import CloseIcon from '@material-ui/icons/Close';
 
@@ -16,6 +22,9 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(2),
         textAlign: 'center',
     },
+    dividers: {
+        borderBottom: `0px solid ${theme.palette.divider}`,
+    }
 
 }));
 
@@ -36,9 +45,14 @@ const Popup = (props) => {
                     </Controls.ActionButton>
                 </div>
             </DialogTitle>
-            <DialogContent dividers>
+            <DialogContent dividers className={classes.dividers}>
                 {children}
             </DialogContent>
+            {/*  <DialogActions>
+                <Button size='large' variant='contained' color="primary" type='submit'>
+                    {btnText}
+                </Button>
+            </DialogActions> */}
         </Dialog>
     )
 }

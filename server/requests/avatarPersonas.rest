@@ -1,0 +1,7 @@
+### ELIMINAR IMAGEN 
+DELETE http://localhost:3001/api/avatars/604eb1278998ef4e150a8716
+Content-Type: application/json
+
+{
+    "id":"iglesias/avatars/ykrvsa8mfanny1yzvu8i"
+}

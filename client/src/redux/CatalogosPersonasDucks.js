@@ -1,7 +1,7 @@
-import Axios from 'axios';
+import Axios from 'axios'
+import backendUrl from './backendUrl'
 import { returnErrors } from './erroresDucks'
 import { addNotificacion } from './notifyDucks'
-const host = 'http://localhost:3001';
 
 
 //  CONSTANTES
@@ -9,18 +9,39 @@ const dataInicial = {
     edoCivil: [],
     escolaridad: [],
     grupoEdades: [],
-    generos: [{ value: 'Feminino', label: 'Feminino' }, { value: 'Masculino', label: 'Masculino' }],
+    tipoMiembro: [],
+    generos: [{ value: 'Mujer', label: 'Mujer' }, { value: 'Hombre', label: 'Hombre' }],
+    motivoBaja: [
+        {
+            id: 1,
+            motivo: 'Sin motivo'
+        },
+        {
+            id: 2,
+            motivo: 'Nueva Iglesia'
+        },
+        {
+            id: 4,
+            motivo: 'Traslado'
+        },
+        {
+            id: 3,
+            motivo: 'Fallecimiento'
+        }
+    ],
     loading: false
 };
 
 //ACTION TYPES
-const CATALOGOS_LOADING = 'CATALOGOS_LOADING';
-const GET_ESTADO_CVIL = 'GET_ESTADO_CVIL';
-const GET_ESCOLARIDAD = 'GET_ESCOLARIDAD';
-const GET_EDADES = 'GET_EDADES';
-const ESTADO_ERROR = 'ESTADO_CIVIL_ERROR';
-const ESCOLARIDAD_ERROR = 'ESCOLARIDAD_ERROR';
-const EDADES_ERROR = 'EDADES_ERROR';
+const CATALOGOS_LOADING = 'CATALOGOS_LOADING'
+const GET_ESTADO_CVIL = 'GET_ESTADO_CVIL'
+const GET_ESCOLARIDAD = 'GET_ESCOLARIDAD'
+const GET_EDADES = 'GET_EDADES'
+const GET_TIPOMIEMBROS = 'GET_TIPOMIEMBROS'
+const ESTADO_ERROR = 'ESTADO_CIVIL_ERROR'
+const ESCOLARIDAD_ERROR = 'ESCOLARIDAD_ERROR'
+const EDADES_ERROR = 'EDADES_ERROR'
+const ERROR_TIPOMIEMBROS = 'ERROR_TIPOMIEMBROS'
 
 //REDUCER
 export default function catalogosPersonasReducer(state = dataInicial, action) {
@@ -33,6 +54,9 @@ export default function catalogosPersonasReducer(state = dataInicial, action) {
             return { ...state, escolaridad: action.payload, loading: false }
         case GET_EDADES:
             return { ...state, grupoEdades: action.payload, loading: false }
+        case GET_TIPOMIEMBROS:
+            return { ...state, tipoMiembro: action.payload, loading: false }
+        case ERROR_TIPOMIEMBROS:
         case EDADES_ERROR:
         case ESTADO_ERROR:
         case ESCOLARIDAD_ERROR:
@@ -45,9 +69,12 @@ export default function catalogosPersonasReducer(state = dataInicial, action) {
 
 //ACTIONS
 export const obtenerCatalogosPersonas = () => async (dispatch, getState) => {
+
+    const { iglesia } = getState().general
+    //console.log({ iglesia })
     dispatch({ type: CATALOGOS_LOADING })
 
-    Axios.get(`${host}/api/catalogos/edocivil`)
+    Axios.get(`${backendUrl}/api/catalogos/edocivil`)
         .then(res =>
             dispatch({
                 type: GET_ESTADO_CVIL,
@@ -61,7 +88,7 @@ export const obtenerCatalogosPersonas = () => async (dispatch, getState) => {
             dispatch(addNotificacion(err.message, true, 'error'))
         })
 
-    Axios.get(`${host}/api/catalogos/escolaridad`)
+    Axios.get(`${backendUrl}/api/catalogos/escolaridad`)
         .then(res =>
             dispatch({
                 type: GET_ESCOLARIDAD,
@@ -75,7 +102,7 @@ export const obtenerCatalogosPersonas = () => async (dispatch, getState) => {
             dispatch(addNotificacion(err.message, true, 'error'))
         })
 
-    Axios.get(`${host}/api/catalogos/edades`)
+    Axios.get(`${backendUrl}/api/catalogos/edades`)
         .then(res =>
             dispatch({
                 type: GET_EDADES,
@@ -89,5 +116,18 @@ export const obtenerCatalogosPersonas = () => async (dispatch, getState) => {
             dispatch(addNotificacion(err.message, true, 'error'))
         })
 
+    Axios.get(`${backendUrl}/api/catalogos/tipomiembros/${iglesia._id}`)
+        .then(res =>
+            dispatch({
+                type: GET_TIPOMIEMBROS,
+                payload: res.data
+            }))
+        .catch(err => {
+            dispatch({
+                type: ERROR_TIPOMIEMBROS
+            });
+            dispatch(returnErrors(err, ''))
+            dispatch(addNotificacion(err.message, true, 'error'))
+        })
 
 }

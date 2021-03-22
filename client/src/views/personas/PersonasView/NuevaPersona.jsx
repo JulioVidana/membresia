@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux'
-import { obtenerCatalogosPersonas } from 'src/redux/CatalogosPersonasDucks'
-import { useLocation } from 'react-router-dom';
+import React from 'react';
+import { useSelector } from 'react-redux'
 import { addNotificacion } from 'src/redux/notifyDucks'
 import {
     Container,
-    makeStyles
+    makeStyles,
+    Card,
+    CardHeader,
+    CardContent,
+    Divider
 } from '@material-ui/core';
 import Page from 'src/components/Page';
 import Registro from './Registro';
@@ -23,56 +25,55 @@ const useStyles = makeStyles((theme) => ({
 
 const NuevaPersona = () => {
     const classes = useStyles();
-    const dispatch = useDispatch()
     //const [selectedDate, handleDateChange] = useState(new Date());
-    const [editar, setEditar] = useState(false);
     const catalogos = useSelector(store => store.catalogos);
+    const { generos, edoCivil, grupoEdades, escolaridad } = catalogos
     const iglesia = useSelector(store => store.general.iglesia);
-    const location = useLocation();
+
     const initialFValues = {
         _id: 0,
         nombre: '',
         aPaterno: '',
+        aMaterno: '',
         grupoEdad: '',
-        genero: '',
-        iglesia: iglesia,
+        email: '',
+        telefono: '',
+        ciudad: '',
+        calle: '',
+        colonia: '',
+        cp: '',
+        sexo: '',
+        iglesia: iglesia._id,
+        oficio: '',
+        civil: edoCivil[0],
+        escolaridad: escolaridad[0]
     }
-    const [values, setValues] = useState(initialFValues);
 
 
-    //console.log('DATE:', selectedDate)
-    useEffect(() => {
-
-        const fetchData = () => {
-            dispatch(obtenerCatalogosPersonas())
-        }
-        fetchData()
-
-        if (location.state != null) {
-            setEditar(true);
-            setValues({
-                ...location.state.recordForEdit
-            })
-
-        }
-
-    }, [dispatch, location])
     return (
         <Page
             className={classes.root}
             title="Agregar Persona"
         >
             <Container maxWidth="lg">
-                <Registro
-                    catalogos={catalogos}
-                    values={values}
-                    editar={editar}
-                    generos={catalogos.generos}
-                    civil={catalogos.edoCivil}
-                    edades={catalogos.grupoEdades}
-                    escolaridad={catalogos.escolaridad}
-                    notif={addNotificacion}
-                />
+                <Card>
+                    <CardHeader
+                        title="Agregar Persona"
+                        subheader="Datos Básicos"
+                    />
+                    <Divider />
+                    <CardContent>
+                        <Registro
+                            values={initialFValues}
+                            editar={false}
+                            generos={generos}
+                            civil={edoCivil}
+                            edades={grupoEdades}
+                            escolaridad={escolaridad}
+                            notif={addNotificacion}
+                        />
+                    </CardContent>
+                </Card>
             </Container>
         </Page>
     );

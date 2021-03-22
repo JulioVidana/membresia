@@ -1,0 +1,80 @@
+### TRAE TODAS LAS PERSONAS POR DETERMINADA IGLESIA
+GET http://localhost:3001/api/personas/6024878b19e804be07b07462 
+
+### TRAE DATOS DE UNA PERSONA
+GET http://localhost:3001/api/personas/persona/6035cb6d79332c2971ba17bc 
+
+### AGREGAR NUEVA PERSONA (DATOS BÁSICOS)
+POST http://localhost:3001/api/personas/add 
+Content-Type: application/json
+
+{
+    "nombre": "Pablito",
+    "aPaterno": "Perez",
+    "aMaterno": "Perez",
+    "sexo": "Hombre",
+    "grupoEdad": "Adulto",
+    "iglesia":"6024878b19e804be07b07462",
+    "civil": "602f37f68f3c0825d2debcb2",
+    "escolaridad": "602f36cc8f3c0825d2debcaf",
+    "email": "pablito.perez@gmail.com",
+    "telefono": "6622232378",
+    "ciudad": "",
+    "calle": "",
+    "colonia": "",
+    "cp": "",
+    "oficio":""
+}
+
+### ACTUALIZA DATOS DE UNA PERSONA
+POST http://localhost:3001/api/personas/update 
+Content-Type: application/json
+
+{
+    "_id": "604f0af20d76ca153941f6ff",
+    "nombre": "Pablito",
+    "aPaterno": "Perez",
+    "aMaterno": "Perez",
+    "sexo": "Hombre",
+    "grupoEdad": "Adulto",
+    "iglesia":"6024878b19e804be07b07462",
+    "civil": "602f37f68f3c0825d2debcb2",
+    "escolaridad": "602f36cc8f3c0825d2debcaf",
+    "email": "",
+    "telefono": "",
+    "ciudad": "Hermosillo",
+    "calle": "",
+    "colonia": "",
+    "cp": "",
+    "oficio":""
+}
+
+### ACTUALIZA o AGREGA el TipoMiembro
+PUT http://localhost:3001/api/personas/tipomiembro/6035cb6d79332c2971ba17bc
+Content-Type: application/json
+
+{
+    "_id": "604fa9a93c4b041a6e9d73a5"
+}
+
+### CAMBIA ESTATUS INACTIVO
+PUT http://localhost:3001/api/personas/inactivo/6035cb6d79332c2971ba17bc
+Content-Type: application/json
+
+{
+    "activo": false,
+    "motivo": "Sin motivo",
+    "fecha": "2021-03-16T17:11:21.472Z"
+}
+
+
+### ACTUALIZA Bautismo
+PUT http://localhost:3001/api/personas/bautismo/6035cb6d79332c2971ba17bc
+Content-Type: application/json
+
+{
+    "activo": true,
+    "fecha": "2021-03-16T17:11:21.472Z"
+}
+### BORARR Registro de Persona
+DELETE http://localhost:3001/api/personas/borrar/60514085cf79b147626400b1

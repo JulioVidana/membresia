@@ -112,7 +112,7 @@ const UsuariosView = () => {
     }
 
     const openInPopup = item => {
-        //console.log(item)
+        // item && console.log('trae datos', item);
         setRecordForEdit(item)
         setOpenPopup(true)
     }

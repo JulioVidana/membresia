@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { cargaPersona } from 'src/redux/personaDetalleDucks';
+import { obtenerPersonas } from 'src/redux/personasDucks'
+import { obtenerCatalogosPersonas } from 'src/redux/CatalogosPersonasDucks'
 import moment from 'moment';
 import Page from 'src/components/Page';
 import Titulo from 'src/components/Toolbar';
@@ -15,18 +17,16 @@ import {
     Box,
     Container,
     Card,
-    CardContent,
     Avatar,
     Typography,
     Grid
 } from '@material-ui/core';
 import { Search as SearchIcon } from 'react-feather';
-import AddIcon from '@material-ui/icons/AddCircleOutline';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import getInitials from 'src/utils/getInitials';
 import Tabla from 'src/components/Tabla';
 import Controls from 'src/components/controls/Controls';
-import data from './data';
+//import data from './data';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -53,9 +53,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const headCells = [
-    { id: 'nombre', label: 'Nombre' },
-    { id: 'email', label: 'Correo Elctrónico' },
-    { id: 'phone', label: 'Teléfono' },
+    { id: 'completo', label: 'Nombre' },
+    { id: 'email', label: 'Correo Electrónico' },
+    { id: 'telefono', label: 'Teléfono' },
     { id: 'createdAt', label: 'Fecha de Registro' }
 ];
 
@@ -64,7 +64,9 @@ const PeronasView = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } });
-    const usuariosList = data;
+    //const usuariosList = data;
+    const iglesia = useSelector(store => store.general.iglesia);
+    const usuariosList = useSelector(store => store.personas.personas)
 
 
     const {
@@ -74,6 +76,14 @@ const PeronasView = () => {
         recordsAfterPagingAndSorting
     } = Tabla(usuariosList, headCells, filterFn);
 
+    useEffect(() => {
+        const fetchData = () => {
+            dispatch(obtenerPersonas(iglesia))
+            dispatch(obtenerCatalogosPersonas())
+        }
+        fetchData()
+    }, [dispatch, iglesia])
+
     const handleSearch = e => {
         let target = e.target;
         setFilterFn({
@@ -81,7 +91,7 @@ const PeronasView = () => {
                 if (target.value === "")
                     return items;
                 else
-                    return items.filter(x => x.nombre.toLowerCase().includes(target.value))
+                    return items.filter(x => x.completo.toLowerCase().includes(target.value))
             }
         })
     }
@@ -158,20 +168,20 @@ const PeronasView = () => {
                                                     >
                                                         <Avatar
                                                             className={classes.avatar}
-                                                            src={item.avatarUrl}
+                                                            src={item.imagen?.url}
                                                         >
-                                                            {getInitials(item.nombre)}
+                                                            {getInitials(item.completo)}
                                                         </Avatar>
                                                         <Typography
                                                             color="textPrimary"
                                                             variant="body1"
                                                         >
-                                                            {item.nombre}
+                                                            {item.completo}
                                                         </Typography>
                                                     </Box>
                                                 </TableCell>
                                                 <TableCell>{item.email}</TableCell>
-                                                <TableCell>{item.phone}</TableCell>
+                                                <TableCell>{item.telefono}</TableCell>
                                                 <TableCell>
                                                     {moment(item.createdAt).format('DD/MM/YYYY')}
                                                 </TableCell>

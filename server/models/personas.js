@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model } = require('mongoose')
 
 const personaSchema = new Schema({
     _id: { type: Schema.ObjectId, auto: true },
@@ -10,6 +10,7 @@ const personaSchema = new Schema({
     sexo: { type: String },
     telefono: { type: Number },
     email: { type: String, min: 6, max: 255 },
+    ciudad: { type: String, min: 3, max: 255 },
     calle: { type: String, min: 3, max: 255 },
     colonia: { type: String, min: 3, max: 255 },
     cp: { type: String, min: 3, max: 255 },
@@ -20,16 +21,21 @@ const personaSchema = new Schema({
     escolaridad: { type: Schema.Types.ObjectId, ref: 'Escolaridad' },
     tipoMiembro: { type: Schema.Types.ObjectId, ref: 'TipoMiembro' },
     familia: { type: Schema.Types.ObjectId, ref: 'Familia' },
-    bautismo: {},
-    estatus: {},
+    bautismo: {
+        activo: { type: Boolean, default: false },
+        fecha: { type: Date }
+    },
     estatus: {
         activo: { type: Boolean, default: true },
         motivo: { type: String },
         fecha: { type: Date }
     },
-    imagen: { type: String }
+    imagen: {
+        url: String,
+        id: String
+    }
 }, {
     timestamps: true
-});
+})
 
-module.exports = model("Persona", personaSchema);
+module.exports = model('Persona', personaSchema)

@@ -64,7 +64,7 @@ const RegistroView = (props) => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    console.log('datos', location)
+    //console.log('datos', location)
 
 
     useEffect(() => {
@@ -78,7 +78,7 @@ const RegistroView = (props) => {
         }
 
     }, [location.state])
-
+    // console.log({ values })
     return (
 
         <Formik

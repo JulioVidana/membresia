@@ -1,0 +1,31 @@
+### Get CATALOGOS GENERALES
+GET http://localhost:3001/api/catalogos/escolaridad
+###
+GET http://localhost:3001/api/catalogos/edocivil
+###
+GET http://localhost:3001/api/catalogos/edades
+
+
+### TRAE catalogo de TIPO DE MIEMBROS x iglesia
+GET http://localhost:3001/api/catalogos/tipomiembros/6024878b19e804be07b07462
+
+### AGREGA nuevo TIPO DE MIEMBRO
+POST http://localhost:3001/api/catalogos/tipomiembros
+Content-Type: application/json
+
+{
+    "tipo": "En Proceso",
+    "iglesia": "6024878b19e804be07b07462"
+}
+
+### ACTUALIZA  TIPO DE MIEMBRO
+PUT http://localhost:3001/api/catalogos/tipomiembros/604f9f01de3e5916a4d030ef
+Content-Type: application/json
+
+{
+    "tipo": "Miembro"
+}
+
+### BORRAR documento TIPO DE MIEMBRO
+DELETE http://localhost:3001/api/catalogos/tipomiembros/604f903e97d9600d7928f522
+

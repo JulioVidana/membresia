@@ -6,4 +6,4 @@ const edadesSchema = new Schema({
     grupo: { type: String, required: true }
 })
 
-module.exports = model("Edade", edadesSchema)
+module.exports = model('Edade', edadesSchema)

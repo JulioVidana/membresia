@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model } = require('mongoose')
 
 const usuarioSchema = new Schema({
     _id: { type: Schema.ObjectId, auto: true },
@@ -9,6 +9,6 @@ const usuarioSchema = new Schema({
     rol: { type: Number },
     iglesia: { type: Schema.Types.ObjectId, ref: 'Iglesia' },
     imagen: { type: String }
-});
+})
 
-module.exports = model("Usuario", usuarioSchema);
+module.exports = model('Usuario', usuarioSchema)

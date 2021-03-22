@@ -4,11 +4,12 @@ import PropTypes from 'prop-types';
 import {
     Card,
     CardContent,
-    CardHeader,
     Divider,
     Grid,
     makeStyles,
     Typography,
+    Box,
+    colors
 } from '@material-ui/core';
 import PhoneIcon from '@material-ui/icons/PhoneIphone';
 import MailIcon from '@material-ui/icons/Mail';
@@ -16,10 +17,14 @@ import LocationOnIcon from '@material-ui/icons/LocationOn';
 import WorkIcon from '@material-ui/icons/Work';
 import TodayIcon from '@material-ui/icons/Today';
 import SchoolIcon from '@material-ui/icons/School';
-
+import Ajustes from './ajustes/Ajustes'
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import CancelIcon from '@material-ui/icons/Cancel';
 
 const useStyles = makeStyles((theme) => ({
-    root: {},
+    root: {
+        height: '100%'
+    },
     statsIcon: {
         marginRight: 5
     },
@@ -31,193 +36,239 @@ const useStyles = makeStyles((theme) => ({
     texto: {
         marginLeft: 20
     },
+    siBautismo: {
+        marginLeft: 10,
+        color: colors.green[600]
+    },
+    noBautismo: {
+        marginLeft: 10,
+        color: colors.red[600]
+    }
 
 }));
 
 
 const ProfileDetails = ({ className, datos, ...rest }) => {
     const classes = useStyles();
+    const direcc = (calle, colonia, ciudad, cp) => {
+        let direccion = ''
+        if (calle !== '') { direccion = direccion + calle }
+        if (colonia !== '') { direccion = direccion + ', ' + colonia }
+        if (ciudad !== '') { direccion = direccion + ', ' + ciudad }
+        if (cp !== '') { direccion = direccion + ', ' + cp }
+        return direccion
+    }
 
     return (
-        <Card>
-            <CardHeader
-                title="Información personal"
+        <Box className={classes.root}>
+
+            <Ajustes
+                tiposMiembro={rest.tiposMiembro}
+                idMiembro={datos.tipoMiembro}
+                idUsuario={datos._id}
+                setOpenPopupEs={rest.setOpenPopupEs}
+                setOpenPopupBa={rest.setOpenPopupBa}
+
             />
-            <Divider />
-            <CardContent>
-                <Grid
-                    container
-                    spacing={3}
-                    wrap="wrap"
-                >
-                    <Grid
-                        className={classes.statsItem}
-                        item
-                        sm={7}
-                        xs={12}
-                    >
-                        <MailIcon
-                            className={classes.statsIcon}
-                            color="secondary"
-                        />
-                        <Typography
-                            color="textPrimary"
-                            variant="h5"
-                        >
-                            Correo:
-                        </Typography>
-                        <Typography
-                            color="textSecondary"
-                            className={classes.texto}
-                            variant="h5"
-                        >
-                            {datos.email}
-                        </Typography>
 
-                    </Grid>
+            <Card >
+
+                <CardContent>
 
                     <Grid
-                        className={classes.statsItem}
-                        item
-                        sm={5}
-                        xs={12}
+                        container
+                        spacing={3}
+                        wrap="wrap"
                     >
-                        <TodayIcon
-                            className={classes.statsIcon}
-                            color="secondary"
-                        />
-                        <Typography
-                            color="textPrimary"
-                            variant="h5"
+                        <Grid
+                            className={classes.statsItem}
+                            item
+                            sm={7}
+                            xs={12}
                         >
-                            Nacimiento:
+                            <MailIcon
+                                className={classes.statsIcon}
+                                color="secondary"
+                            />
+                            <Typography
+                                color="textPrimary"
+                                variant="h5"
+                            >
+                                Correo:
                         </Typography>
-                        <Typography
-                            color="textSecondary"
-                            className={classes.texto}
-                            variant="h5"
-                        >
-                            {moment(datos.nacimiento).format('LL')}
-                        </Typography>
+                            <Typography
+                                color="textSecondary"
+                                className={classes.texto}
+                                variant="h5"
+                            >
+                                {datos.email}
+                            </Typography>
 
-                    </Grid>
+                        </Grid>
 
-                    <Grid
-                        className={classes.statsItem}
-                        item
-                        sm={7}
-                        xs={12}
-                    >
-                        <PhoneIcon
-                            className={classes.statsIcon}
-                            color="secondary"
-                        />
-                        <Typography
-                            color="textPrimary"
-                            variant="h5"
+                        <Grid
+                            className={classes.statsItem}
+                            item
+                            sm={5}
+                            xs={12}
                         >
-                            Teléfono:
+                            <TodayIcon
+                                className={classes.statsIcon}
+                                color="secondary"
+                            />
+                            <Typography
+                                color="textPrimary"
+                                variant="h5"
+                            >
+                                Nacimiento:
                         </Typography>
-                        <Typography
-                            color="textSecondary"
-                            className={classes.texto}
-                            variant="h5"
-                        >
-                            {datos.phone}
-                        </Typography>
+                            <Typography
+                                color="textSecondary"
+                                className={classes.texto}
+                                variant="h5"
+                            >
+                                {moment(datos.nacimiento).format('LL')}
+                            </Typography>
 
-                    </Grid>
-                    <Grid
-                        className={classes.statsItem}
-                        item
-                        sm={5}
-                        xs={12}
-                    >
-                        <WorkIcon
-                            className={classes.statsIcon}
-                            color="secondary"
-                        />
-                        <Typography
-                            color="textPrimary"
-                            variant="h5"
-                        >
-                            Oficio:
-                        </Typography>
-                        <Typography
-                            color="textSecondary"
-                            className={classes.texto}
-                            variant="h5"
-                        >
-                            {datos.oficio}
-                        </Typography>
+                        </Grid>
 
-                    </Grid>
-
-                    <Grid
-                        className={classes.statsItem}
-                        item
-                        sm={12}
-                        xs={12}
-                    >
-                        <LocationOnIcon
-                            className={classes.statsIcon}
-                            color="secondary"
-                        />
-                        <Typography
-                            color="textPrimary"
-                            variant="h5"
+                        <Grid
+                            className={classes.statsItem}
+                            item
+                            sm={7}
+                            xs={12}
                         >
-                            Dirección:
+                            <PhoneIcon
+                                className={classes.statsIcon}
+                                color="secondary"
+                            />
+                            <Typography
+                                color="textPrimary"
+                                variant="h5"
+                            >
+                                Teléfono:
                         </Typography>
-                        <Typography
-                            color="textSecondary"
-                            className={classes.texto}
-                            variant="h5"
+                            <Typography
+                                color="textSecondary"
+                                className={classes.texto}
+                                variant="h5"
+                            >
+                                {datos.telefono}
+                            </Typography>
+
+                        </Grid>
+                        <Grid
+                            className={classes.statsItem}
+                            item
+                            sm={5}
+                            xs={12}
                         >
+                            <WorkIcon
+                                className={classes.statsIcon}
+                                color="secondary"
+                            />
+                            <Typography
+                                color="textPrimary"
+                                variant="h5"
+                            >
+                                Oficio:
+                        </Typography>
+                            <Typography
+                                color="textSecondary"
+                                className={classes.texto}
+                                variant="h5"
+                            >
+                                {datos.oficio}
+                            </Typography>
+
+                        </Grid>
+
+                        <Grid
+                            className={classes.statsItem}
+                            item
+                            sm={12}
+                            xs={12}
+                        >
+                            <LocationOnIcon
+                                className={classes.statsIcon}
+                                color="secondary"
+                            />
+                            <Typography
+                                color="textPrimary"
+                                variant="h5"
+                            >
+                                Dirección:
+                        </Typography>
+                            <Typography
+                                color="textSecondary"
+                                className={classes.texto}
+                                variant="h5"
+                            >
+                                {
+                                    direcc(datos.calle, datos.colonia, datos.ciudad, datos.cp)
+                                }
+                            </Typography>
+
+                        </Grid>
+                        <Grid
+                            className={classes.statsItem}
+                            item
+                            sm={7}
+                            xs={12}
+                        >
+                            <SchoolIcon
+                                className={classes.statsIcon}
+                                color="secondary"
+                            />
+                            <Typography
+                                color="textPrimary"
+                                variant="h5"
+                            >
+                                Escolaridad:
+                        </Typography>
+                            <Typography
+                                color="textSecondary"
+                                className={classes.texto}
+                                variant="h5"
+                            >
+                                {datos.escolaridad.escolaridad}
+                            </Typography>
+
+                        </Grid>
+                        <Grid
+                            className={classes.statsItem}
+                            item
+                            sm={5}
+                            xs={12}
+                        >
+                            <Typography
+                                color="textPrimary"
+                                variant="h5"
+                            >
+                                Bautizado:
+                        </Typography>
                             {
-                                datos.address &&
-                                `${datos.address.calle}, ${datos.address.colonia}, ${datos.address.ciudad}, ${datos.address.cp}`
+                                datos.bautismo.activo ?
+                                    <CheckCircleIcon className={classes.siBautismo} />
+                                    :
+                                    <CancelIcon className={classes.noBautismo} />
+
                             }
-                        </Typography>
+
+
+                        </Grid>
+
+
 
                     </Grid>
-                    {/*  <Grid
-                        className={classes.statsItem}
-                        item
-                        sm={5}
-                        xs={12}
-                    >
-                        <SchoolIcon
-                            className={classes.statsIcon}
-                            color="secondary"
-                        />
-                        <Typography
-                            color="textPrimary"
-                            variant="h5"
-                        >
-                            Escolaridad:
-                        </Typography>
-                        <Typography
-                            color="textSecondary"
-                            className={classes.texto}
-                            variant="h5"
-                        >
-                            {datos.education}
-                        </Typography>
-
-                    </Grid>
- */}
-
-
-                </Grid>
 
 
 
-            </CardContent>
-            <Divider />
+                </CardContent>
+                <Divider />
 
-        </Card>
-
+            </Card>
+        </Box>
     );
 };
 

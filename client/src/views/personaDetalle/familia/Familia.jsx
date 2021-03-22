@@ -54,7 +54,8 @@ const Famila = ({ className, datos, ...rest }) => {
 
         <Card>
             {
-                Object.keys(datos.familia).length !== 0 ?
+                /* Object.keys(datos.familia).length !== 0 ?*/
+                datos.familia ?
                     <div>
                         <CardHeader
                             title={`Familia ${datos.familia.familia}`}

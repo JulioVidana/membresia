@@ -1,5 +1,7 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { obtenerCatalogosPersonas } from 'src/redux/CatalogosPersonasDucks'
+import { addNotificacion } from 'src/redux/notifyDucks'
 import {
     Container,
     Grid,
@@ -8,16 +10,20 @@ import {
     Tab,
     Tabs,
     Divider
-} from '@material-ui/core';
-import PropTypes from 'prop-types';
-import Page from 'src/components/Page';
-import Profile from './Profile';
-import ProfileDetails from './ProfileDetails';
-import Famila from './Familia';
-import Notas from './Notas';
-import Actividad from './Actividad';
-import Ajustes from './Ajustes';
-import Titulo from 'src/components/Toolbar';
+} from '@material-ui/core'
+import PropTypes from 'prop-types'
+import Page from 'src/components/Page'
+import Profile from './Profile'
+import ProfileDetails from './ProfileDetails'
+import Famila from './familia/Familia'
+import Notas from './notas/Notas'
+import Actividad from './actividad/Actividad'
+import Titulo from 'src/components/Toolbar'
+import Popup from 'src/components/Popup'
+import Registro from '../personas/PersonasView/Registro'
+import Estatus from './ajustes/Estatus'
+import Bautismo from './ajustes/Bautismo'
+import Imagen from './image/Imagen'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -26,10 +32,10 @@ const useStyles = makeStyles((theme) => ({
         paddingBottom: theme.spacing(3),
         paddingTop: theme.spacing(3)
     }
-}));
+}))
 
 function TabPanel(props) {
-    const { children, value, index, ...other } = props;
+    const { children, value, index, ...other } = props
 
     return (
         <div
@@ -62,12 +68,32 @@ function a11yProps(index) {
 }
 
 const PersonaDetalle = () => {
-    const classes = useStyles();
-    const [value, setValue] = React.useState(0);
-    const personaData = useSelector(store => store.personaDetalle);
+    const classes = useStyles()
+    const dispatch = useDispatch()
+    const [value, setValue] = useState(0)
+    const catalogos = useSelector(store => store.catalogos)
+    const personaData = useSelector(store => store.personaDetalle.persona)
+    const { generos, edoCivil, grupoEdades, escolaridad, tipoMiembro } = catalogos
+    const [openPopup, setOpenPopup] = useState(false)
+    const [openPopupEs, setOpenPopupEs] = useState(false)
+    const [openPopupBa, setOpenPopupBa] = useState(false)
+    const [openPopupImg, setOpenPopupImg] = useState(false)
+
+
+
+
+
     const handleChange = (event, newValue) => {
-        setValue(newValue);
+        setValue(newValue)
     };
+
+    const openInPopup = () => {
+        if (catalogos.edoCivil.length === 0) {
+            dispatch(obtenerCatalogosPersonas())
+        }
+        setOpenPopup(true)
+    }
+
 
     return (
         <Page
@@ -76,9 +102,10 @@ const PersonaDetalle = () => {
         >
             <Titulo
                 title="Detalle Persona"
+                btnType='edit'
                 btnText="EDITAR"
                 icono='edit'
-                to='/app/addpersona'
+                onClick={() => { openInPopup() }}
             />
 
             <Container maxWidth={false}>
@@ -105,7 +132,10 @@ const PersonaDetalle = () => {
                             md={4}
                             xs={12}
                         >
-                            <Profile datos={personaData.persona} />
+                            <Profile
+                                datos={personaData}
+                                setOpenPopup={setOpenPopupImg}
+                            />
                         </Grid>
                         <Grid
                             item
@@ -113,8 +143,13 @@ const PersonaDetalle = () => {
                             md={8}
                             xs={12}
                         >
-                            <Ajustes />
-                            <ProfileDetails datos={personaData.persona} />
+
+                            <ProfileDetails
+                                datos={personaData}
+                                tiposMiembro={tipoMiembro}
+                                setOpenPopupBa={setOpenPopupBa}
+                                setOpenPopupEs={setOpenPopupEs}
+                            />
                         </Grid>
 
                         <Grid
@@ -123,13 +158,13 @@ const PersonaDetalle = () => {
                             md={4}
                             xs={12}
                         >
-                            <Famila datos={personaData.persona} />
+                            <Famila datos={personaData} />
                         </Grid>
                     </Grid>
 
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                    <Notas datos={personaData.persona} />
+                    <Notas datos={personaData} />
                 </TabPanel>
                 <TabPanel value={value} index={2}>
                     <Actividad />
@@ -137,7 +172,65 @@ const PersonaDetalle = () => {
 
             </Container>
 
+
+            <Popup
+                title="Datos Generales"
+                openPopup={openPopup}
+                setOpenPopup={setOpenPopup}
+            >
+                <Registro
+                    catalogos={catalogos}
+                    values={personaData}
+                    editar={true}
+                    generos={generos}
+                    civil={edoCivil}
+                    edades={grupoEdades}
+                    escolaridad={escolaridad}
+                    notif={addNotificacion}
+                    setOpenPopup={setOpenPopup}
+                />
+            </Popup>
+
+            <Popup
+                title="Cambiar Estatus a Inactivo"
+                openPopup={openPopupEs}
+                setOpenPopup={setOpenPopupEs}
+            >
+                <Estatus
+                    notif={addNotificacion}
+                    setOpenPopup={setOpenPopupEs}
+                    motivoBaja={catalogos.motivoBaja}
+                />
+            </Popup>
+
+            <Popup
+                title="Bautismo"
+                openPopup={openPopupBa}
+                setOpenPopup={setOpenPopupBa}
+            >
+                <Bautismo
+                    notif={addNotificacion}
+                    setOpenPopup={setOpenPopupBa}
+                    bautismoEstatus={personaData.bautismo.activo}
+                />
+            </Popup>
+
+            <Popup
+                title='Editar Imagen'
+                openPopup={openPopupImg}
+                setOpenPopup={setOpenPopupImg}
+            >
+                <Imagen
+                    imagen={personaData.imagen}
+                    notif={addNotificacion}
+                    setOpenPopup={setOpenPopupImg}
+                />
+            </Popup>
+
+
         </Page>
+
+
 
     );
 };
