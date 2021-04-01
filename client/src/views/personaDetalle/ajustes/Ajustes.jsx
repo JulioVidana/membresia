@@ -20,6 +20,7 @@ import SettingsIcon from '@material-ui/icons/Settings'
 import ExpandMore from '@material-ui/icons/ExpandMore'
 import { addNotificacion } from 'src/redux/notifyDucks'
 import ConfirmDialog from 'src/components/ConfirmDialog'
+import Inactivo from './Inactivo'
 
 
 
@@ -52,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const Ajustes = ({ tiposMiembro, idMiembro, idUsuario, setOpenPopupEs, setOpenPopupBa }) => {
+const Ajustes = ({ tiposMiembro, idMiembro, idUsuario, setOpenPopupEs, setOpenPopupBa, estatus }) => {
     const dispatch = useDispatch()
     const classes = useStyles()
     const navigate = useNavigate();
@@ -119,6 +120,23 @@ const Ajustes = ({ tiposMiembro, idMiembro, idUsuario, setOpenPopupEs, setOpenPo
             spacing={1}
             className={classes.grids}
         >
+            {
+                !estatus.activo &&
+                <Grid
+                    item
+                    xs={12}
+                    md={7}
+                    lg={7}
+                >
+                    <Inactivo
+                        estatus={estatus}
+                        confirmDialog={confirmDialog}
+                        setConfirmDialog={setConfirmDialog}
+                    />
+                </Grid>
+            }
+
+
             <Grid
                 item
                 lg={3}

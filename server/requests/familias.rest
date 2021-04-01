@@ -1,0 +1,36 @@
+
+###GET FAMILIA POR id Familia
+GET http://localhost:3001/api/familias/6060c08f630c2751724e3dc5
+
+###GET FAMILIA POR PERSONA
+GET http://localhost:3001/api/familias/persona/605fee39acb57c11e45ab649
+
+###GET TODAS LAS FAMILIAS por IGLESIAS
+GET http://localhost:3001/api/familias/todas/6024878b19e804be07b07462
+
+
+### NUEVA FAMILIA
+POST http://localhost:3001/api/familias
+Content-Type: application/json
+
+{
+    "familia": "Lopez Valenzuela",
+    "iglesia": "6024878b19e804be07b07462",
+    "personas": ["605fee39acb57c11e45ab649","605ff04bacb57c11e45ab64d"]
+}
+
+
+### ELIMINA FAMILIA
+DELETE http://localhost:3001/api/familias/6060121c8f46d9290ca34eb5
+
+
+### ACTUALIZA FAMILIA
+PUT http://localhost:3001/api/familias/6060f5b74a3224702538b8a7
+Content-Type: application/json
+
+{
+    "familia": "Lopez Valenzuela",
+    "iglesia": "6024878b19e804be07b07462",
+    "personas": ["605ff04bacb57c11e45ab64d","605fee39acb57c11e45ab649"]
+}
+//  "personas": ["605ff04bacb57c11e45ab64d","605fee39acb57c11e45ab649","605fef29acb57c11e45ab64c"]

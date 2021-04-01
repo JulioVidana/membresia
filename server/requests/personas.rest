@@ -1,6 +1,9 @@
 ### TRAE TODAS LAS PERSONAS POR DETERMINADA IGLESIA
 GET http://localhost:3001/api/personas/6024878b19e804be07b07462 
 
+### TRAE A LAS PERSONAS  INACTIVAS POR DETERMINADA IGLESIA
+GET http://localhost:3001/api/personas/inactivos/6024878b19e804be07b07462 
+
 ### TRAE DATOS DE UNA PERSONA
 GET http://localhost:3001/api/personas/persona/6035cb6d79332c2971ba17bc 
 

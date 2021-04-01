@@ -2,7 +2,7 @@ import Axios from 'axios'
 import backendUrl from './backendUrl'
 import { returnErrors } from './erroresDucks'
 import { addNotificacion } from './notifyDucks'
-
+import { traeFamilia, resetFamilia } from './familiasDucks'
 
 //CONSTANTES
 const dataInicial = {
@@ -57,6 +57,7 @@ export default function personaDetReducer(state = dataInicial, action) {
 //ACCIONES
 export const cargaPersona = (datos) => async (dispatch, getState) => {
     dispatch({ type: CARGA_PERSONA, payload: datos })
+    datos.familia ? dispatch(traeFamilia(datos.familia)) : dispatch(resetFamilia())
 }
 
 export const traePersona = (datos) => async (dispatch) => {
@@ -87,13 +88,18 @@ export const actualizaTipoMiembro = (id, datos) => async (dispatch, getState) =>
 
 }
 
-export const addInactivo = (datos) => async (dispatch, getState) => {
+export const cambiaEstatus = (datos) => async (dispatch, getState) => {
 
     const { persona } = getState().personaDetalle
 
-    Axios.put(`${backendUrl}/api/personas/inactivo/${persona._id}`, datos)
+    Axios.put(`${backendUrl}/api/personas/estatus/${persona._id}`, datos)
         .then(result => {
             dispatch({ type: ADD_INACTIVO, payload: result.data })
+
+            Axios.get(`${backendUrl}/api/personas/persona/${persona._id}`)
+                .then(result => {
+                    dispatch({ type: TRAE_PERSONA, payload: result.data[0] })
+                })
         })
         .catch(err => {
             dispatch(returnErrors(err.response.data, err.response.status, 'REGISTRO_ERROR'));

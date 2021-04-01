@@ -3,57 +3,28 @@ const Personas = require('../models/personas')
 const ObjectId = require('mongoose').Types.ObjectId
 
 
-
-router.route('/:id').get(async (req, res) => {
+router.get('/:id', async (req, res, next) => {
     const { id } = req.params
-    await Personas.aggregate(
-        [
-            {
-                '$match': {
-                    'estatus.activo': true,
-                    'iglesia': new ObjectId(id)
-                }
-            }, {
-                '$lookup': {
-                    'from': 'estadoCivil',
-                    'localField': 'civil',
-                    'foreignField': '_id',
-                    'as': 'civil'
-                }
-            }, {
-                '$unwind': {
-                    'path': '$civil'
-                }
-            }, {
-                '$lookup': {
-                    'from': 'escolaridad',
-                    'localField': 'escolaridad',
-                    'foreignField': '_id',
-                    'as': 'escolaridad'
-                }
-            }, {
-                '$unwind': {
-                    'path': '$escolaridad'
-                }
-            },
-            {
-                '$addFields': {
-                    'completo': {
-                        '$concat': [
-                            '$nombre', ' ', '$aPaterno', ' ', '$aMaterno'
-                        ]
-                    }
-                }
-            }
-        ],
-        (err, result) => {
-            if (err) {
-                res.send(err)
-            }
-            res.send(result)
-        }
-    )
+
+    await Personas.find({ iglesia: id, 'estatus.activo': true })
+        .populate('civil')
+        .populate('escolaridad')
+        .populate('tipoMiembro', { iglesia: 0 })
+        .then(result => res.json(result))
+        .catch(err => next(err))
 })
+
+router.get('/inactivos/:id', async (req, res, next) => {
+    const { id } = req.params
+
+    await Personas.find({ iglesia: id, 'estatus.activo': false })
+        .populate('civil')
+        .populate('escolaridad')
+        .populate('tipoMiembro', { iglesia: 0 })
+        .then(result => res.json(result))
+        .catch(err => next(err))
+})
+
 
 //AGREGAR NUEVA PERSONA
 router.post('/add', async (request, response, next) => {
@@ -193,7 +164,7 @@ router.route('/tipomiembro/:id').put((request, response, next) => {
 })
 
 //ESTATUS INACTIVO
-router.route('/inactivo/:id').put((request, response, next) => {
+router.route('/estatus/:id').put((request, response, next) => {
     const { id } = request.params
     const datos = request.body
 
@@ -237,7 +208,7 @@ router.route('/bautismo/:id').put((request, response, next) => {
 
 })
 //BORRAR USUARIO
-router.route('/borrar/:id').delete(async (request, response, next) => {
+router.route('/borrar/:id').delete(async (request, response) => {
     const { id } = request.params
     const borrar = await Personas.findByIdAndDelete(id)
 

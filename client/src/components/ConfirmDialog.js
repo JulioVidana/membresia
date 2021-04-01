@@ -1,8 +1,8 @@
 import React from 'react'
 import { Dialog, DialogContent, DialogActions, Typography, makeStyles, IconButton } from '@material-ui/core'
 import Controls from "./controls/Controls";
-import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
+import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 
 const useStyles = makeStyles(theme => ({
     dialog: {
@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
         }
     },
     titleIcon1: {
-        color: theme.palette.secondary.main,
+        color: theme.palette.warning.main,
         '& .MuiSvgIcon-root': {
             fontSize: '8rem',
         }
@@ -40,8 +40,8 @@ const useStyles = makeStyles(theme => ({
         '&:hover': { backgroundColor: theme.palette.error.dark }
     },
     btnDialog: {
-        backgroundColor: theme.palette.primary.main,
-        '&:hover': { backgroundColor: theme.palette.primary.dark }
+        backgroundColor: theme.palette.warning.main,
+        '&:hover': { backgroundColor: theme.palette.warning.dark }
     }
 }))
 
@@ -59,7 +59,7 @@ export default function ConfirmDialog(props) {
                         </IconButton>
                         :
                         <IconButton disableRipple className={classes.titleIcon1}>
-                            <HelpOutlineIcon />
+                            <ErrorOutlineIcon />
                         </IconButton>
                 }
 
@@ -76,7 +76,7 @@ export default function ConfirmDialog(props) {
                     color="default"
                     onClick={() => setConfirmDialog({ ...confirmDialog, isOpen: false })} />
                 <Controls.Button
-                    text="Yes"
+                    text="Si"
                     className={confirmDialog.type === 'alerta' ? classes.btnAlerta : classes.btnDialog}
                     onClick={confirmDialog.onConfirm} />
             </DialogActions>

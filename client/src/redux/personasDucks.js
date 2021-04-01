@@ -13,6 +13,7 @@ const dataInicial = {
 //ACTION TYPES
 const PERSONAS_LOADING = 'PERSONAS_LOADING'
 const OBTENER_PERSONAS = 'OBTENER_PERSONAS'
+const OBTENER_INACTIVOS = 'OBTENER_INACTIVOS'
 const AGREGA_PERSONA = 'AGREGA_PERSONA'
 const ERROR_AGREGA_PERSONA = 'ERROR_AGREGA_PERSONA'
 const ACTUALIZA_PERSONA = 'ACTUALIZA_PERSONA'
@@ -26,6 +27,7 @@ export default function personasReducer(state = dataInicial, action) {
     switch (action.type) {
         case PERSONAS_LOADING:
             return { ...state, loading: true }
+        case OBTENER_INACTIVOS:
         case OBTENER_PERSONAS:
             return { ...state, personas: action.payload, loading: false }
         case ACTUALIZA_PERSONA:
@@ -89,3 +91,18 @@ export const actualizaPersona = (datos) => async (dispatch, getState) => {
 
 }
 
+//ACCIONES
+export const obtenerInactivos = (iglesia) => async (dispatch, getState) => {
+    dispatch({ type: PERSONAS_LOADING })
+    Axios.get(`${backendUrl}/api/personas/inactivos/${iglesia._id}`)
+        .then(result => {
+            dispatch({ type: OBTENER_INACTIVOS, payload: result.data })
+        })
+        .catch(err => {
+            dispatch(returnErrors(err.response.data, err.response.status, 'REGISTRO_ERROR'));
+            dispatch({ type: ERROR_OBTENER_PERSONAS });
+            dispatch(addNotificacion(err.message, true, 'error'))
+
+        })
+
+}

@@ -15,7 +15,7 @@ import PropTypes from 'prop-types'
 import Page from 'src/components/Page'
 import Profile from './Profile'
 import ProfileDetails from './ProfileDetails'
-import Famila from './familia/Familia'
+import Famila from './familia/FamiliaCard'
 import Notas from './notas/Notas'
 import Actividad from './actividad/Actividad'
 import Titulo from 'src/components/Toolbar'
@@ -24,6 +24,7 @@ import Registro from '../personas/PersonasView/Registro'
 import Estatus from './ajustes/Estatus'
 import Bautismo from './ajustes/Bautismo'
 import Imagen from './image/Imagen'
+import RegistroFamilia from './familia/index'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -73,12 +74,14 @@ const PersonaDetalle = () => {
     const [value, setValue] = useState(0)
     const catalogos = useSelector(store => store.catalogos)
     const personaData = useSelector(store => store.personaDetalle.persona)
+    const personasList = useSelector(store => store.personas.personas)
+    const familia = useSelector(store => store.familias.familia)
     const { generos, edoCivil, grupoEdades, escolaridad, tipoMiembro } = catalogos
     const [openPopup, setOpenPopup] = useState(false)
     const [openPopupEs, setOpenPopupEs] = useState(false)
     const [openPopupBa, setOpenPopupBa] = useState(false)
     const [openPopupImg, setOpenPopupImg] = useState(false)
-
+    const [openFamilia, setOpenFamilia] = useState(false)
 
 
 
@@ -98,7 +101,7 @@ const PersonaDetalle = () => {
     return (
         <Page
             className={classes.root}
-            title="Account"
+            title="Detalle Persona"
         >
             <Titulo
                 title="Detalle Persona"
@@ -158,7 +161,10 @@ const PersonaDetalle = () => {
                             md={4}
                             xs={12}
                         >
-                            <Famila datos={personaData} />
+                            <Famila
+                                setOpenPopup={setOpenFamilia}
+                                familia={familia}
+                            />
                         </Grid>
                     </Grid>
 
@@ -227,12 +233,26 @@ const PersonaDetalle = () => {
                 />
             </Popup>
 
+            <Popup
+                title='Editar Familia'
+                openPopup={openFamilia}
+                setOpenPopup={setOpenFamilia}
+                fullWidth={true}
+                maxWidth={'sm'}
+            >
+                <RegistroFamilia
+                    personaData={personaData}
+                    notif={addNotificacion}
+                    setOpenPopup={setOpenFamilia}
+                    personasList={personasList}
+                    familia={familia}
+                />
+            </Popup>
+
 
         </Page>
 
-
-
-    );
-};
+    )
+}
 
 export default PersonaDetalle;

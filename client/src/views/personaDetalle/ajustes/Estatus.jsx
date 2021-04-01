@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { addInactivo } from 'src/redux/personaDetalleDucks'
+import { cambiaEstatus } from 'src/redux/personaDetalleDucks'
 import {
     Box,
     makeStyles,
@@ -83,11 +83,15 @@ const Estatus = ({ motivoBaja, setOpenPopup, notif }) => {
 
     const onSubmit = e => {
         e.preventDefault()
-        dispatch(addInactivo(inactivo))
+        dispatch(cambiaEstatus(inactivo))
             .then(() => {
                 dispatch(notif('Se actualizó correctamente', true, 'success'))
                 setOpenPopup(false)
             })
+    }
+    const cancelar = () => {
+        setOpenPopup(false)
+        //setFiles([])
     }
     return (
         <form onSubmit={onSubmit} >
@@ -169,7 +173,27 @@ const Estatus = ({ motivoBaja, setOpenPopup, notif }) => {
                     <Grid
                         item
                         md={3}
-                        xs={12}
+                        xs={6}
+                    >
+                        <Box
+                            display="flex"
+                            justifyContent="flex-end"
+                            p={1}
+                        >
+
+                            <Button
+                                color="secondary"
+                                size="large"
+                                onClick={() => cancelar()}
+                            >
+                                cancelar
+                            </Button>
+                        </Box>
+                    </Grid>
+                    <Grid
+                        item
+                        md={3}
+                        xs={6}
                     >
                         <Box
                             display="flex"

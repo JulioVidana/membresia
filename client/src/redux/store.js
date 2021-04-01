@@ -12,6 +12,7 @@ import notifyReducer from './notifyDucks';
 import usuariosReducer from './usuariosDucks';
 import catalogosPersonas from './CatalogosPersonasDucks'
 import personas from './personasDucks'
+import familias from './familiasDucks'
 
 const rootReducer = combineReducers({
     error: erroresReducer,
@@ -21,7 +22,8 @@ const rootReducer = combineReducers({
     notificacion: notifyReducer,
     usuarios: usuariosReducer,
     catalogos: catalogosPersonas,
-    personas: personas
+    personas: personas,
+    familias: familias
 })
 
 //extensión de google chrome para visualizar la tienda en navegador

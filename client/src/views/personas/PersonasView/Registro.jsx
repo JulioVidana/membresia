@@ -75,7 +75,8 @@ const RegistroView = (props) => {
         iglesia: values.iglesia,
         oficio: values.oficio,
         civil: values.civil._id,
-        escolaridad: values.escolaridad._id
+        escolaridad: values.escolaridad._id,
+        nacimiento: values.nacimiento
     }
     //console.log({ initialFValues })
 

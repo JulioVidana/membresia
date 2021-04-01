@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
     Button,
@@ -48,32 +48,33 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const Famila = ({ className, datos, ...rest }) => {
-    const classes = useStyles();
+const FamilaCard = ({ familia, setOpenPopup }) => {
+    const classes = useStyles()
+
     return (
 
         <Card>
             {
                 /* Object.keys(datos.familia).length !== 0 ?*/
-                datos.familia ?
+                Object.keys(familia).length !== 0 ?
                     <div>
                         <CardHeader
-                            title={`Familia ${datos.familia.familia}`}
+                            title={`Familia ${familia.familia}`}
                         />
                         <Divider />
                         <CardContent>
                             <List className={classes.lista}>
                                 {
-                                    datos.familia.integrantes.map(item => (
+                                    familia.personas.map(item => (
                                         <ListItem key={item._id}>
                                             <ListItemAvatar>
                                                 <Avatar
-                                                    src={item.avatarUrl}
+                                                    src={item.imagen?.url}
                                                 >
                                                     {getInitials(item.nombre)}
                                                 </Avatar>
                                             </ListItemAvatar>
-                                            <ListItemText primary={item.nombre} />
+                                            <ListItemText primary={`${item.nombre}  ${item.aPaterno} ${item.aMaterno}`} />
                                         </ListItem>
 
 
@@ -89,6 +90,7 @@ const Famila = ({ className, datos, ...rest }) => {
                                 variant="text"
                                 size="large"
                                 startIcon={<EditIcon />}
+                                onClick={() => { setOpenPopup(true) }}
                             >
                                 Editar
                             </Button>
@@ -117,6 +119,7 @@ const Famila = ({ className, datos, ...rest }) => {
                                 variant="text"
                                 size="large"
                                 startIcon={<AddIcon />}
+                                onClick={() => { setOpenPopup(true) }}
                             >
                                 Agregar
         </Button>
@@ -132,8 +135,8 @@ const Famila = ({ className, datos, ...rest }) => {
     );
 };
 
-Famila.propTypes = {
+FamilaCard.propTypes = {
     className: PropTypes.string
 };
 
-export default Famila;
+export default FamilaCard;

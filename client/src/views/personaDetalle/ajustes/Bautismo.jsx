@@ -93,6 +93,12 @@ const Bautismo = ({ bautismoEstatus, setOpenPopup, notif }) => {
 
 
     }
+
+    const cancelar = () => {
+        setOpenPopup(false)
+        //setFiles([])
+    }
+
     return (
         <form onSubmit={onSubmit} >
             <Box
@@ -157,8 +163,28 @@ const Bautismo = ({ bautismoEstatus, setOpenPopup, notif }) => {
                 >
                     <Grid
                         item
+                        md={3}
+                        xs={6}
+                    >
+                        <Box
+                            display="flex"
+                            justifyContent="flex-end"
+                            p={1}
+                        >
+
+                            <Button
+                                color="secondary"
+                                size="large"
+                                onClick={() => cancelar()}
+                            >
+                                cancelar
+                            </Button>
+                        </Box>
+                    </Grid>
+                    <Grid
+                        item
                         md={6}
-                        xs={12}
+                        xs={6}
                     >
                         <Box
                             display="flex"

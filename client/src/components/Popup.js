@@ -29,10 +29,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Popup = (props) => {
-    const { title, children, openPopup, setOpenPopup, fullWidth, fullScreen } = props;
+    const { title, children, openPopup, setOpenPopup, fullWidth, fullScreen, maxWidth } = props;
     const classes = useStyles();
     return (
-        <Dialog fullScreen={fullScreen} open={openPopup} maxWidth="lg" fullWidth={fullWidth} classes={{ paper: classes.dialogWrapper }}>
+        <Dialog fullScreen={fullScreen} open={openPopup} maxWidth={maxWidth || 'lg'} fullWidth={fullWidth} classes={{ paper: classes.dialogWrapper }}>
             <DialogTitle className={classes.dialogTitle}>
                 <div style={{ display: 'flex' }}>
                     <Typography variant="h5" component="div" style={{ flexGrow: 1 }}>

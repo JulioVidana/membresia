@@ -50,25 +50,26 @@ const useStyles = makeStyles((theme) => ({
 
 const ProfileDetails = ({ className, datos, ...rest }) => {
     const classes = useStyles();
-    const direcc = (calle, colonia, ciudad, cp) => {
-        let direccion = ''
-        if (calle !== '') { direccion = direccion + calle }
-        if (colonia !== '') { direccion = direccion + ', ' + colonia }
-        if (ciudad !== '') { direccion = direccion + ', ' + ciudad }
-        if (cp !== '') { direccion = direccion + ', ' + cp }
-        return direccion
-    }
+    /* const direcc = (calle, colonia, ciudad, cp) => {
+       let direccion = ''
+       if (calle !== '') { direccion = direccion + calle }
+       if (colonia !== '') { direccion = direccion + ', ' + colonia }
+       if (ciudad !== '') { direccion = direccion + ', ' + ciudad }
+       if (cp !== '') { direccion = direccion + ', ' + cp }
+       return direccion
+   }  */
+
 
     return (
         <Box className={classes.root}>
 
             <Ajustes
                 tiposMiembro={rest.tiposMiembro}
-                idMiembro={datos.tipoMiembro}
+                idMiembro={datos.tipoMiembro?._id}
                 idUsuario={datos._id}
                 setOpenPopupEs={rest.setOpenPopupEs}
                 setOpenPopupBa={rest.setOpenPopupBa}
-
+                estatus={datos.estatus}
             />
 
             <Card >
@@ -205,7 +206,8 @@ const ProfileDetails = ({ className, datos, ...rest }) => {
                                 variant="h5"
                             >
                                 {
-                                    direcc(datos.calle, datos.colonia, datos.ciudad, datos.cp)
+                                    //direcc(datos.calle, datos.colonia, datos.ciudad, datos.cp)
+                                    `${datos.calle} ${datos.colonia} ${datos.ciudad} ${datos.cp}`
                                 }
                             </Typography>
 

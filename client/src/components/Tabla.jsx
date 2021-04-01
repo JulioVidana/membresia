@@ -36,6 +36,7 @@ const Tabla = (records, headCells, filterFn) => {
     const [order, setOrder] = useState()
     const [orderBy, setOrderBy] = useState()
 
+
     const TblContainer = props => (
         <Table className={classes.table}>
 
@@ -90,17 +91,17 @@ const Tabla = (records, headCells, filterFn) => {
     function stableSort(array, comparator) {
         const stabilizedThis = array.map((el, index) => [el, index]);
         stabilizedThis.sort((a, b) => {
-            const order = comparator(a[0], b[0]);
-            if (order !== 0) return order;
-            return a[1] - b[1];
+            const order = comparator(a[0], b[0])
+            if (order !== 0) return order
+            return a[1] - b[1]
         });
-        return stabilizedThis.map((el) => el[0]);
+        return stabilizedThis.map((el) => el[0])
     }
 
     function getComparator(order, orderBy) {
         return order === 'desc'
             ? (a, b) => descendingComparator(a, b, orderBy)
-            : (a, b) => -descendingComparator(a, b, orderBy);
+            : (a, b) => -descendingComparator(a, b, orderBy)
     }
 
     function descendingComparator(a, b, orderBy) {

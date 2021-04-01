@@ -35,7 +35,23 @@ const personaSchema = new Schema({
         id: String
     }
 }, {
-    timestamps: true
+    timestamps: true,
+    toJSON: {
+        virtuals: true
+    }
+})
+
+let nombreVirtual = personaSchema.virtual('completo')
+
+nombreVirtual.get(function () {
+    return this.nombre + ' ' + this.aPaterno + ' ' + this.aMaterno
+})
+
+nombreVirtual.set(function (name) {
+    let split = name.split(' ')
+    this.nombre = split[0]
+    this.aPaterno = split[1]
+    this.aMaterno = split[2]
 })
 
 module.exports = model('Persona', personaSchema)
