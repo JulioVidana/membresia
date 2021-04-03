@@ -1,4 +1,5 @@
 const { Schema, model } = require('mongoose')
+//plugin(require('../utils/diff-plugin'))
 
 const personaSchema = new Schema({
     _id: { type: Schema.ObjectId, auto: true },

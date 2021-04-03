@@ -3,6 +3,7 @@ import backendUrl from './backendUrl'
 import { returnErrors } from './erroresDucks'
 import { addNotificacion } from './notifyDucks'
 import { traeFamilia, resetFamilia } from './familiasDucks'
+import { traeNotas } from './notasDucks'
 
 //CONSTANTES
 const dataInicial = {
@@ -58,6 +59,7 @@ export default function personaDetReducer(state = dataInicial, action) {
 export const cargaPersona = (datos) => async (dispatch, getState) => {
     dispatch({ type: CARGA_PERSONA, payload: datos })
     datos.familia ? dispatch(traeFamilia(datos.familia)) : dispatch(resetFamilia())
+    dispatch(traeNotas(datos._id))
 }
 
 export const traePersona = (datos) => async (dispatch) => {

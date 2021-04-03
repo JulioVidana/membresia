@@ -14,6 +14,7 @@ const catalogosPersonas = require('./routes/catalogosPersonas')
 const personas = require('./routes/personas')
 const avatarsPersonas = require('./routes/avatarPersonas')
 const familias = require('./routes/familias')
+const notas = require('./routes/notas')
 
 //conexión base de datos MONGODB LOCAL
 mongoose.connect('mongodb://localhost:27017/membresia', { useNewUrlParser: true, useUnifiedTopology: true })
@@ -36,6 +37,7 @@ app.use('/api/catalogos', catalogosPersonas)
 app.use('/api/personas', personas)
 app.use('/api/avatars', avatarsPersonas)
 app.use('/api/familias', familias)
+app.use('/api/notas', notas)
 app.get('/', (req, res) => {
     res.send('Membresia API')
 })

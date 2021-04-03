@@ -76,6 +76,8 @@ const PersonaDetalle = () => {
     const personaData = useSelector(store => store.personaDetalle.persona)
     const personasList = useSelector(store => store.personas.personas)
     const familia = useSelector(store => store.familias.familia)
+    const notas = useSelector(store => store.notas.notas)
+    const usuario = useSelector(store => store.auth.usuario)
     const { generos, edoCivil, grupoEdades, escolaridad, tipoMiembro } = catalogos
     const [openPopup, setOpenPopup] = useState(false)
     const [openPopupEs, setOpenPopupEs] = useState(false)
@@ -170,7 +172,12 @@ const PersonaDetalle = () => {
 
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                    <Notas datos={personaData} />
+                    <Notas
+                        datos={personaData}
+                        notas={notas}
+                        usuario={usuario}
+                        notif={addNotificacion}
+                    />
                 </TabPanel>
                 <TabPanel value={value} index={2}>
                     <Actividad />

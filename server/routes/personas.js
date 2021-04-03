@@ -147,21 +147,53 @@ router.route('/persona/:id').get(async (req, res) => {
         .catch(err => res.status(400).json('Error ' + err))
 })
 
-//ACTUALIZA TIPO DE MIEMBRO
-router.route('/tipomiembro/:id').put((request, response, next) => {
-    const { id } = request.params
-    const datos = request.body
+    //ACTUALIZA TIPO DE MIEMBRO
+    / router.route('/tipomiembro/:id').put((request, response, next) => {
+        const { id } = request.params
+        const datos = request.body
 
-    Personas.findByIdAndUpdate(
-        id,
-        { tipoMiembro: datos._id },
-        { new: true, useFindAndModify: false })
-        .then(() => {
-            response.status(200).end()
+        Personas.findByIdAndUpdate(
+            id,
+            { tipoMiembro: datos._id },
+            { new: true, useFindAndModify: false })
+            .then(() => {
+                response.status(200).end()
+            })
+            .catch(error => next(error))
+
+    })
+
+/* router.route('/tipomiembro/:id').put((req, res, next) => {
+    const { id } = req.params
+    const datos = req.body
+
+    return Personas.findById(id)
+        .then(persona => {
+            if (!persona)
+                throw new Error('No existe Persona')
+            persona.tipoMiembro = datos._id
+            return persona.save()
         })
-        .catch(error => next(error))
+        .then(result => {
+            res.json(result)
+            return result
+        })
+        .catch(next)
+        .then(persona => {
+            if (persona && typeof persona.log === 'function') {
+                const data = {
+                    action: 'update-tipoMiembro',
+                    persona: datos._id,
+                    createdBy: datos.usuario
+                }
+                return persona.log(data)
+            }
+        })
+        .catch(err => {
+            console.log('Caught error while logging: ', err)
+        })
+}) */
 
-})
 
 //ESTATUS INACTIVO
 router.route('/estatus/:id').put((request, response, next) => {

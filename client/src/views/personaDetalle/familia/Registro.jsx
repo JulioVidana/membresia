@@ -54,7 +54,7 @@ const Registro = ({
                 initialValues={values}
                 validationSchema={
                     Yup.object().shape({
-                        familia: Yup.string().max(255).min(6, 'Mínimo 6 caracteres').required('Falta Nombre'),
+                        familia: Yup.string().max(128).min(6, 'Mínimo 6 caracteres').required('Falta Nombre'),
                     })
                 }
                 onSubmit={(values) => {

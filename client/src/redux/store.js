@@ -11,19 +11,24 @@ import iglesiasReducer from './iglesiasDucks';
 import notifyReducer from './notifyDucks';
 import usuariosReducer from './usuariosDucks';
 import catalogosPersonas from './CatalogosPersonasDucks'
-import personas from './personasDucks'
-import familias from './familiasDucks'
+import personasReducer from './personasDucks'
+import familiasReducer from './familiasDucks'
+import notasReducer from './notasDucks'
+import authReducer from './authDucks'
 
 const rootReducer = combineReducers({
-    error: erroresReducer,
+    auth: authReducer,
     general: generalReducer,
-    personaDetalle: personaDetReducer,
-    iglesias: iglesiasReducer,
-    notificacion: notifyReducer,
-    usuarios: usuariosReducer,
     catalogos: catalogosPersonas,
-    personas: personas,
-    familias: familias
+    personaDetalle: personaDetReducer,
+    personas: personasReducer,
+    notas: notasReducer,
+    familias: familiasReducer,
+    iglesias: iglesiasReducer,
+    usuarios: usuariosReducer,
+    notificacion: notifyReducer,
+    error: erroresReducer,
+
 })
 
 //extensión de google chrome para visualizar la tienda en navegador

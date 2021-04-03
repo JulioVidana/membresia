@@ -4,13 +4,20 @@ import NuevaNota from './NuevaNota'
 import NotasTotal from './NotasTotal'
 
 
-const Notas = (datos, ...rest) => {
+const Notas = ({ datos, notas, usuario, notif }) => {
 
     return (
         <Box>
-            <NuevaNota />
+            <NuevaNota
+                datosPersona={datos}
+                usuario={usuario}
+                notif={notif}
+            />
             <Box mt={2}>
-                <NotasTotal />
+                <NotasTotal
+                    notas={notas}
+                    notif={notif}
+                />
             </Box>
         </Box>
     )

@@ -57,7 +57,8 @@ PUT http://localhost:3001/api/personas/tipomiembro/6035cb6d79332c2971ba17bc
 Content-Type: application/json
 
 {
-    "_id": "604fa9a93c4b041a6e9d73a5"
+    "_id": "604fa9a93c4b041a6e9d73a5",
+    "usuario": "602bf8c2e9176be5008ef2cc"
 }
 
 ### CAMBIA ESTATUS INACTIVO

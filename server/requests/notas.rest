@@ -1,0 +1,17 @@
+### TRAE NOTAS POR PERSONA
+GET http://localhost:3001/api/notas/6035ddb53530c334a10674fe
+
+### GUARDA NUEVA NOTA
+POST http://localhost:3001/api/notas
+Content-Type: application/json
+
+{
+    "nota": "Tercera Nota de prueba",
+    "categoria":"General",
+    "persona":"6035ddb53530c334a10674fe",
+    "usuario": "602bf8c2e9176be5008ef2cc",
+    "fecha": "2021-03-28T17:11:21.472Z"
+}
+
+### BORRAR NOTA
+DELETE http://localhost:3001/api/notas/6066b0dedebe1c672c43dd8e
