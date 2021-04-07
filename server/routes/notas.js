@@ -16,6 +16,32 @@ router.get('/:id', async (req, res, next) => {
 
 })
 
+router.get('/global/:id', async (req, res, next) => {
+    const { id } = req.params
+
+    await Nota.find({ iglesia: id })
+        .sort({ fecha: 'desc' })
+        .populate('createdBy', {
+            nombre: 1,
+            email: 1
+        })
+        .populate({
+            path: 'persona',
+            populate: { path: 'civil' },
+        })
+        .populate({
+            path: 'persona',
+            populate: { path: 'escolaridad' },
+        })
+        .populate({
+            path: 'persona',
+            populate: { path: 'tipoMiembro', select: { iglesia: 0 } },
+        })
+        .then(result => res.json(result))
+        .catch(err => next(err))
+
+})
+
 router.post('/', async (req, res, next) => {
     const datos = req.body
     try {
@@ -24,7 +50,8 @@ router.post('/', async (req, res, next) => {
             categoria: datos.categoria,
             persona: datos.persona,
             createdBy: datos.usuario,
-            fecha: datos.fecha
+            fecha: datos.fecha,
+            iglesia: datos.iglesia
         })
 
         await newNota.save()

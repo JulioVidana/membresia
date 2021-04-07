@@ -9,7 +9,8 @@ import {
     Box,
     Tab,
     Tabs,
-    Divider
+    Divider,
+    Slide
 } from '@material-ui/core'
 import PropTypes from 'prop-types'
 import Page from 'src/components/Page'
@@ -34,6 +35,10 @@ const useStyles = makeStyles((theme) => ({
         paddingTop: theme.spacing(3)
     }
 }))
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="down" ref={ref} {...props} />
+})
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props
@@ -190,6 +195,7 @@ const PersonaDetalle = () => {
                 title="Datos Generales"
                 openPopup={openPopup}
                 setOpenPopup={setOpenPopup}
+                Transition={Transition}
             >
                 <Registro
                     catalogos={catalogos}
@@ -208,6 +214,7 @@ const PersonaDetalle = () => {
                 title="Cambiar Estatus a Inactivo"
                 openPopup={openPopupEs}
                 setOpenPopup={setOpenPopupEs}
+                Transition={Transition}
             >
                 <Estatus
                     notif={addNotificacion}
@@ -220,6 +227,7 @@ const PersonaDetalle = () => {
                 title="Bautismo"
                 openPopup={openPopupBa}
                 setOpenPopup={setOpenPopupBa}
+                Transition={Transition}
             >
                 <Bautismo
                     notif={addNotificacion}
@@ -246,6 +254,7 @@ const PersonaDetalle = () => {
                 setOpenPopup={setOpenFamilia}
                 fullWidth={true}
                 maxWidth={'sm'}
+                Transition={Transition}
             >
                 <RegistroFamilia
                     personaData={personaData}

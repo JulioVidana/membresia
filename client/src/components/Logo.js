@@ -26,7 +26,7 @@ const Logo = (props) => {
           src="/static/logo.svg"
           {...props}
         />
-        <Typography className={classes.logoText} variant="h5">MEMBRESIA</Typography>
+        <Typography className={classes.logoText} variant="h5">IGLESIAPP</Typography>
 
       </Box>
     </div>

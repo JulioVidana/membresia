@@ -68,7 +68,8 @@ const NuevaNota = ({ datosPersona, usuario, notif }) => {
         categoria: 'General',
         persona: datosPersona._id,
         usuario: usuario._id,
-        fecha: new Date()
+        fecha: new Date(),
+        iglesia: datosPersona.iglesia
     }
     const errorInicial = { error: false, msj: '' }
     const [expanded, setExpanded] = useState(false)

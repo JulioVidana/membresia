@@ -20,6 +20,7 @@ import SchoolIcon from '@material-ui/icons/School';
 import Ajustes from './ajustes/Ajustes'
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CancelIcon from '@material-ui/icons/Cancel';
+import 'moment/locale/es-mx'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -49,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 const ProfileDetails = ({ className, datos, ...rest }) => {
-    const classes = useStyles();
+    const classes = useStyles()
     /* const direcc = (calle, colonia, ciudad, cp) => {
        let direccion = ''
        if (calle !== '') { direccion = direccion + calle }
@@ -128,7 +129,7 @@ const ProfileDetails = ({ className, datos, ...rest }) => {
                                 className={classes.texto}
                                 variant="h5"
                             >
-                                {moment(datos.nacimiento).format('LL')}
+                                {moment(datos.nacimiento).format('ll')}
                             </Typography>
 
                         </Grid>

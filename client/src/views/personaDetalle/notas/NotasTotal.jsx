@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { borraNota } from 'src/redux/notasDucks'
 import {
@@ -36,16 +36,16 @@ const useStyles = makeStyles((theme) => ({
     filtro: {
         marginBottom: theme.spacing(2)
     }
-}));
+}))
 
 const categoria = [
     { value: 'Todo', label: 'Todas' },
     { value: 'General', label: 'General' },
     { value: 'Oracion', label: 'Petición Oración' }
-];
+]
 
 const NotasTotal = ({ notas, notif }) => {
-    const classes = useStyles();
+    const classes = useStyles()
     const [sortMenu, setSortMenu] = useState('')
     const dispatch = useDispatch()
     const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: '', type: '' })
@@ -72,6 +72,10 @@ const NotasTotal = ({ notas, notif }) => {
             })
 
     }
+
+    useEffect(() => {
+        setLasNotas(notas)
+    }, [setLasNotas, notas])
     return (
 
         <Card >
@@ -106,24 +110,27 @@ const NotasTotal = ({ notas, notif }) => {
                             <Paper className={classes.pageContent} key={item._id}>
                                 <Grid
                                     container
+                                    justify='flex-end'
+                                >
+                                    <Chip color="secondary" size="small" label={item.categoria} />
+                                </Grid>
+                                <Grid
+                                    container
                                     justify="space-between"
                                     alignItems="center"
                                 >
                                     <Grid
                                         item
+                                        xs={12}
                                     >
                                         <Typography
                                             color="textPrimary"
                                             gutterBottom
-                                            variant="subtitle1">
+                                            variant="h6">
                                             {item.nota}
                                         </Typography>
                                     </Grid>
-                                    <Grid
-                                        item
-                                    >
-                                        <Chip color="secondary" size="small" label={item.categoria} />
-                                    </Grid>
+
 
                                 </Grid>
                                 <Grid
@@ -138,7 +145,7 @@ const NotasTotal = ({ notas, notif }) => {
                                             color="textSecondary"
                                             gutterBottom
                                             variant="caption">
-                                            {`${moment(item.fecha).format('LL')} por ${item.createdBy.nombre}`}
+                                            {`${moment(item.fecha).locale('es-mx').format('LL')} por ${item.createdBy.nombre}`}
                                         </Typography>
                                     </Grid>
                                     <Grid

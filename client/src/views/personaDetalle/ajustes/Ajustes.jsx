@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
         textAlign: 'center'
 
     }
-}));
+}))
 
 
 const Ajustes = ({ tiposMiembro, idMiembro, idUsuario, setOpenPopupEs, setOpenPopupBa, estatus }) => {
@@ -69,7 +69,7 @@ const Ajustes = ({ tiposMiembro, idMiembro, idUsuario, setOpenPopupEs, setOpenPo
 
     const handleClickListItem = (event) => {
         setAnchorEl(event.currentTarget)
-    };
+    }
 
     const handleMenuItemClick = (event, valor) => {
         setTipo(valor)
@@ -78,18 +78,18 @@ const Ajustes = ({ tiposMiembro, idMiembro, idUsuario, setOpenPopupEs, setOpenPo
                 dispatch(addNotificacion('Se cambió Tipo de Miembro', true, 'success'))
             })
         setAnchorEl(null);
-    };
+    }
 
     const handleClose = () => {
         setAnchorEl(null);
-    };
+    }
 
     const handleClick2 = (event) => {
         setAnchorEl2(event.currentTarget)
-    };
+    }
     const handleClose2 = () => {
         setAnchorEl2(null)
-    };
+    }
 
     const openEstatus = () => {
         setAnchorEl2(null)
@@ -157,7 +157,7 @@ const Ajustes = ({ tiposMiembro, idMiembro, idUsuario, setOpenPopupEs, setOpenPo
                             <ListItemIcon className={classes.listaIcon}>
                                 <PersonOutlineIcon />
                             </ListItemIcon>
-                            <ListItemText primary={!idMiembro ? 'Tipo de Miembro' : tipo.tipo} />
+                            <ListItemText primary={!idMiembro ? 'Tipo de Miembro' : tipo?.tipo} />
                             <ExpandMore />
                         </ListItem>
                     </List>

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { addNotificacion } from 'src/redux/notifyDucks'
-import { obtenerUsuarios, bajaUsuario } from 'src/redux/usuariosDucks';
+import { obtenerUsuarios, bajaUsuario } from 'src/redux/usuariosDucks'
 import ConfirmDialog from 'src/components/ConfirmDialog'
 import {
     makeStyles,
@@ -17,21 +17,22 @@ import {
     Avatar,
     Grid,
     Typography,
-    colors
-} from '@material-ui/core';
-import Page from 'src/components/Page';
-import Titulo from 'src/components/Toolbar';
-import Tabla from 'src/components/Tabla';
-import Controls from 'src/components/controls/Controls';
-import { Search as SearchIcon } from 'react-feather';
-import AddIcon from '@material-ui/icons/Add';
-import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
-import CloseIcon from '@material-ui/icons/Close';
-import PerfectScrollbar from 'react-perfect-scrollbar';
-import Registro from './Registro';
-import Notificacion from 'src/components/Notification';
-import Popup from 'src/components/Popup';
-import getInitials from 'src/utils/getInitials';
+    colors,
+    Slide
+} from '@material-ui/core'
+import Page from 'src/components/Page'
+import Titulo from 'src/components/Toolbar'
+import Tabla from 'src/components/Tabla'
+import Controls from 'src/components/controls/Controls'
+import { Search as SearchIcon } from 'react-feather'
+import AddIcon from '@material-ui/icons/Add'
+import EditOutlinedIcon from '@material-ui/icons/EditOutlined'
+import CloseIcon from '@material-ui/icons/Close'
+import PerfectScrollbar from 'react-perfect-scrollbar'
+import Registro from './Registro'
+import Notificacion from 'src/components/Notification'
+import Popup from 'src/components/Popup'
+import getInitials from 'src/utils/getInitials'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -62,7 +63,11 @@ const useStyles = makeStyles((theme) => ({
         color: theme.palette.getContrastText(colors.deepOrange[500]),
         backgroundColor: colors.deepOrange[500],
     }
-}));
+}))
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />
+})
 
 const headCells = [
     { id: 'nombre', label: 'Nombre' },
@@ -70,16 +75,16 @@ const headCells = [
     { id: 'rol', label: 'Rol' },
     { id: 'empresa', label: 'Empresa' },
     { id: 'actions', label: 'Actions', disableSorting: true }
-];
+]
 
 const UsuariosView = () => {
-    const classes = useStyles();
-    const dispatch = useDispatch();
-    const [filterFn, setFilterFn] = useState({ fn: items => { return items; } });
-    const [openPopup, setOpenPopup] = useState(false);
-    const [notify, setNotify] = useState({ isOpen: false, message: '', type: '' });
+    const classes = useStyles()
+    const dispatch = useDispatch()
+    const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
+    const [openPopup, setOpenPopup] = useState(false)
+    const [notify, setNotify] = useState({ isOpen: false, message: '', type: '' })
     const [recordForEdit, setRecordForEdit] = useState(null)
-    const usuariosList = useSelector(store => store.usuarios.datos);
+    const usuariosList = useSelector(store => store.usuarios.datos)
     const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: '', type: '' })
 
 
@@ -88,7 +93,7 @@ const UsuariosView = () => {
         TblHead,
         TblPagination,
         recordsAfterPagingAndSorting
-    } = Tabla(usuariosList, headCells, filterFn);
+    } = Tabla(usuariosList, headCells, filterFn)
 
     useEffect(() => {
 
@@ -135,7 +140,7 @@ const UsuariosView = () => {
             className={classes.root}
             title="Usuarios"
         >
-            <Titulo title="Usuarios" />
+            <Titulo title="Usuarios" btnType='no' />
             <Container maxWidth={false}>
                 <Box mt={3}>
                     <Card>
@@ -256,6 +261,7 @@ const UsuariosView = () => {
                 title="Formulario de Usuario"
                 openPopup={openPopup}
                 setOpenPopup={setOpenPopup}
+                Transition={Transition}
             >
                 <Registro
                     setOpenPopup={setOpenPopup}

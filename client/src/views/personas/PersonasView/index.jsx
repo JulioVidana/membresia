@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
     avatar: {
         marginRight: theme.spacing(2)
     }
-}));
+}))
 
 const menuItems = [
     { value: 'Todos', label: 'Todos' },
@@ -65,14 +65,14 @@ const menuItems = [
     { value: 'Mujer', label: 'Mujer' },
     { value: 'Inactivos', label: 'Inactivos' }
 
-];
+]
 
 const headCells = [
     { id: 'completo', label: 'Nombre' },
     { id: 'email', label: 'Correo Electrónico' },
     { id: 'telefono', label: 'Teléfono' },
     { id: 'createdAt', label: 'Fecha de Registro' }
-];
+]
 
 const PeronasView = () => {
     const classes = useStyles()

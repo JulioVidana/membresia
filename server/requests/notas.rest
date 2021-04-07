@@ -10,8 +10,12 @@ Content-Type: application/json
     "categoria":"General",
     "persona":"6035ddb53530c334a10674fe",
     "usuario": "602bf8c2e9176be5008ef2cc",
-    "fecha": "2021-03-28T17:11:21.472Z"
+    "fecha": "2021-03-28T17:11:21.472Z",
+    "iglesia":"6024878b19e804be07b07462"
 }
 
 ### BORRAR NOTA
 DELETE http://localhost:3001/api/notas/6066b0dedebe1c672c43dd8e
+
+### TRAE NOTAS GLOBAL POR IGLESIA
+GET http://localhost:3001/api/notas/global/6024878b19e804be07b07462

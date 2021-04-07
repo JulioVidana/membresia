@@ -16,7 +16,7 @@ import AgregarIglesia from './views/iglesias/IglesiasView/NuevaIglesias'
 import PersonasView from './views/personas/PersonasView'
 import AgregarPersona from './views/personas/PersonasView/NuevaPersona'
 import PersonaDetalle from './views/personaDetalle'
-
+import NotasGlobal from './views/notasGlobal'
 
 const routes = [
   {
@@ -35,6 +35,7 @@ const routes = [
       { path: 'personas', element: <PersonasView /> },
       { path: 'addpersona', element: <AgregarPersona /> },
       { path: 'personadetalle', element: <PersonaDetalle /> },
+      { path: 'notasglobal', element: <NotasGlobal /> },
       { path: '/', element: <Navigate to="/app/home" /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
@@ -46,7 +47,7 @@ const routes = [
       { path: 'login', element: <LoginView /> },
       { path: '404', element: <NotFoundView /> },
       { path: '/', element: <Navigate to="/app/home" /> },
-      { path: '*', element: <Navigate to="/404" /> }
+      { path: '*', element: <Navigate to="/404" /> },
     ]
   }
 ];

@@ -24,7 +24,8 @@ import {
   Users as UsersIcon,
   Home as HomeIcon,
   List as ListIcon,
-  Disc as DiscIcon
+  Disc as DiscIcon,
+  FileText as FileIcon
 } from 'react-feather';
 import NavItem from './NavItem';
 
@@ -56,9 +57,9 @@ const items = [
         title: 'Lista de Personas'
       },
       {
-        href: '/app/addpersona',
-        icon: UserPlusIcon,
-        title: 'Agregar Persona'
+        href: '/app/notasglobal',
+        icon: FileIcon,
+        title: 'Notas de Personas'
       }
     ]
   },
@@ -116,6 +117,11 @@ const items2 = [
     href: '/app/personas',
     icon: UsersIcon,
     title: 'Personas'
+  },
+  {
+    href: '/app/notasglobal',
+    icon: FileIcon,
+    title: 'Notas de Personas'
   },
   {
     href: '/app/dashboard',

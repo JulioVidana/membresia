@@ -6,11 +6,13 @@ import { addNotificacion } from './notifyDucks'
 const dataInicial = {
     nota: {},
     notas: [],
+    notasGlobal: [],
     loading: false
 }
 
 const LOADING = 'LOADING_NOTAS'
 const GET_NOTAS = 'GET_NOTAS'
+const GET_NOTAS_GLOBAL = 'GET_NOTAS_GLOBAL'
 const NUEVA_NOTA = 'NUEVA_NOTA'
 const DELETE_NOTA = 'DELETE_NOTA'
 
@@ -19,6 +21,8 @@ export default function notasReducer(state = dataInicial, action) {
     switch (action.type) {
         case LOADING:
             return { ...state, loading: true }
+        case GET_NOTAS_GLOBAL:
+            return { ...state, notasGlobal: action.payload, loading: false }
         case GET_NOTAS:
             return { ...state, notas: action.payload, loading: false }
         case NUEVA_NOTA:
@@ -68,6 +72,39 @@ export const borraNota = (idNota) => async (dispatch, getState) => {
             Axios.get(`${backendUrl}/api/notas/${idPersona}`)
                 .then(result => {
                     dispatch({ type: GET_NOTAS, payload: result.data })
+                })
+
+        })
+        .catch(err => {
+            dispatch(returnErrors(err.response.data, err.response.status, 'ERR_DELETE_NOTAS'));
+            dispatch(addNotificacion(err.message, true, 'error'))
+        })
+}
+
+export const traeNotasGlobal = (idIglesia) => async (dispatch, getState) => {
+    dispatch({ type: LOADING })
+
+    Axios.get(`${backendUrl}/api/notas/global/${idIglesia}`)
+        .then(result => {
+            dispatch({ type: GET_NOTAS_GLOBAL, payload: result.data })
+        })
+        .catch(err => {
+            dispatch(returnErrors(err.response.data, err.response.status, 'ERR_GET_NOTAS_GLOBAL'));
+            dispatch(addNotificacion(err.response.data.error, true, 'error'))
+        })
+}
+
+export const borraNotaGlobal = (idNota) => async (dispatch, getState) => {
+    dispatch({ type: LOADING })
+    const idIglesia = getState().general.iglesia._id
+
+    Axios.delete(`${backendUrl}/api/notas/${idNota}`)
+        .then(() => {
+            dispatch({ type: DELETE_NOTA })
+
+            Axios.get(`${backendUrl}/api/notas/global/${idIglesia}`)
+                .then(result => {
+                    dispatch({ type: GET_NOTAS_GLOBAL, payload: result.data })
                 })
 
         })
