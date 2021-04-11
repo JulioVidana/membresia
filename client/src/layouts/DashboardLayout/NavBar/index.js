@@ -68,11 +68,6 @@ const items = [
     grupo: 'Plantilla',
     items: [
       {
-        href: '/app/dashboard',
-        icon: BarChartIcon,
-        title: 'Dashboard'
-      },
-      {
         href: '/app/customers',
         icon: ListIcon,
         title: 'Customers'
@@ -104,6 +99,11 @@ const items = [
 
 const items2 = [
   {
+    href: '/app/dashboard',
+    icon: BarChartIcon,
+    title: 'Dashboard'
+  },
+  {
     href: '/app/usuarios',
     icon: UserPlusIcon,
     title: 'Usuarios'
@@ -122,11 +122,6 @@ const items2 = [
     href: '/app/notasglobal',
     icon: FileIcon,
     title: 'Notas de Personas'
-  },
-  {
-    href: '/app/dashboard',
-    icon: BarChartIcon,
-    title: 'Dashboard'
   },
   {
     href: '/app/customers',
@@ -176,11 +171,16 @@ const NavBar = ({ onMobileClose, openMobile }) => {
   const dispatch = useDispatch();
   const location = useLocation();
   const [menu, setMenu] = useState([]);
-  const [user, setUser] = useState({
+  /* const [user, setUser] = useState({
     avatar: '',
     title: 'Administrador',
     name: 'Julio V'
-  });
+  }); */
+  const user = {
+    avatar: '',
+    title: 'Administrador',
+    name: 'Julio V'
+  }
 
   useEffect(() => {
     if (openMobile && onMobileClose) {
@@ -231,7 +231,13 @@ const NavBar = ({ onMobileClose, openMobile }) => {
             title='Home'
             icon={DiscIcon}
           />
+          <NavItem
+            href='/app/dashboard'
+            title='Dashboard'
+            icon={BarChartIcon}
+          />
         </List>
+
 
         {menu.map((item) => (
           <List

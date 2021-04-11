@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { obtenerCatalogosPersonas } from 'src/redux/CatalogosPersonasDucks'
 import { addNotificacion } from 'src/redux/notifyDucks'
@@ -78,19 +78,22 @@ const PersonaDetalle = () => {
     const dispatch = useDispatch()
     const [value, setValue] = useState(0)
     const catalogos = useSelector(store => store.catalogos)
+    const {
+        generos,
+        edoCivil,
+        grupoEdades,
+        escolaridad,
+        tipoMiembro } = catalogos
     const personaData = useSelector(store => store.personaDetalle.persona)
     const personasList = useSelector(store => store.personas.personas)
     const familia = useSelector(store => store.familias.familia)
     const notas = useSelector(store => store.notas.notas)
     const usuario = useSelector(store => store.auth.usuario)
-    const { generos, edoCivil, grupoEdades, escolaridad, tipoMiembro } = catalogos
     const [openPopup, setOpenPopup] = useState(false)
     const [openPopupEs, setOpenPopupEs] = useState(false)
     const [openPopupBa, setOpenPopupBa] = useState(false)
     const [openPopupImg, setOpenPopupImg] = useState(false)
     const [openFamilia, setOpenFamilia] = useState(false)
-
-
 
 
     const handleChange = (event, newValue) => {
@@ -100,9 +103,17 @@ const PersonaDetalle = () => {
     const openInPopup = () => {
         if (catalogos.edoCivil.length === 0) {
             dispatch(obtenerCatalogosPersonas())
+
         }
         setOpenPopup(true)
     }
+
+    useEffect(() => {
+        const fetchData = () => {
+            dispatch(obtenerCatalogosPersonas())
+        }
+        fetchData()
+    }, [dispatch])
 
 
     return (
@@ -156,7 +167,7 @@ const PersonaDetalle = () => {
 
                             <ProfileDetails
                                 datos={personaData}
-                                tiposMiembro={tipoMiembro}
+                                catalogoMiembros={tipoMiembro}
                                 setOpenPopupBa={setOpenPopupBa}
                                 setOpenPopupEs={setOpenPopupEs}
                             />
@@ -233,6 +244,7 @@ const PersonaDetalle = () => {
                     notif={addNotificacion}
                     setOpenPopup={setOpenPopupBa}
                     bautismoEstatus={personaData.bautismo.activo}
+                    bautismoFecha={personaData.bautismo.fecha}
                 />
             </Popup>
 

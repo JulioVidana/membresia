@@ -15,7 +15,7 @@ import {
     Grid,
     makeStyles
 } from '@material-ui/core';
-import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
+import { MuiPickersUtilsProvider, DatePicker } from '@material-ui/pickers'
 import DateFnsUtils from '@date-io/moment'
 import BackspaceIcon from '@material-ui/icons/Backspace';
 
@@ -356,7 +356,7 @@ const RegistroView = (props) => {
                             md={3}
                             xs={12}
                         >
-                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                            {/*      <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                 <KeyboardDatePicker
                                     fullWidth
                                     margin="normal"
@@ -370,7 +370,25 @@ const RegistroView = (props) => {
                                     InputAdornmentProps={{ position: "start" }}
                                     onChange={value => setFieldValue("nacimiento", value)}
                                 />
+                            </MuiPickersUtilsProvider> */}
+                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                <DatePicker
+                                    fullWidth
+                                    autoOk
+                                    margin="normal"
+                                    disableFuture
+                                    openTo="year"
+                                    format="MM/DD/YYYY"
+                                    label="Fecha de Nacimiento"
+                                    variant="inline"
+                                    inputVariant="outlined"
+                                    name="nacimiento"
+                                    views={["year", "month", "date"]}
+                                    value={values.nacimiento}
+                                    onChange={value => setFieldValue("nacimiento", value)}
+                                />
                             </MuiPickersUtilsProvider>
+
                         </Grid>
                         <Grid
                             item
@@ -506,8 +524,9 @@ const RegistroView = (props) => {
                         }
                     </Grid>
                 </form>
-            )}
-        </Formik>
+            )
+            }
+        </Formik >
 
     );
 };

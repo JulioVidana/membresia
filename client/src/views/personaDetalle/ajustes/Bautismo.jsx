@@ -64,14 +64,15 @@ NumberFormatCustom.propTypes = {
     onChange: PropTypes.func.isRequired,
 };
 
-const Bautismo = ({ bautismoEstatus, setOpenPopup, notif }) => {
+const Bautismo = ({ bautismoEstatus, setOpenPopup, notif, bautismoFecha }) => {
     const classes = useStyles()
     const dispatch = useDispatch()
     const [bautizo, setBautizo] = useState({
         activo: bautismoEstatus,
-        fecha: new Date()
+        fecha: bautismoFecha
 
     })
+    //fecha: new Date()
 
     const { activo, fecha } = bautizo
 
@@ -107,14 +108,13 @@ const Bautismo = ({ bautismoEstatus, setOpenPopup, notif }) => {
                 <Grid
                     container
                     spacing={1}
+                    justify="center"
+                    alignItems="center"
                 >
 
                     <Grid
                         item
                         xs={6}
-                        justify="center"
-                        alignItems="center"
-
                         className={classes.switch}
                     >
                         <FormControlLabel

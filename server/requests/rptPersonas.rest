@@ -1,0 +1,6 @@
+GET http://localhost:3001/api/rptpersonas/bautismos/6024878b19e804be07b07462
+Content-Type: application/json
+
+{
+    "year": 2021
+}

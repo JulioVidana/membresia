@@ -53,19 +53,14 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 
-const Ajustes = ({ tiposMiembro, idMiembro, idUsuario, setOpenPopupEs, setOpenPopupBa, estatus }) => {
+const Ajustes = ({ catalogoMiembros, idMiembro, idUsuario, setOpenPopupEs, setOpenPopupBa, estatus, tipoMiembro }) => {
     const dispatch = useDispatch()
     const classes = useStyles()
     const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = useState(null)
     const [anchorEl2, setAnchorEl2] = useState(null)
-    const busca = valor => tiposMiembro.find(({ _id }) => {
-        return _id === valor
-    })
-
-    const [tipo, setTipo] = useState(!idMiembro ? {} : busca(idMiembro))
+    const [tipo, setTipo] = useState(!idMiembro ? {} : tipoMiembro)
     const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: '', type: '' })
-
 
     const handleClickListItem = (event) => {
         setAnchorEl(event.currentTarget)
@@ -169,10 +164,10 @@ const Ajustes = ({ tiposMiembro, idMiembro, idUsuario, setOpenPopupEs, setOpenPo
                         onClose={handleClose}
                     >
 
-                        {tiposMiembro.map((option) => (
+                        {catalogoMiembros.map((option) => (
                             <MenuItem
                                 key={option._id}
-                                selected={option._id === tipo._id}
+                                selected={option._id === tipo?._id}
                                 onClick={(event) => handleMenuItemClick(event, option)}
                             >
                                 {option.tipo}
@@ -181,6 +176,8 @@ const Ajustes = ({ tiposMiembro, idMiembro, idUsuario, setOpenPopupEs, setOpenPo
                     </Menu>
                 </Paper>
             </Grid>
+
+
             <Grid
                 item
                 lg={2}

@@ -48,11 +48,17 @@ nombreVirtual.get(function () {
     return this.nombre + ' ' + this.aPaterno + ' ' + this.aMaterno
 })
 
+
 nombreVirtual.set(function (name) {
     let split = name.split(' ')
     this.nombre = split[0]
     this.aPaterno = split[1]
     this.aMaterno = split[2]
+})
+
+personaSchema.virtual('edad').get(function () {
+    let birthDate = new Date(this.nacimiento)
+    return Math.floor((Date.now() - birthDate.getTime()) / (1000 * 3600 * 24 * 365))
 })
 
 module.exports = model('Persona', personaSchema)

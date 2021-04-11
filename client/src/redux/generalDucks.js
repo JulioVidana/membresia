@@ -5,7 +5,7 @@ const dataInicial = {
 }
 
 //  TYPES
-const CARGA_MENU = 'CARGA_MENU'
+const CARGA_MENU = '@global/cargaMenu'
 
 
 // REDUCER

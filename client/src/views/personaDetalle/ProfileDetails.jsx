@@ -65,8 +65,9 @@ const ProfileDetails = ({ className, datos, ...rest }) => {
         <Box className={classes.root}>
 
             <Ajustes
-                tiposMiembro={rest.tiposMiembro}
+                catalogoMiembros={rest.catalogoMiembros}
                 idMiembro={datos.tipoMiembro?._id}
+                tipoMiembro={datos.tipoMiembro}
                 idUsuario={datos._id}
                 setOpenPopupEs={rest.setOpenPopupEs}
                 setOpenPopupBa={rest.setOpenPopupBa}

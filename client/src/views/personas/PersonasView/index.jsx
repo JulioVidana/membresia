@@ -12,20 +12,16 @@ import {
     TableBody,
     TableCell,
     TableRow,
-    InputAdornment,
     Box,
     Container,
     Card,
     Avatar,
-    Typography,
-    Grid
+    Typography
 } from '@material-ui/core'
-import SearchIcon from '@material-ui/icons/Search'
 import PerfectScrollbar from 'react-perfect-scrollbar'
 import getInitials from 'src/utils/getInitials'
 import Tabla from 'src/components/Tabla'
-import Controls from 'src/components/controls/Controls'
-import SortBar from 'src/components/SortBar'
+import Toolbar from './Toolbar'
 //import data from './data';
 
 
@@ -49,6 +45,10 @@ const useStyles = makeStyles((theme) => ({
     },
     avatar: {
         marginRight: theme.spacing(2)
+    },
+    backdrop: {
+        zIndex: theme.zIndex.drawer + 1,
+        color: '#fff',
     }
 }))
 
@@ -79,9 +79,9 @@ const PeronasView = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const [filterFn, setFilterFn] = useState({ fn: items => { return items } })
-    //const usuariosList = data;
     const iglesia = useSelector(store => store.general.iglesia)
     const usuariosList = useSelector(store => store.personas.personas)
+    //const loading = useSelector(store => store.personas.loading)
     const [sortMenu, setSortMenu] = useState('')
 
     const {
@@ -91,7 +91,6 @@ const PeronasView = () => {
         recordsAfterPagingAndSorting
     } = Tabla(usuariosList, headCells, filterFn)
 
-    //console.log(recordsAfterPagingAndSorting())
     useEffect(() => {
         const fetchData = () => {
             dispatch(obtenerPersonas(iglesia))
@@ -170,62 +169,16 @@ const PeronasView = () => {
             <Container maxWidth={false}>
                 <Box mt={3}>
                     <Card>
-                        <Box p={2}>
-                            <Grid
-                                container
-                                spacing={1}
-                                justify='flex-start'
-                                alignItems="center"
-                            >
-                                <Grid
-                                    item
-                                    md={2}
-                                    xs={2}
-                                >
-                                    <Typography
-                                        variant="h5"
-                                        color="secondary"
-                                        component="div" >
-                                        {`${filterFn.fn(usuariosList).length} Personas`}
-                                    </Typography>
 
-                                </Grid>
-                                <Grid
-                                    item
-                                    md={6}
-                                    xs={6}
-                                >
-                                    <Controls.Input
-                                        fullWidth
-                                        placeholder="Buscar Persona"
-                                        InputProps={{
-                                            startAdornment: (
-                                                <InputAdornment position="start">
-                                                    <SearchIcon color="primary" />
-                                                </InputAdornment>
-                                            )
-                                        }}
-                                        onChange={handleSearch}
-                                    />
-                                </Grid>
-                                <Grid
-                                    item
-                                    md={4}
-                                    xs={4}
-                                >
-                                    <SortBar
-                                        sortBy={sortMenu}
-                                        menuItems={menuItems}
-                                        handleSortChange={handleSortChange}
-                                        label="Personas"
+                        <Toolbar
+                            usuariosList={usuariosList}
+                            filterFn={filterFn}
+                            handleSearch={handleSearch}
+                            sortMenu={sortMenu}
+                            menuItems={menuItems}
+                            handleSortChange={handleSortChange}
+                        />
 
-                                    />
-
-
-                                </Grid>
-
-                            </Grid>
-                        </Box>
                         <PerfectScrollbar>
                             <Box >
                                 <TblContainer>
@@ -270,9 +223,8 @@ const PeronasView = () => {
 
                     </Card>
                 </Box>
-
-            </Container>
-        </Page>
+            </Container >
+        </Page >
     )
 }
 

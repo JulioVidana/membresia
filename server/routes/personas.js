@@ -6,7 +6,7 @@ const ObjectId = require('mongoose').Types.ObjectId
 router.get('/:id', async (req, res, next) => {
     const { id } = req.params
 
-    await Personas.find({ iglesia: id, 'estatus.activo': true })
+    await Personas.find({ iglesia: id, 'estatus.activo': true }).sort('-createdAt')
         .populate('civil')
         .populate('escolaridad')
         .populate('tipoMiembro', { iglesia: 0 })
