@@ -1,0 +1,39 @@
+ @baseUrl = http://localhost:3001/api/iglesias
+ @authToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwMmJmOGMyZTkxNzZiZTUwMDhlZjJjYyIsImVtYWlsIjoianVsaW8udmlkYW5hQGdtYWlsLmNvbSIsInJvbCI6InN1cGVyYWRtaW4iLCJpc3MiOiJhcGkuaWdsZXNpYXBwIiwiaWF0IjoxNjE4NzY2NzY3LCJleHAiOjE2MTg4NTMxNjd9.pEZzeprpGKu1Bn8PPyd1zWkl0qMtl6wTK6YvsJrsRD0
+
+### TRAER IGLESIAS
+GET {{baseUrl}}
+Authorization: {{authToken}}
+
+### AGREGAR IGLESIA
+POST {{baseUrl}}
+Authorization: {{authToken}}
+Content-Type: application/json
+
+{
+    "nombre": "Borrar iglesia",
+    "cobertura": "IAFCJ",
+    "pais": "MX",
+    "ciudad": "Hermosillo",
+    "pastor": "Miguel Angel Uribe",
+    "contacto": "6622678943"
+}
+
+###ACTUALIZAR IGLESIA
+PUT {{baseUrl}}/607cb966d51b6c1ab9add2a3
+Authorization: {{authToken}}
+Content-Type: application/json
+
+{
+    "nombre": "Borrar iglesia2",
+    "cobertura": "IAFCJ",
+    "pais": "MX",
+    "ciudad": "Hermosillo",
+    "pastor": "Miguel Angel Uribe",
+    "contacto": "6622678943"
+}
+
+###ELIMINAR IGLESIA
+DELETE {{baseUrl}}/607cb93a89ca3c1a4aa0117a
+Authorization: {{authToken}}
+Content-Type: application/json

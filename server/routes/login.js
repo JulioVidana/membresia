@@ -1,51 +1,72 @@
-const bcrypt = require('bcrypt')
-const LoginRouter = require('express').Router()
-const Usuario = require('../models/usuarios')
 const jwt = require('jsonwebtoken')
-const Joi = require('joi')
-const auth = require('../middleware/validate-token')
+const jwtDecode = require('jwt-decode')
+const bcrypt = require('bcrypt')
+const loginRouter = require('express').Router()
+const Usuario = require('../models/usuarios')
+const requireAuth = require('../middleware/requireAuth')
 
-const schemaLogin = Joi.object({
-    email: Joi.string().min(6).max(255).required().email(),
-    password: Joi.string().min(6).max(1024).required()
-})
-
-LoginRouter.post('/', async (req, res) => {
+loginRouter.post('/', async (request, response, next) => {
+    const { body } = request
+    //const { email, password } = body
 
     try {
-        // validaciones
-        const { error } = schemaLogin.validate(req.body)
-        if (error) throw Error(error.details[0].message)
 
-        const user = await Usuario.findOne({ email: req.body.email })
-        if (!user) throw Error('Usuario no existe')
+        const user = await Usuario.findOne({ email: body.email })
+            .populate('iglesia').lean()
+        const passwordCorrect = user === null
+            ? false
+            : await bcrypt.compare(body.password, user.password)
 
+        if (!(user && passwordCorrect)) {
+            response.status(401).json({
+                msg: 'Usuario o conraseña inválida'
+            })
+            return
+        }
 
-        const validPassword = await bcrypt.compare(req.body.password, user.password)
-        if (!validPassword) throw Error('Contraseña incorrecta')
+        const { password, iglesia, ...rest } = user
+        const userInfo = Object.assign({}, { ...rest })
 
-        // create token
-        const token = jwt.sign({
-            nombre: user.nombre,
+        //Create Token
+        const userForToken = {
             id: user._id,
-            activo: user.activo,
+            email: user.email,
             rol: user.rol,
-            img: user.img
-        }, process.env.TOKEN_SECRET)
+            iss: 'api.iglesiapp'
+        }
 
-        res.header('x-auth-token', token).json({
-            error: null,
-            data: { token }
+        const token = jwt.sign(
+            userForToken,
+            process.env.TOKEN_SECRET,
+            {
+                algorithm: 'HS256',
+                expiresIn: 60 * 60 * 24 // expires in 24 hours
+            }
+        )
+        const decodedToken = jwtDecode(token)
+        const expiresAt = decodedToken.exp
+
+        response.cookie('iglesiapp_session', token, {
+            httpOnly: true
         })
 
+        response.send({
+            token,
+            userInfo,
+            iglesia,
+            expiresAt
+        })
     } catch (error) {
-        res.status(400).json({ msg: error.message })
+        console.log(error)
+        next(error)
     }
 })
 
-LoginRouter.get('/datosuser', auth, async (req, res) => {
+loginRouter.get('/profile', requireAuth, async (req, res) => {
     try {
-        const user = await Usuario.findById(req.user.id).select('-password')
+
+        const user = await Usuario.findById(req.userId).select('-password')
+            .populate('iglesia')
         if (!user) throw Error('Usuario no existe')
         res.json(user)
     } catch (e) {
@@ -53,4 +74,4 @@ LoginRouter.get('/datosuser', auth, async (req, res) => {
     }
 })
 
-module.exports = LoginRouter
+module.exports = loginRouter

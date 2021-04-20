@@ -4,19 +4,21 @@ const Joi = require('@hapi/joi')
 const bcrypt = require('bcrypt')
 Joi.objectId = require('joi-objectid')(Joi)
 const ObjectId = require('mongoose').Types.ObjectId
+const requireSuperAdmin = require('../middleware/requireSuperAdmin')
 
-router.route('/').get(async (req, res) => {
+
+router.get('/', async (req, res) => {
     await Usuarios.find()
         .then(result => res.json(result))
         .catch(err => res.status(400).json('Error: ' + err))
 })
 
 
-router.post('/register', async (req, res) => {
+router.post('/', requireSuperAdmin, async (req, res) => {
     try {
 
         const existeEmail = await Usuarios.findOne({ email: req.body.email })
-        if (existeEmail) throw Error('User already exists')
+        if (existeEmail) throw Error('Ya existe usuario con ese correo')
 
         // hash contraseña
         const salt = await bcrypt.genSalt(10)
@@ -31,97 +33,77 @@ router.post('/register', async (req, res) => {
             rol: req.body.rol
         })
 
-        const savedUser = await usuario.save()
-        res.json({
-            error: null,
-            data: savedUser
-        })
+        await usuario.save()
+
+        const traeUsuarios = await Usuarios.find()
+        res.json(traeUsuarios)
+
+    } catch (error) {
+
+        res.status(409).json({ msg: error.message })
+    }
+})
+
+
+router.put('/:id', requireSuperAdmin, async (req, res) => {
+    try {
+        const { id } = req.params
+        const data = req.body
+
+        // hash contraseña
+        const salt = await bcrypt.genSalt(10)
+        const hash = await bcrypt.hash(data.password, salt)
+        if (!hash) throw Error('Something went wrong hashing the password')
+        let nuevosDatos
+
+        if (data.password === '') {
+            nuevosDatos = {
+                $set: {
+                    nombre: data.nombre,
+                    activo: data.activo,
+                    rol: data.rol,
+                    iglesia: data.iglesia
+                }
+            }
+        } else {
+            nuevosDatos = {
+                $set: {
+                    nombre: data.nombre,
+                    activo: data.activo,
+                    password: hash,
+                    rol: data.rol,
+                    iglesia: data.iglesia
+                }
+            }
+        }
+
+        await Usuarios.updateOne(
+            {
+                _id: ObjectId(id)
+            },
+            nuevosDatos
+        )
+
+        const traeUsuarios = await Usuarios.find()
+        res.json(traeUsuarios)
+
     } catch (error) {
         res.status(400).json({ msg: error.message })
     }
 })
 
-
-router.post('/update', async (req, res) => {
+router.delete('/:id', requireSuperAdmin, async (req, res) => {
     try {
+        const { id } = req.params
 
-        // hash contraseña
-        const salt = await bcrypt.genSalt(10)
-        const hash = await bcrypt.hash(req.body.password, salt)
-        if (!hash) throw Error('Something went wrong hashing the password')
-        let datos
+        await Usuarios.findByIdAndDelete(id)
 
-        if (req.body.password === '') {
-            datos = {
-                $set: {
-                    nombre: req.body.nombre,
-                    activo: req.body.activo,
-                    rol: req.body.rol,
-                    iglesia: req.body.iglesia
-                }
-            }
-        } else {
-            datos = {
-                $set: {
-                    nombre: req.body.nombre,
-                    activo: req.body.activo,
-                    password: hash,
-                    rol: req.body.rol,
-                    iglesia: req.body.iglesia
-                }
-            }
-        }
-        const updatedUser = await Usuarios.updateOne(
-            {
-                _id: ObjectId(req.body._id)
-            },
-            datos
-        )
-        res.json({
-            error: null,
-            data: updatedUser
-        })
+        const traeUsuarios = await Usuarios.find()
+        res.json(traeUsuarios)
+
     } catch (error) {
-        res.status(400).json({ error: error.message })
+        res.status(400).json({ msg: error.message })
     }
 })
-
-router.post('/baja', async (req, res) => {
-    try {
-        const updatedUser = await Usuarios.updateOne(
-            {
-                _id: ObjectId(req.body._id)
-            },
-            {
-                $set: {
-                    activo: false,
-                }
-            }
-        )
-        res.json({
-            error: null,
-            data: updatedUser
-        })
-
-    } catch (error) {
-        res.status(400).json({ error: error.message })
-    }
-})
-/* router.post('/delete', async (req, res) => {
-    try {
-
-        const deletedUser = await Usuarios.deleteOne(
-            {
-                _id: ObjectId(req.body._id)
-            }
-        )
-        res.json({
-            error: null,
-            data: deletedUser
-        })
-    } catch (error) {
-        res.status(400).json({ error: error.message })
-    }
-}) */
 
 module.exports = router

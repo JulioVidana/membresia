@@ -1,7 +1,6 @@
 import Axios from 'axios'
-import backendUrl from './backendUrl'
+import backendUrl from '../utils/backendUrl'
 import { returnErrors } from './erroresDucks'
-import { addNotificacion } from './notifyDucks'
 
 const dataInicial = {
     nota: {},
@@ -38,26 +37,24 @@ export default function notasReducer(state = dataInicial, action) {
 export const traeNotas = (idPersona) => async (dispatch, getState) => {
     dispatch({ type: LOADING })
 
-    Axios.get(`${backendUrl}/api/notas/${idPersona}`)
+    Axios.get(`${backendUrl}/notas/${idPersona}`)
         .then(result => {
             dispatch({ type: GET_NOTAS, payload: result.data })
         })
         .catch(err => {
             dispatch(returnErrors(err.response.data, err.response.status, 'ERR_GET_NOTAS'));
-            dispatch(addNotificacion(err.response.data.error, true, 'error'))
         })
 }
 
 export const nuevaNota = (datos) => async (dispatch, getState) => {
     dispatch({ type: LOADING })
 
-    Axios.post(`${backendUrl}/api/notas`, datos)
+    Axios.post(`${backendUrl}/notas`, datos)
         .then(result => {
             dispatch({ type: NUEVA_NOTA, payload: result.data })
         })
         .catch(err => {
             dispatch(returnErrors(err.response.data, err.response.status, 'ERR_GET_NOTAS'));
-            dispatch(addNotificacion(err.message, true, 'error'))
         })
 }
 
@@ -65,11 +62,11 @@ export const borraNota = (idNota) => async (dispatch, getState) => {
     dispatch({ type: LOADING })
     const idPersona = getState().personaDetalle.persona._id
 
-    Axios.delete(`${backendUrl}/api/notas/${idNota}`)
+    Axios.delete(`${backendUrl}/notas/${idNota}`)
         .then(() => {
             dispatch({ type: DELETE_NOTA })
 
-            Axios.get(`${backendUrl}/api/notas/${idPersona}`)
+            Axios.get(`${backendUrl}/notas/${idPersona}`)
                 .then(result => {
                     dispatch({ type: GET_NOTAS, payload: result.data })
                 })
@@ -77,20 +74,18 @@ export const borraNota = (idNota) => async (dispatch, getState) => {
         })
         .catch(err => {
             dispatch(returnErrors(err.response.data, err.response.status, 'ERR_DELETE_NOTAS'));
-            dispatch(addNotificacion(err.message, true, 'error'))
         })
 }
 
 export const traeNotasGlobal = (idIglesia) => async (dispatch, getState) => {
     dispatch({ type: LOADING })
 
-    Axios.get(`${backendUrl}/api/notas/global/${idIglesia}`)
+    Axios.get(`${backendUrl}/notas/global/${idIglesia}`)
         .then(result => {
             dispatch({ type: GET_NOTAS_GLOBAL, payload: result.data })
         })
         .catch(err => {
             dispatch(returnErrors(err.response.data, err.response.status, 'ERR_GET_NOTAS_GLOBAL'));
-            dispatch(addNotificacion(err.response.data.error, true, 'error'))
         })
 }
 
@@ -98,11 +93,11 @@ export const borraNotaGlobal = (idNota) => async (dispatch, getState) => {
     dispatch({ type: LOADING })
     const idIglesia = getState().general.iglesia._id
 
-    Axios.delete(`${backendUrl}/api/notas/${idNota}`)
+    Axios.delete(`${backendUrl}/notas/${idNota}`)
         .then(() => {
             dispatch({ type: DELETE_NOTA })
 
-            Axios.get(`${backendUrl}/api/notas/global/${idIglesia}`)
+            Axios.get(`${backendUrl}/notas/global/${idIglesia}`)
                 .then(result => {
                     dispatch({ type: GET_NOTAS_GLOBAL, payload: result.data })
                 })
@@ -110,6 +105,9 @@ export const borraNotaGlobal = (idNota) => async (dispatch, getState) => {
         })
         .catch(err => {
             dispatch(returnErrors(err.response.data, err.response.status, 'ERR_DELETE_NOTAS'));
-            dispatch(addNotificacion(err.message, true, 'error'))
         })
 }
+
+
+
+

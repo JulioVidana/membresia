@@ -1,10 +1,9 @@
 import Axios from 'axios'
-import backendUrl from './backendUrl'
+import backendUrl from '../utils/backendUrl'
 import { returnErrors } from './erroresDucks'
-import { addNotificacion } from './notifyDucks'
 import { traeFamilia, resetFamilia } from './familiasDucks'
 import { traeNotas } from './notasDucks'
-
+import { obtenerPersonas } from './personasDucks'
 //CONSTANTES
 const dataInicial = {
     persona: {},
@@ -12,22 +11,22 @@ const dataInicial = {
 }
 
 //TYPES
-const CARGA_PERSONA = 'CARGA_PERSONA'
-const TRAE_PERSONA = 'TRAE_PERSONA'
-const ADD_TIPOMIEMBRO = 'ADD_TIPOMIEMBRO'
-const ADD_INACTIVO = 'ADD_INACTIVO'
-const ADD_BAUTISMO = 'ADD_BAUTISMO'
-const BORRAR_PERSONA = 'BORRAR_PERSONA'
-const ERROR_AGREGA_TIPOMIEMBRO = 'ERROR_AGREGA_TIPOMIEMBRO'
-const ERR_INACTIVO = 'ERR_INACTIVO'
-const ERR_BORRAR_PERSONA = 'ERR_BORRAR_PERSONA'
-const ERR_ADD_BAUTISMO = 'ERR_ADD_BAUTISMO'
-const SUBIR_IMAGEN = 'SUBIR_IMAGEN'
-const ERR_SUBIR_IMAGEN = 'ERR_SUBIR_IMAGEN'
-const ELIMINAR_IMAGEN = 'ELIMINAR_IMAGEN'
-const ERR_ELIMINAR_IMAGEN = 'ERR_ELIMINAR_IMAGEN'
-const CAMBIA_IMAGEN = 'CAMBIA_IMAGEN'
-const ERR_CAMBIA_IMAGEN = 'ERR_CAMBIA_IMAGEN'
+const CARGA_PERSONA = '@detPersona/loading'
+const TRAE_PERSONA = '@detPersona/getPersona'
+const ADD_TIPOMIEMBRO = '@detPersona/updateTipoMiembro'
+const ADD_INACTIVO = '@detPersona/updateInactivo'
+const ADD_BAUTISMO = '@detPersona/updateBautismo'
+const BORRAR_PERSONA = '@detPersona/deletePersona'
+const SUBIR_IMAGEN = '@detPersona/uploadImage'
+const CAMBIA_IMAGEN = '@detPersona/updateImage'
+const ELIMINAR_IMAGEN = '@detPersona/deleteImage'
+const ERROR_AGREGA_TIPOMIEMBRO = '@detPersona/error/updateTipoMiembro'
+const ERR_INACTIVO = '@detPersona/error/inactivo'
+const ERR_BORRAR_PERSONA = '@detPersona/error/deletePersona'
+const ERR_ADD_BAUTISMO = '@detPersona/error/updateBautismo'
+const ERR_SUBIR_IMAGEN = '@detPersona/error/uploadImage'
+const ERR_ELIMINAR_IMAGEN = '@detPersona/error/deleteImage'
+const ERR_CAMBIA_IMAGEN = '@detPersona/error/updateImage'
 
 //REDUCER
 export default function personaDetReducer(state = dataInicial, action) {
@@ -63,29 +62,25 @@ export const cargaPersona = (datos) => async (dispatch, getState) => {
 }
 
 export const traePersona = (datos) => async (dispatch) => {
-    console.log('id', datos._id)
-    await Axios.get(`${backendUrl}/api/personas/persona/${datos._id}`)
+    //console.log('id', datos._id)
+    await Axios.get(`${backendUrl}/personas/persona/${datos._id}`)
         .then(result => {
             dispatch({ type: TRAE_PERSONA, payload: result.data[0] })
         })
         .catch(err => {
-            dispatch(returnErrors(err.response.data, err.response.status, 'REGISTRO_ERROR'));
-            //dispatch({ type: ERROR_AGREGA_PERSONA });
-            dispatch(addNotificacion(err.message, true, 'error'))
+            dispatch(returnErrors(err.response.data, err.response.status, 'ERROR'));
         })
 }
 
 export const actualizaTipoMiembro = (id, datos) => async (dispatch, getState) => {
     //dispatch({ type: PERSONAS_LOADING })
-    Axios.put(`${backendUrl}/api/personas/tipomiembro/${id}`, datos)
+    Axios.put(`${backendUrl}/personas/tipomiembro/${id}`, datos)
         .then(result => {
             dispatch({ type: ADD_TIPOMIEMBRO, payload: result.data })
         })
         .catch(err => {
-            dispatch(returnErrors(err.response.data, err.response.status, 'REGISTRO_ERROR'));
-            dispatch({ type: ERROR_AGREGA_TIPOMIEMBRO });
-            dispatch(addNotificacion(err.message, true, 'error'))
-
+            dispatch({ type: ERROR_AGREGA_TIPOMIEMBRO })
+            dispatch(returnErrors(err.response.data, err.response.status, 'ERROR_AGREGA_TIPOMIEMBRO'))
         })
 
 }
@@ -94,20 +89,18 @@ export const cambiaEstatus = (datos) => async (dispatch, getState) => {
 
     const { persona } = getState().personaDetalle
 
-    Axios.put(`${backendUrl}/api/personas/estatus/${persona._id}`, datos)
+    Axios.put(`${backendUrl}/personas/estatus/${persona._id}`, datos)
         .then(result => {
             dispatch({ type: ADD_INACTIVO, payload: result.data })
 
-            Axios.get(`${backendUrl}/api/personas/persona/${persona._id}`)
+            Axios.get(`${backendUrl}/personas/persona/${persona._id}`)
                 .then(result => {
                     dispatch({ type: TRAE_PERSONA, payload: result.data[0] })
                 })
         })
         .catch(err => {
-            dispatch(returnErrors(err.response.data, err.response.status, 'REGISTRO_ERROR'));
-            dispatch({ type: ERR_INACTIVO });
-            dispatch(addNotificacion(err.message, true, 'error'))
-
+            dispatch({ type: ERR_INACTIVO })
+            dispatch(returnErrors(err.response.data, err.response.status, 'ERR_INACTIVO'))
         })
 
 }
@@ -115,36 +108,35 @@ export const addBautismo = (datos) => async (dispatch, getState) => {
 
     const { persona } = getState().personaDetalle
 
-    Axios.put(`${backendUrl}/api/personas/bautismo/${persona._id}`, datos)
+    Axios.put(`${backendUrl}/personas/bautismo/${persona._id}`, datos)
         .then(result => {
             dispatch({ type: ADD_BAUTISMO, payload: result.data })
 
-            Axios.get(`${backendUrl}/api/personas/persona/${persona._id}`)
+            Axios.get(`${backendUrl}/personas/persona/${persona._id}`)
                 .then(result => {
                     dispatch({ type: TRAE_PERSONA, payload: result.data[0] })
                 })
 
         })
         .catch(err => {
-            dispatch(returnErrors(err.response.data, err.response.status, 'REGISTRO_ERROR'));
-            dispatch({ type: ERR_ADD_BAUTISMO });
-            dispatch(addNotificacion(err.message, true, 'error'))
-
+            dispatch({ type: ERR_ADD_BAUTISMO })
+            dispatch(returnErrors(err.response.data, err.response.status, 'ERR_ADD_BAUTISMO'))
         })
 
 }
 export const borrarPersona = (id) => async (dispatch, getState) => {
+    const { imagen } = getState().personaDetalle.persona
+    const iglesia = getState().general.iglesia
 
-
-    Axios.delete(`${backendUrl}/api/personas/borrar/${id}`)
+    Axios.post(`${backendUrl}/personas/delete/${id}`, imagen)
         .then(result => {
             dispatch({ type: BORRAR_PERSONA, payload: result.data })
+
+            dispatch(obtenerPersonas(iglesia))
         })
         .catch(err => {
-            dispatch(returnErrors(err.response.data, err.response.status, 'REGISTRO_ERROR'));
-            dispatch({ type: ERR_BORRAR_PERSONA });
-            dispatch(addNotificacion(err.message, true, 'error'))
-
+            dispatch({ type: ERR_BORRAR_PERSONA })
+            dispatch(returnErrors(err.response.data, err.response.status, 'ERR_BORRAR_PERSONA'))
         })
 
 }
@@ -153,20 +145,18 @@ export const borrarPersona = (id) => async (dispatch, getState) => {
 export const subirImagen = (imagen) => async (dispatch, getState) => {
     const { persona } = getState().personaDetalle
 
-    Axios.post(`${backendUrl}/api/avatars/${persona._id}`, imagen)
+    Axios.post(`${backendUrl}/avatars/${persona._id}`, imagen)
         .then(result => {
             dispatch({ type: SUBIR_IMAGEN, payload: result.data })
 
-            Axios.get(`${backendUrl}/api/personas/persona/${persona._id}`)
+            Axios.get(`${backendUrl}/personas/persona/${persona._id}`)
                 .then(result => {
                     dispatch({ type: TRAE_PERSONA, payload: result.data[0] })
                 })
         })
         .catch(err => {
-            dispatch(returnErrors(err.response.data, err.response.status, 'REGISTRO_ERROR'));
-            dispatch({ type: ERR_SUBIR_IMAGEN });
-            dispatch(addNotificacion(err.message, true, 'error'))
-
+            dispatch({ type: ERR_SUBIR_IMAGEN })
+            dispatch(returnErrors(err.response.data, err.response.status, 'ERR_SUBIR_IMAGEN'))
         })
 
 }
@@ -174,20 +164,18 @@ export const subirImagen = (imagen) => async (dispatch, getState) => {
 export const EliminarImagen = (imagen) => async (dispatch, getState) => {
     const { persona } = getState().personaDetalle
 
-    Axios.post(`${backendUrl}/api/avatars/borrar/${persona._id}`, imagen)
+    Axios.post(`${backendUrl}/avatars/borrar/${persona._id}`, imagen)
         .then(result => {
             dispatch({ type: ELIMINAR_IMAGEN, payload: result.data })
 
-            Axios.get(`${backendUrl}/api/personas/persona/${persona._id}`)
+            Axios.get(`${backendUrl}/personas/persona/${persona._id}`)
                 .then(result => {
                     dispatch({ type: TRAE_PERSONA, payload: result.data[0] })
                 })
         })
         .catch(err => {
-            dispatch(returnErrors(err.response.data, err.response.status, 'REGISTRO_ERROR'));
-            dispatch({ type: ERR_ELIMINAR_IMAGEN });
-            dispatch(addNotificacion(err.message, true, 'error'))
-
+            dispatch({ type: ERR_ELIMINAR_IMAGEN })
+            dispatch(returnErrors(err.response.data, err.response.status, 'ERR_ELIMINAR_IMAGEN'))
         })
 
 }
@@ -195,20 +183,18 @@ export const EliminarImagen = (imagen) => async (dispatch, getState) => {
 export const cambiarImagen = (imagen) => async (dispatch, getState) => {
     const { persona } = getState().personaDetalle
 
-    Axios.put(`${backendUrl}/api/avatars/${persona._id}`, imagen)
+    Axios.put(`${backendUrl}/avatars/${persona._id}`, imagen)
         .then(result => {
             dispatch({ type: CAMBIA_IMAGEN, payload: result.data })
 
-            Axios.get(`${backendUrl}/api/personas/persona/${persona._id}`)
+            Axios.get(`${backendUrl}/personas/persona/${persona._id}`)
                 .then(result => {
                     dispatch({ type: TRAE_PERSONA, payload: result.data[0] })
                 })
         })
         .catch(err => {
-            dispatch(returnErrors(err.response.data, err.response.status, 'REGISTRO_ERROR'));
-            dispatch({ type: ERR_CAMBIA_IMAGEN });
-            dispatch(addNotificacion(err.message, true, 'error'))
-
+            dispatch({ type: ERR_CAMBIA_IMAGEN })
+            dispatch(returnErrors(err.response.data, err.response.status, 'ERR_CAMBIA_IMAGEN'))
         })
 
 }

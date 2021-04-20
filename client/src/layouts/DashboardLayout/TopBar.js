@@ -1,28 +1,21 @@
-import React, { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import React from 'react'
+import { Link as RouterLink } from 'react-router-dom'
 import clsx from 'clsx';
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 import {
   AppBar,
-  Badge,
   Box,
   Hidden,
   IconButton,
   Toolbar,
-  makeStyles
-} from '@material-ui/core';
-import MenuIcon from '@material-ui/icons/Menu';
-import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
-import InputIcon from '@material-ui/icons/Input';
-import Logo from 'src/components/Logo';
-
+  makeStyles,
+} from '@material-ui/core'
+import MenuIcon from '@material-ui/icons/Menu'
+import Logo from 'src/components/Logo'
+import UserMenu from './MenuUser'
 const useStyles = makeStyles(() => ({
-  root: {},
-  avatar: {
-    width: 60,
-    height: 60
-  }
-}));
+  root: {}
+}))
 
 const TopBar = ({
   className,
@@ -30,7 +23,8 @@ const TopBar = ({
   ...rest
 }) => {
   const classes = useStyles();
-  const [notifications] = useState([]);
+
+
 
   return (
     <AppBar
@@ -39,24 +33,6 @@ const TopBar = ({
       {...rest}
     >
       <Toolbar>
-        <RouterLink to="/">
-          <Logo />
-        </RouterLink>
-        <Box flexGrow={1} />
-        <Hidden mdDown>
-          <IconButton color="inherit">
-            <Badge
-              badgeContent={notifications.length}
-              color="primary"
-              variant="dot"
-            >
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
-          <IconButton color="inherit">
-            <InputIcon />
-          </IconButton>
-        </Hidden>
         <Hidden lgUp>
           <IconButton
             color="inherit"
@@ -65,14 +41,23 @@ const TopBar = ({
             <MenuIcon />
           </IconButton>
         </Hidden>
+
+        <Hidden mdDown>
+          <RouterLink to="/">
+            <Logo />
+          </RouterLink>
+        </Hidden>
+        <Box flexGrow={1} />
+        <UserMenu />
+
       </Toolbar>
     </AppBar>
-  );
-};
+  )
+}
 
 TopBar.propTypes = {
   className: PropTypes.string,
   onMobileNavOpen: PropTypes.func
-};
+}
 
-export default TopBar;
+export default TopBar

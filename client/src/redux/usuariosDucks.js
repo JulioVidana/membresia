@@ -1,8 +1,6 @@
 import Axios from 'axios'
-import backendUrl from './backendUrl'
+import backendUrl from '../utils/backendUrl'
 import { returnErrors } from './erroresDucks'
-import { addNotificacion } from './notifyDucks'
-
 
 //  CONSTANTES
 const dataInicial = {
@@ -12,13 +10,12 @@ const dataInicial = {
 }
 
 //  TYPES
-const USUARIOS_LOADING = 'USER_LOADING'
-const OBTENER_USUARIOS = 'OBTENER_USUARIOS'
-const REGISTER_SUCCESS = 'REGISTER_SUCCESS'
-const REGISTER_FAIL = 'REGISTER_FAIL'
-const REGISTRO_ERROR = 'REGISTRO_ERROR'
-const UPDATE_USUARIO = 'UPDATE_USUARIO'
-const BORRA_USUARIO = 'BORRA_USUARIO'
+const USUARIOS_LOADING = '@usuarios/Loading'
+const OBTENER_USUARIOS = '@usuarios/TraerTodos'
+const REGISTER_SUCCESS = '@usuarios/Agregar'
+const REGISTRO_ERROR = '@usuarios/Error'
+const UPDATE_USUARIO = '@usuarios/Actualizar'
+const BORRA_USUARIO = '@usuario/Borrar'
 
 
 //REDUCER
@@ -26,14 +23,12 @@ export default function usuariosReducer(state = dataInicial, action) {
     switch (action.type) {
         case USUARIOS_LOADING:
             return { ...state, loading: true }
-        case OBTENER_USUARIOS:
-            return { ...state, datos: action.payload, loading: false }
+        case BORRA_USUARIO:
         case REGISTER_SUCCESS:
         case UPDATE_USUARIO:
-        case BORRA_USUARIO:
-            return { ...state, ...action.payload, loading: false, regis: true }
+        case OBTENER_USUARIOS:
+            return { ...state, datos: action.payload, loading: false }
         case REGISTRO_ERROR:
-        case REGISTER_FAIL:
             return { ...state, loading: false, regis: false }
         default:
             return state
@@ -45,7 +40,7 @@ export const obtenerUsuarios = () => async (dispatch, getState) => {
 
     dispatch({ type: USUARIOS_LOADING })
 
-    Axios.get(`${backendUrl}/api/usuarios`)
+    Axios.get(`${backendUrl}/usuarios`)
         .then(res =>
             dispatch({
                 type: OBTENER_USUARIOS,
@@ -54,58 +49,40 @@ export const obtenerUsuarios = () => async (dispatch, getState) => {
         .catch(err => {
             dispatch({
                 type: REGISTRO_ERROR
-            });
-            dispatch(returnErrors(err.response.data, err.response.status));
-            dispatch(addNotificacion(err.message, true, 'error'))
+            })
+            dispatch(returnErrors(err.response.data, err.response.status))
         })
 
 }
 
 export const agregaUsuario = (datos) => async (dispatch, getState) => {
     dispatch({ type: USUARIOS_LOADING })
-    console.log('iglesias', getState().iglesias.datos)
-    Axios.post(`${backendUrl}/api/usuarios/register`, datos)
+
+    Axios.post(`${backendUrl}/usuarios`, datos)
         .then(result => {
-            //alert("chido")
             dispatch({ type: REGISTER_SUCCESS, payload: result.data })
-
-            Axios.get(`${backendUrl}/api/usuarios`)
-                .then(res =>
-                    dispatch({ type: OBTENER_USUARIOS, payload: res.data }))
-
-
         })
         .catch(err => {
-            //console.log(err.response)
-            dispatch(addNotificacion(err.message, true, 'error'))
-            dispatch(returnErrors(err.response.data, err.response.status, 'REGISTRO_ERROR'),);
+            dispatch(returnErrors(err.response.data, err.response.status, 'REGISTRO_ERROR'))
             dispatch({
                 type: REGISTRO_ERROR
-            });
+            })
         })
 
 }
 
 export const actualizaUsuario = (datos) => async (dispatch, getState) => {
     dispatch({ type: USUARIOS_LOADING })
-    //console.log(datos)
-    Axios.post(`${backendUrl}/api/usuarios/update`, datos)
+
+    Axios.put(`${backendUrl}/usuarios/${datos._id}`, datos)
         .then(result => {
-            //alert("chido")
             dispatch({ type: UPDATE_USUARIO, payload: result.data })
-
-            Axios.get(`${backendUrl}/api/usuarios`)
-                .then(res =>
-                    dispatch({ type: OBTENER_USUARIOS, payload: res.data }))
-
-
         })
         .catch(err => {
-            dispatch(addNotificacion(err.message, true, 'error'))
-            dispatch(returnErrors(err.response.data, err.response.status));
+            dispatch(returnErrors(err.response.data, err.response.status))
             dispatch({
                 type: REGISTRO_ERROR
-            });
+            })
         })
 
 }
@@ -113,23 +90,16 @@ export const actualizaUsuario = (datos) => async (dispatch, getState) => {
 
 export const bajaUsuario = (datos) => async (dispatch, getState) => {
     dispatch({ type: USUARIOS_LOADING })
-    //console.log(datos)
-    Axios.post(`${backendUrl}/api/usuarios/baja`, datos)
+
+    Axios.delete(`${backendUrl}/usuarios/${datos._id}`)
         .then(result => {
-            //alert("chido")
             dispatch({ type: BORRA_USUARIO, payload: result.data })
-
-            Axios.get(`${backendUrl}/api/usuarios`)
-                .then(res =>
-                    dispatch({ type: OBTENER_USUARIOS, payload: res.data }))
-
-
         })
         .catch(err => {
-            dispatch(returnErrors(err.response.data, err.response.status));
+            dispatch(returnErrors(err.response.data, err.response.status))
             dispatch({
                 type: REGISTRO_ERROR
-            });
+            })
         })
 
 }

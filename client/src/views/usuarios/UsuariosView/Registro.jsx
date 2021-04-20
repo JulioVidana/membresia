@@ -40,7 +40,7 @@ const initialFValues = {
     password: '',
     activo: true,
     msg: null,
-    rol: 2
+    rol: 'admin'
 }
 
 
@@ -110,7 +110,8 @@ const RegistroView = (props) => {
                                         setOpenPopup(false);
                                     })
                                 : dispatch(agregaUsuario(values))
-                                    .then(() => {
+                                    .then(result => {
+                                        console.log(result)
                                         dispatch(addNotificacion('Se agregó correctamente', true, 'success'))
                                         setOpenPopup(false);
                                     })

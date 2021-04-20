@@ -1,6 +1,7 @@
-GET http://localhost:3001/api/rptpersonas/bautismos/6024878b19e804be07b07462
+POST http://localhost:3001/api/rptpersonas/bautismos
 Content-Type: application/json
 
 {
-    "year": 2021
+    "year": 2021,
+    "idIglesia":"6024878b19e804be07b07462"
 }

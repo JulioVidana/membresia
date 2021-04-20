@@ -1,8 +1,12 @@
+ @baseUrl = http://localhost:3001/api/notas
+ @authToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwN2M5NGJlYzk1MjA1ZmYyZDM3MGY4NyIsImVtYWlsIjoiY2VzYXJAZ21haWwuY29tIiwicm9sIjoiZWRpdG9yIiwiaXNzIjoiYXBpLmlnbGVzaWFwcCIsImlhdCI6MTYxODc4ODQ4MywiZXhwIjoxNjE4ODc0ODgzfQ.y3MmEMBRE_XDk0iEVvhbnlpK-CRhOoqlmxG0Fy6Z8Dk
+
 ### TRAE NOTAS POR PERSONA
-GET http://localhost:3001/api/notas/6035ddb53530c334a10674fe
+GET {{baseUrl}}/6035ddb53530c334a10674fe
+Authorization: {{authToken}}
 
 ### GUARDA NUEVA NOTA
-POST http://localhost:3001/api/notas
+POST {{baseUrl}}
 Content-Type: application/json
 
 {
@@ -15,7 +19,11 @@ Content-Type: application/json
 }
 
 ### BORRAR NOTA
-DELETE http://localhost:3001/api/notas/6066b0dedebe1c672c43dd8e
+DELETE {{baseUrl}}/607868b3479de97cf0d919b3
+Authorization: {{authToken}}
+Content-Type: application/json
 
 ### TRAE NOTAS GLOBAL POR IGLESIA
-GET http://localhost:3001/api/notas/global/6024878b19e804be07b07462
+GET {{baseUrl}}/global/6024878b19e804be07b07462
+Authorization: {{authToken}}
+Content-Type: application/json

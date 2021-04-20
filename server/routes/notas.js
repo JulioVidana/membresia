@@ -1,7 +1,6 @@
 const router = require('express').Router()
 const Nota = require('../models/Nota')
 
-
 router.get('/:id', async (req, res, next) => {
     const { id } = req.params
 
@@ -44,7 +43,12 @@ router.get('/global/:id', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
     const datos = req.body
+    const { rol } = req.user
+
     try {
+        if (rol === 'consulta') {
+            return res.status(400).json({ msg: 'No tienes Permiso de Crear Nota' })
+        }
         const newNota = new Nota({
             nota: datos.nota,
             categoria: datos.categoria,
@@ -71,8 +75,14 @@ router.post('/', async (req, res, next) => {
 
 router.delete('/:id', async (req, res, next) => {
     const { id } = req.params
+    const { rol } = req.user
+    const allowedRoles = ['superadmin', 'admin']
 
     try {
+        if (!allowedRoles.includes(rol)) {
+            return res
+                .status(400).json({ msg: 'No tienes Permiso de eliminar Nota' })
+        }
 
         const borrar = await Nota.findByIdAndDelete(id)
         if (borrar === null) return res.sendStatus(404)

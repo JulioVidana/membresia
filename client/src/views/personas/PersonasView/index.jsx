@@ -80,6 +80,7 @@ const PeronasView = () => {
     const dispatch = useDispatch()
     const [filterFn, setFilterFn] = useState({ fn: items => { return items } })
     const iglesia = useSelector(store => store.general.iglesia)
+    const { usuario } = useSelector(store => store.auth)
     const usuariosList = useSelector(store => store.personas.personas)
     //const loading = useSelector(store => store.personas.loading)
     const [sortMenu, setSortMenu] = useState('')
@@ -162,6 +163,7 @@ const PeronasView = () => {
         >
             <Titulo
                 title="Lista de Persona"
+                btnType={usuario.rol === 'consulta' ? 'no' : 'add'}
                 btnText="NUEVA PERSONA"
                 icono='add'
                 to='/app/addpersona'

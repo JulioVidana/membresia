@@ -1,6 +1,6 @@
 import { v4 as uuid } from 'uuid';
 
-export const usuarios = [
+export const usuariosPrueba = [
     {
         _id: uuid(),
         nombre: "Julio Vidana",
@@ -29,19 +29,19 @@ export const usuarios = [
 
 export const roles = [
     {
-        _id: 1,
-        rol: 'SuperAdmin'
+        _id: 'superadmin',
+        rol: 'Super Administrador'
     },
     {
-        _id: 2,
+        _id: 'admin',
         rol: 'Admin'
     },
     {
-        _id: 3,
+        _id: 'editor',
         rol: 'Editor'
     },
     {
-        _id: 4,
+        _id: 'consulta',
         rol: 'Consulta'
     }
-];
+]

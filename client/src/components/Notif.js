@@ -1,10 +1,10 @@
-import { makeStyles, Snackbar } from '@material-ui/core';
-import { Alert } from '@material-ui/lab';
-import React from 'react';
-import { connect } from 'react-redux';
-import { clearNotificacion } from 'src/redux/notifyDucks';
-import { useDispatch } from 'react-redux';
-import { v4 as uuid } from 'uuid';
+import { makeStyles, Snackbar } from '@material-ui/core'
+import { Alert } from '@material-ui/lab'
+import React from 'react'
+import { connect } from 'react-redux'
+import { clearNotificacion } from 'src/redux/notifyDucks'
+import { useDispatch } from 'react-redux'
+import { v4 as uuid } from 'uuid'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -19,7 +19,7 @@ const Notif = (props) => {
     const classes = useStyles();
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
-            return;
+            return
         }
         dispatch(clearNotificacion())
     }
@@ -32,7 +32,7 @@ const Notif = (props) => {
                 key={uuid()}
                 className={classes.root}
                 open={notify.isOpen}
-                autoHideDuration={3000}
+                autoHideDuration={notify.type !== 'error' ? 3000 : null}
                 anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                 onClose={handleClose}
             >
@@ -55,4 +55,4 @@ const mapStateToProps = (state) => ({
     notify: state.notificacion
 })
 
-export default connect(mapStateToProps)(Notif);
+export default connect(mapStateToProps)(Notif)

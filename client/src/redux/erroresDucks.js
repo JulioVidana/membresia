@@ -1,3 +1,5 @@
+import { addNotificacion } from './notifyDucks'
+
 //  CONSTANTES
 const dataInicial = {
     msg: {},
@@ -6,8 +8,8 @@ const dataInicial = {
 }
 
 //  TYPES
-const GET_ERRORS = "GET_ERRORS";
-const CLEAR_ERRORS = "CLEAR_ERRORS";
+const GET_ERRORS = "GET_ERRORS"
+const CLEAR_ERRORS = "CLEAR_ERRORS"
 
 //REDUCER
 export default function erroresReducer(state = dataInicial, action) {
@@ -22,15 +24,16 @@ export default function erroresReducer(state = dataInicial, action) {
 }
 
 //ACCIONES
-export const returnErrors = (msg, status, id) => {
+export const returnErrors = (msg, status, id) => async (dispatch, getState) => {
+    dispatch(addNotificacion(msg.msg, true, 'error'))
     return {
         type: GET_ERRORS,
         payload: { msg, status, id }
-    };
-};
+    }
+}
 
 export const clearErrors = () => {
     return {
         type: CLEAR_ERRORS
-    };
-};
+    }
+}

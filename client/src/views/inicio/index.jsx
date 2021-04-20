@@ -21,6 +21,8 @@ const useStyles = makeStyles((theme) => ({
 const Home = () => {
     const classes = useStyles();
     const menu = useSelector(store => store.general.menu)
+    const auth = useSelector(store => store.auth.usuario)
+    const { rol } = auth
 
     return (
         <Page
@@ -33,7 +35,8 @@ const Home = () => {
                     spacing={3}
                 >
                     {menu.map((item) => (
-                        item.title !== 'Home' &&
+
+                        item.allowedRoles.includes(rol) &&
                         <Grid
                             key={item.href}
                             item
@@ -44,6 +47,8 @@ const Home = () => {
                         >
                             <BtnMenu link={item.href} title={item.title} icon={item.icon} />
                         </Grid>
+
+
 
                     ))}
 

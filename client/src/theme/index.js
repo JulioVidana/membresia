@@ -1,6 +1,7 @@
 import { createMuiTheme, colors } from '@material-ui/core';
 import shadows from './shadows';
 import typography from './typography';
+import { esES } from '@material-ui/data-grid';
 
 const theme = createMuiTheme({
   palette: {
@@ -39,6 +40,6 @@ const theme = createMuiTheme({
   },
   shadows,
   typography
-});
+}, esES);
 
 export default theme;

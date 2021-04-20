@@ -6,7 +6,7 @@ const usuarioSchema = new Schema({
     password: { type: String, required: true, min: 6, max: 1024 },
     email: { type: String, required: true, min: 6, max: 255 },
     activo: { type: Boolean, default: true },
-    rol: { type: Number },
+    rol: { type: String },
     iglesia: { type: Schema.Types.ObjectId, ref: 'Iglesia' },
     imagen: { type: String }
 })

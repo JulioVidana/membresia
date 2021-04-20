@@ -74,7 +74,7 @@ const reducer = (state, action) => {
 
 
 const NotasView = (props) => {
-    const { notasState } = props
+    //const { notasState } = props
     const classes = useStyles()
     const dispatchRdx = useDispatch()
     const [state, dispatch] = useReducer(reducer, initialState)
@@ -85,7 +85,6 @@ const NotasView = (props) => {
     const [csvNota, setCsvNota] = useState(notas)
     const [openPopup, setOpenPopup] = useState(false)
 
-    console.log(notasState.loading)
 
     useEffect(() => {
         const fetchData = () => {

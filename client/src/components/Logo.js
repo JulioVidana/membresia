@@ -1,5 +1,5 @@
-import React from 'react';
-import { Typography, makeStyles, Box } from '@material-ui/core';
+import React from 'react'
+import { Typography, makeStyles, Box } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -9,10 +9,26 @@ const useStyles = makeStyles((theme) => ({
     color: '#fff',
     marginLeft: 10
   }
-}));
+}))
+
+export const Logo2 = () => {
+  //const classes = useStyles()
+  return (
+    <div>
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="flex-end"
+      >
+        <Typography variant="h5">IGLESIAPP</Typography>
+
+      </Box>
+    </div>
+  )
+}
 
 const Logo = (props) => {
-  const classes = useStyles();
+  const classes = useStyles()
 
   return (
     <div>
@@ -30,7 +46,7 @@ const Logo = (props) => {
 
       </Box>
     </div>
-  );
-};
+  )
+}
 
-export default Logo;
+export default Logo

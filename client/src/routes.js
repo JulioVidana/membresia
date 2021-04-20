@@ -17,11 +17,14 @@ import PersonasView from './views/personas/PersonasView'
 import AgregarPersona from './views/personas/PersonasView/NuevaPersona'
 import PersonaDetalle from './views/personaDetalle'
 import NotasGlobal from './views/notasGlobal'
+import PersonasView2 from './views/personas/PersonasView/Index2'
 
-const routes = [
+//Object-based Routes de la Versión 6 en lugar de usar la etiqueta  <Route path="/" element={<UsersIndex />} />
+
+const routes = (auth) => [
   {
     path: 'app',
-    element: <DashboardLayout />,
+    element: !auth.isAuthenticated && !auth.loading ? <Navigate to="/login" /> : <DashboardLayout />,
     children: [
       { path: 'home', element: <InicioView /> },
       { path: 'account', element: <AccountView /> },
@@ -29,13 +32,14 @@ const routes = [
       { path: 'dashboard', element: <DashboardView /> },
       { path: 'products', element: <ProductListView /> },
       { path: 'settings', element: <SettingsView /> },
-      { path: 'usuarios', element: <UsuariosView /> },
-      { path: 'iglesias', element: <IglesiasView /> },
+      { path: 'usuarios', element: auth.usuario?.rol === 'superadmin' ? <UsuariosView /> : <InicioView /> },
+      { path: 'iglesias', element: auth.usuario?.rol === 'superadmin' ? <IglesiasView /> : <InicioView /> },
       { path: 'addiglesia', element: <AgregarIglesia /> },
       { path: 'personas', element: <PersonasView /> },
       { path: 'addpersona', element: <AgregarPersona /> },
       { path: 'personadetalle', element: <PersonaDetalle /> },
       { path: 'notasglobal', element: <NotasGlobal /> },
+      { path: 'personas2', element: <PersonasView2 /> },
       { path: '/', element: <Navigate to="/app/home" /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]

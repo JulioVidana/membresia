@@ -6,6 +6,8 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 const handleErrors = require('./middleware/handleErrors')
 const notFound = require('./middleware/notFound')
+const cookieParser = require('cookie-parser')
+const requireAuth = require('./middleware/requireAuth')
 
 //IMPORTAR RUTAS
 const iglesiasRoutes = require('./routes/iglesias')
@@ -14,8 +16,10 @@ const catalogosPersonas = require('./routes/catalogosPersonas')
 const personas = require('./routes/personas')
 const avatarsPersonas = require('./routes/avatarPersonas')
 const familias = require('./routes/familias')
-const notas = require('./routes/notas')
+const notasRoutes = require('./routes/notas')
 const rptPersonas = require('./routes/reportPersonas')
+const loginRoutes = require('./routes/login')
+
 
 //conexión base de datos MONGODB LOCAL
 mongoose.connect('mongodb://localhost:27017/membresia', { useNewUrlParser: true, useUnifiedTopology: true })
@@ -30,18 +34,21 @@ var corsOptions = {
 app.use(cors(corsOptions))
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(cookieParser())
 
 //route middelware
+app.use('/api/login', loginRoutes)
+app.use(requireAuth)//protegiendo rutas
 app.use('/api/iglesias', iglesiasRoutes)
 app.use('/api/usuarios', usuariosRoutes)
 app.use('/api/catalogos', catalogosPersonas)
 app.use('/api/personas', personas)
 app.use('/api/avatars', avatarsPersonas)
 app.use('/api/familias', familias)
-app.use('/api/notas', notas)
+app.use('/api/notas', notasRoutes)
 app.use('/api/rptpersonas', rptPersonas)
 app.get('/', (req, res) => {
-    res.send('Membresia API')
+    res.send('Iglesiapp API')
 })
 app.use(notFound)
 app.use(handleErrors)

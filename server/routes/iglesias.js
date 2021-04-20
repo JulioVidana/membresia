@@ -1,15 +1,15 @@
 const router = require('express').Router()
 const Iglesias = require('../models/iglesias')
 const ObjectId = require('mongoose').Types.ObjectId
+const requireSuperAdmin = require('../middleware/requireSuperAdmin')
 
-
-router.route('/').get(async (req, res) => {
+router.get('/', requireSuperAdmin, async (req, res) => {
     await Iglesias.find()
         .then(result => res.json(result))
         .catch(err => res.status(400).json('Error: ' + err))
 })
 
-router.post('/add', async (req, res) => {
+router.post('/', requireSuperAdmin, async (req, res) => {
     try {
 
         const iglesia = new Iglesias({
@@ -21,38 +21,40 @@ router.post('/add', async (req, res) => {
             contacto: req.body.contacto
         })
 
-        const saveIglesia = await iglesia.save()
-        res.json({
-            error: null,
-            data: saveIglesia
-        })
+        await iglesia.save()
+
+        const traeIglesias = await Iglesias.find()
+        res.json(traeIglesias)
 
     } catch (error) {
         res.status(400).json({ msg: error.message })
     }
 })
 
-router.post('/update', async (req, res) => {
+router.put('/:id', requireSuperAdmin, async (req, res) => {
     try {
-        const updateIglesia = await Iglesias.updateOne(
+
+        const { id } = req.params
+        const data = req.body
+
+        await Iglesias.updateOne(
             {
-                _id: ObjectId(req.body._id)
+                _id: ObjectId(id)
             },
             {
                 $set: {
-                    nombre: req.body.nombre,
-                    cobertura: req.body.cobertura,
-                    pais: req.body.pais,
-                    ciudad: req.body.ciudad,
-                    pastor: req.body.pastor,
-                    contacto: req.body.contacto
+                    nombre: data.nombre,
+                    cobertura: data.cobertura,
+                    pais: data.pais,
+                    ciudad: data.ciudad,
+                    pastor: data.pastor,
+                    contacto: data.contacto
                 }
             }
         )
-        res.json({
-            error: null,
-            data: updateIglesia
-        })
+
+        const traeIglesias = await Iglesias.find()
+        res.json(traeIglesias)
 
     } catch (error) {
         res.status(400).json({ msg: error.message })
@@ -61,20 +63,16 @@ router.post('/update', async (req, res) => {
 })
 
 
-router.post('/delete', async (req, res) => {
+router.delete('/:id', requireSuperAdmin, async (req, res) => {
     try {
-        const deleteIglesia = await Iglesias.deleteOne(
-            {
-                _id: ObjectId(req.body._id)
-            }
-        )
-        res.json({
-            error: null,
-            data: deleteIglesia
-        })
+        const { id } = req.params
+        await Iglesias.findByIdAndDelete(id)
+
+        const traeIglesias = await Iglesias.find()
+        res.json(traeIglesias)
 
     } catch (error) {
-        res.status(400).json({ error: error.message })
+        res.status(400).json({ msg: error.message })
     }
 })
 

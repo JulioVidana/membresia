@@ -2,9 +2,10 @@ const router = require('express').Router()
 const Familias = require('../models/familias')
 const Personas = require('../models/personas')
 const ObjectId = require('mongoose').Types.ObjectId
+const requireAdmin = require('../middleware/requireAdmin')
 
 //familia en específico
-router.route('/:id').get(async (req, res, next) => {
+router.get('/:id', async (req, res, next) => {
     const { id } = req.params
 
     await Familias.findById(id).populate('personas')
@@ -25,7 +26,7 @@ router.get('/persona/:id', async (req, res, next) => {
 })
 
 //Nueva Familia
-router.route('/').post(async (req, res, next) => {
+router.post('/', requireAdmin, async (req, res, next) => {
     try {
         const datos = req.body
 
@@ -56,7 +57,7 @@ router.route('/').post(async (req, res, next) => {
 })
 
 //Actualiza Familia 
-router.put('/:id', async (req, res, next) => {
+router.put('/:id', requireAdmin, async (req, res, next) => {
     const { id } = req.params
     const datos = req.body
 
@@ -98,7 +99,7 @@ router.put('/:id', async (req, res, next) => {
 
 })
 
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', requireAdmin, async (req, res, next) => {
     try {
         const { id } = req.params
 
@@ -117,7 +118,7 @@ router.delete('/:id', async (req, res, next) => {
 })
 
 //todas las familias de la iglesia
-router.route('/todas/:id').get(async (req, res, next) => {
+router.get('/todas/:id', async (req, res, next) => {
     const { id } = req.params
 
     await Familias.find({ 'iglesia': new ObjectId(id) }).populate('personas')

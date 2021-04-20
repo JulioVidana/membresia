@@ -18,6 +18,7 @@ import {
 } from '@material-ui/core'
 import moment from 'moment'
 import DeleteIcon from '@material-ui/icons/Delete'
+import DOMpurify from 'dompurify'
 
 const useStyles = makeStyles((theme) => ({
     root: {},
@@ -46,7 +47,7 @@ const Items = ({ nota, setConfirmDialog, confirmDialog, dispatch, setCsvNota, st
     const dispatchRdx = useDispatch()
     const navigate = useNavigate()
     const createMarkup = html => {
-        return { __html: html }
+        return { __html: DOMpurify.sanitize(html) }
     }
 
 

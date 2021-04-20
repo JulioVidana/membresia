@@ -130,7 +130,7 @@ const UsuariosView = () => {
         dispatch(bajaUsuario(item))
             .then(() => {
                 dispatch(
-                    addNotificacion(`Se dió de baja a usuario ${item.nombre}`, true, 'success')
+                    addNotificacion(`Se Eliminó a usuario ${item.nombre}`, true, 'success')
                 )
             })
     }
@@ -210,8 +210,7 @@ const UsuariosView = () => {
                                                 <TableCell>{item.email}</TableCell>
                                                 <TableCell>
                                                     {
-                                                        item.rol === 1 ? "Administrador" :
-                                                            item.rol === 2 ? "Agente" : "Editor"
+                                                        item.rol
                                                     }
                                                 </TableCell>
                                                 <TableCell>{item.empresa}</TableCell>
@@ -228,6 +227,7 @@ const UsuariosView = () => {
                                                             setConfirmDialog({
                                                                 isOpen: true,
                                                                 title: 'Estas seguro de dar de baja a usuario?',
+                                                                subTitle: 'Puede causar ERRORES si el usuario ya relizó acciones',
                                                                 type: "alerta",
                                                                 onConfirm: () => { onDelete(item) }
                                                             })

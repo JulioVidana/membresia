@@ -2,17 +2,17 @@ const router = require('express').Router()
 const Personas = require('../models/personas')
 const cloudinary = require('../utils/cloudinary')
 const upload = require('../utils/multer')
-
+const requireAdmin = require('../middleware/requireAdmin')
 
 
 
 //SUBIR IMAGEN A CLOUDINARY
-router.route('/:id').post(upload.single('imagen'), async (req, res, next) => {
+router.route('/:id').post(requireAdmin, upload.single('imagen'), async (req, res, next) => {
     const { id } = req.params
     try {
 
         const result = await cloudinary.uploader.upload(req.file.path, { folder: 'iglesias/avatars/' })
-        //console.log(result)
+
         Personas.findByIdAndUpdate(
             id,
             {
@@ -35,7 +35,7 @@ router.route('/:id').post(upload.single('imagen'), async (req, res, next) => {
 })
 
 //CAMBIAR IMAGEN A CLOUDINARY
-router.route('/:id').put(upload.single('imagen'), async (req, res, next) => {
+router.route('/:id').put(requireAdmin, upload.single('imagen'), async (req, res, next) => {
     const { id } = req.params
     try {
         let persona = await Personas.findById(id)
@@ -43,7 +43,7 @@ router.route('/:id').put(upload.single('imagen'), async (req, res, next) => {
         await cloudinary.uploader.destroy(persona.imagen.id)
         // Upload image to cloudinary
         const result = await cloudinary.uploader.upload(req.file.path, { folder: 'iglesias/avatars/' })
-        //console.log(result)
+
         Personas.findByIdAndUpdate(
             id,
             {
@@ -65,7 +65,7 @@ router.route('/:id').put(upload.single('imagen'), async (req, res, next) => {
 
 })
 
-router.route('/borrar/:id').post(async (req, res, next) => {
+router.post('/borrar/:id', requireAdmin, async (req, res, next) => {
     const { id } = req.params
     try {
         // Delete image from cloudinary

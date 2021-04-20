@@ -1,7 +1,6 @@
 import Axios from 'axios'
-import backendUrl from './backendUrl'
+import backendUrl from '../utils/backendUrl'
 import { returnErrors } from './erroresDucks'
-import { addNotificacion } from './notifyDucks'
 
 
 const dataInicial = {
@@ -10,16 +9,16 @@ const dataInicial = {
     loading: false
 }
 
-const LOADING = 'LOADING_FAMILIA'
-const GET_FAMILIA = 'GET_FAMILIA_PERSONA'
-const POST_FAMILIA = 'AGREGA_FAMILIA_PERSONA'
-const PUT_FAMILIA = 'ACTUALIZA_FAMILIA_PERSONA'
-const DELETE_FAMILIA = 'DELETE_FAMILIA_PERSONA'
-const ERR_GET_FAMILIA = 'ERR_GET_FAMILIA_PERSONA'
-const ERR_POST_FAMILIA = 'ERR_POST_FAMILIA_PERSONA'
-const ERR_PUT_FAMILIA = 'ERR_PUT_FAMILIA_PERSONA'
-const ERR_DEL_FAMILIA = 'ERR_DEL_FAMILIA_PERSONA'
-const RESET_FAMILIA = 'RESET_FAMILIA'
+const LOADING = '@familias/loading'
+const GET_FAMILIA = '@familias/getFamilia'
+const POST_FAMILIA = '@familias/addFamilia'
+const PUT_FAMILIA = '@familias/updateFamilia'
+const DELETE_FAMILIA = '@familias/deleteFamilia'
+const ERR_GET_FAMILIA = '@familias/error/getFamilia'
+const ERR_POST_FAMILIA = '@familias/error/addFamilia'
+const ERR_PUT_FAMILIA = '@familias/error/updateFamilia'
+const ERR_DEL_FAMILIA = '@familias/error/deleteFamilia'
+const RESET_FAMILIA = '@familias/resetFamilia'
 
 //REDUCER
 export default function familiasReducer(state = dataInicial, action) {
@@ -48,14 +47,15 @@ export default function familiasReducer(state = dataInicial, action) {
 export const traeFamilia = (idFamilia) => async (dispatch, getState) => {
 
     dispatch({ type: LOADING })
-    await Axios.get(`${backendUrl}/api/familias/${idFamilia}`)
+    await Axios.get(`${backendUrl}/familias/${idFamilia}`)
         .then(result => {
             dispatch({ type: GET_FAMILIA, payload: result.data })
         })
         .catch(err => {
-            dispatch(returnErrors(err.response.data, err.response.status, 'ERR_GET_FAMILIA_PERSONA'));
-            //dispatch({ type: ERR_GET_FAMILIA_PERSONA });
-            dispatch(addNotificacion(err.message, true, 'error'))
+            dispatch(
+                returnErrors(err.response.data, err.response.status, 'ERR_GET_FAMILIA_PERSONA')
+            )
+            dispatch({ type: ERR_GET_FAMILIA })
         })
 
 }
@@ -66,14 +66,15 @@ export const resetFamilia = () => (dispatch) => {
 export const agregaFamilia = (datos) => async (dispatch, getState) => {
 
     dispatch({ type: LOADING })
-    await Axios.post(`${backendUrl}/api/familias`, datos)
+    await Axios.post(`${backendUrl}/familias`, datos)
         .then(result => {
             dispatch({ type: POST_FAMILIA, payload: result.data })
         })
         .catch(err => {
-            dispatch(returnErrors(err.response.data, err.response.status, 'ERR_PUT_FAMILIA'));
-            //dispatch({ type: ERR_POST_FAMILIA });
-            dispatch(addNotificacion(err.message, true, 'error'))
+            dispatch(
+                returnErrors(err.response.data, err.response.status, 'ERR_PUT_FAMILIA')
+            )
+            dispatch({ type: ERR_POST_FAMILIA });
         })
 
 }
@@ -83,10 +84,10 @@ export const actualizaFamilia = (datos) => async (dispatch, getState) => {
     const { _id } = getState().familias.familia
     const persona = getState().personaDetalle.persona
 
-    await Axios.put(`${backendUrl}/api/familias/${_id}`, datos)
+    await Axios.put(`${backendUrl}/familias/${_id}`, datos)
         .then(result => {
             //check si todavía tiene familia la persona 
-            Axios.get(`${backendUrl}/api/familias/persona/${persona._id}`)
+            Axios.get(`${backendUrl}/familias/persona/${persona._id}`)
                 .then(res => {
                     res.data
                         ?
@@ -98,20 +99,18 @@ export const actualizaFamilia = (datos) => async (dispatch, getState) => {
         })
         .catch(err => {
             dispatch(returnErrors(err.response.data, err.response.status, 'ERR_PUT_FAMILIA'));
-            //dispatch({ type: ERR_PUT_FAMILIA });
-            dispatch(addNotificacion(err.message, true, 'error'))
+            dispatch({ type: ERR_PUT_FAMILIA })
         })
 }
 
 export const eliminaFamilia = (idFamilia) => async (dispatch) => {
     dispatch({ type: LOADING })
-    await Axios.delete(`${backendUrl}/api/familias/${idFamilia}`)
+    await Axios.delete(`${backendUrl}/familias/${idFamilia}`)
         .then(result => {
             dispatch({ type: DELETE_FAMILIA, payload: result.data })
         })
         .catch(err => {
-            dispatch(returnErrors(err.response.data, err.response.status, 'ERR_DELETE_FAMILIA'));
-            //dispatch({ type: ERR_DEL_FAMILIA });
-            dispatch(addNotificacion(err.message, true, 'error'))
+            dispatch(returnErrors(err.response.data, err.response.status, 'ERR_DELETE_FAMILIA'))
+            dispatch({ type: ERR_DEL_FAMILIA })
         })
 }

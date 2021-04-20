@@ -1,7 +1,6 @@
 import Axios from 'axios'
-import backendUrl from './backendUrl'
+import backendUrl from '../utils/backendUrl'
 import { returnErrors } from './erroresDucks'
-import { addNotificacion } from './notifyDucks'
 
 //CONSTANTES
 const dataInicial = {
@@ -37,15 +36,13 @@ export default function personasReducer(state = dataInicial, action) {
 //ACCIONES
 export const getPersonas = (iglesia) => async (dispatch, getState) => {
     dispatch({ type: LOADING })
-    Axios.get(`${backendUrl}/api/personas/${iglesia._id}`)
+    Axios.get(`${backendUrl}/personas/${iglesia._id}`)
         .then(result => {
             dispatch({ type: GET_PERSONAS, payload: result.data })
         })
         .catch(err => {
-            dispatch(returnErrors(err.response.data, err.response.status, 'REGISTRO_ERROR'));
-            dispatch({ type: ERROR_GET_PERSONAS });
-            dispatch(addNotificacion(err.message, true, 'error'))
-
+            dispatch(returnErrors(err.response.data, err.response.status, 'ERROR_GET_PERSONAS'))
+            dispatch({ type: ERROR_GET_PERSONAS })
         })
 
 }
@@ -57,15 +54,13 @@ export const getBautismos = (iglesia, year) => async (dispatch, getState) => {
         year: year,
         idIglesia: iglesia._id
     }
-    Axios.post(`${backendUrl}/api/rptpersonas/bautismos/`, datos)
+    Axios.post(`${backendUrl}/rptpersonas/bautismos`, datos)
         .then(result => {
             dispatch({ type: GET_BAUTISMOS, payload: result.data })
         })
         .catch(err => {
-            dispatch(returnErrors(err.response.data, err.response.status, 'REGISTRO_ERROR'));
-            dispatch({ type: ERROR_GET_BAUTISMOS });
-            dispatch(addNotificacion(err.message, true, 'error'))
-
+            dispatch(returnErrors(err.response.data, err.response.status, 'ERROR_GET_BAUTISMOS'))
+            dispatch({ type: ERROR_GET_BAUTISMOS })
         })
 
 }

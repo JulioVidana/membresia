@@ -1,7 +1,6 @@
 import Axios from 'axios'
-import backendUrl from './backendUrl'
+import backendUrl from '../utils/backendUrl'
 import { returnErrors } from './erroresDucks'
-import { addNotificacion } from './notifyDucks'
 
 
 //  CONSTANTES
@@ -30,18 +29,18 @@ const dataInicial = {
         }
     ],
     loading: false
-};
+}
 
 //ACTION TYPES
-const CATALOGOS_LOADING = 'CATALOGOS_LOADING'
-const GET_ESTADO_CVIL = 'GET_ESTADO_CVIL'
-const GET_ESCOLARIDAD = 'GET_ESCOLARIDAD'
-const GET_EDADES = 'GET_EDADES'
-const GET_TIPOMIEMBROS = 'GET_TIPOMIEMBROS'
-const ESTADO_ERROR = 'ESTADO_CIVIL_ERROR'
-const ESCOLARIDAD_ERROR = 'ESCOLARIDAD_ERROR'
-const EDADES_ERROR = 'EDADES_ERROR'
-const ERROR_TIPOMIEMBROS = 'ERROR_TIPOMIEMBROS'
+const CATALOGOS_LOADING = '@catalogos/Loading'
+const GET_ESTADO_CVIL = '@catalogos/getEstadoCivil'
+const GET_ESCOLARIDAD = '@catalogos/getEscolaridad'
+const GET_EDADES = '@catalogos/getEdades'
+const GET_TIPOMIEMBROS = '@catalogos/getTipoMiembros'
+const ESTADO_ERROR = '@catalogos/error/estadocivil'
+const ESCOLARIDAD_ERROR = '@catalogos/error/escolaridad'
+const EDADES_ERROR = '@catalogos/error/edades'
+const ERROR_TIPOMIEMBROS = '@catalogos/error/tipoMiembros'
 
 //REDUCER
 export default function catalogosPersonasReducer(state = dataInicial, action) {
@@ -74,7 +73,7 @@ export const obtenerCatalogosPersonas = () => async (dispatch, getState) => {
     //console.log({ iglesia })
     dispatch({ type: CATALOGOS_LOADING })
 
-    Axios.get(`${backendUrl}/api/catalogos/edocivil`)
+    Axios.get(`${backendUrl}/catalogos/edocivil`)
         .then(res =>
             dispatch({
                 type: GET_ESTADO_CVIL,
@@ -83,12 +82,11 @@ export const obtenerCatalogosPersonas = () => async (dispatch, getState) => {
         .catch(err => {
             dispatch({
                 type: ESTADO_ERROR
-            });
-            dispatch(returnErrors(err, ''))
-            dispatch(addNotificacion(err.message, true, 'error'))
+            })
+            dispatch(returnErrors(err.response.data, err.response.status))
         })
 
-    Axios.get(`${backendUrl}/api/catalogos/escolaridad`)
+    Axios.get(`${backendUrl}/catalogos/escolaridad`)
         .then(res =>
             dispatch({
                 type: GET_ESCOLARIDAD,
@@ -97,12 +95,11 @@ export const obtenerCatalogosPersonas = () => async (dispatch, getState) => {
         .catch(err => {
             dispatch({
                 type: ESCOLARIDAD_ERROR
-            });
-            dispatch(returnErrors(err, ''))
-            dispatch(addNotificacion(err.message, true, 'error'))
+            })
+            dispatch(returnErrors(err.response.data, err.response.status))
         })
 
-    Axios.get(`${backendUrl}/api/catalogos/edades`)
+    Axios.get(`${backendUrl}/catalogos/edades`)
         .then(res =>
             dispatch({
                 type: GET_EDADES,
@@ -111,12 +108,11 @@ export const obtenerCatalogosPersonas = () => async (dispatch, getState) => {
         .catch(err => {
             dispatch({
                 type: EDADES_ERROR
-            });
-            dispatch(returnErrors(err, ''))
-            dispatch(addNotificacion(err.message, true, 'error'))
+            })
+            dispatch(returnErrors(err.response.data, err.response.status))
         })
 
-    Axios.get(`${backendUrl}/api/catalogos/tipomiembros/${iglesia._id}`)
+    Axios.get(`${backendUrl}/catalogos/tipomiembros/${iglesia._id}`)
         .then(res =>
             dispatch({
                 type: GET_TIPOMIEMBROS,
@@ -125,9 +121,8 @@ export const obtenerCatalogosPersonas = () => async (dispatch, getState) => {
         .catch(err => {
             dispatch({
                 type: ERROR_TIPOMIEMBROS
-            });
-            dispatch(returnErrors(err, ''))
-            dispatch(addNotificacion(err.message, true, 'error'))
+            })
+            dispatch(returnErrors(err.response.data, err.response.status))
         })
 
 }

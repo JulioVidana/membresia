@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { Link as RouterLink, useLocation } from 'react-router-dom';
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useLocation } from 'react-router-dom'
 import { cargaMenuAccion } from 'src/redux/generalDucks'
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 import {
   Avatar,
   Box,
@@ -12,184 +12,58 @@ import {
   List,
   Typography,
   makeStyles,
-  ListSubheader
-} from '@material-ui/core';
+  ListSubheader,
+  Paper,
+  colors
+} from '@material-ui/core'
 import {
-  BarChart as BarChartIcon,
-  Lock as LockIcon,
-  Settings as SettingsIcon,
-  ShoppingBag as ShoppingBagIcon,
-  User as UserIcon,
-  UserPlus as UserPlusIcon,
-  Users as UsersIcon,
-  Home as HomeIcon,
-  List as ListIcon,
-  Disc as DiscIcon,
-  FileText as FileIcon
-} from 'react-feather';
-import NavItem from './NavItem';
+  BarChart as BarChartIcon
+} from 'react-feather'
+import HomeIcon from '@material-ui/icons/Home'
+import NavItem from './NavItem'
+import { Logo2 } from 'src/components/Logo'
+import { navItems, items2 } from './menuData'
 
-
-const items = [
-  {
-    _id: 1,
-    grupo: 'Administración',
-    items: [
-      {
-        href: '/app/usuarios',
-        icon: UserPlusIcon,
-        title: 'Usuarios'
-      },
-      {
-        href: '/app/iglesias',
-        icon: HomeIcon,
-        title: 'Iglesias',
-      }
-    ]
-  },
-  {
-    _id: 2,
-    grupo: 'Personas',
-    items: [
-      {
-        href: '/app/personas',
-        icon: UsersIcon,
-        title: 'Lista de Personas'
-      },
-      {
-        href: '/app/notasglobal',
-        icon: FileIcon,
-        title: 'Notas de Personas'
-      }
-    ]
-  },
-  {
-    _id: 3,
-    grupo: 'Plantilla',
-    items: [
-      {
-        href: '/app/customers',
-        icon: ListIcon,
-        title: 'Customers'
-      },
-      {
-        href: '/app/products',
-        icon: ShoppingBagIcon,
-        title: 'Products'
-      },
-      {
-        href: '/app/account',
-        icon: UserIcon,
-        title: 'Account'
-      },
-      {
-        href: '/app/settings',
-        icon: SettingsIcon,
-        title: 'Settings'
-      },
-      {
-        href: '/login',
-        icon: LockIcon,
-        title: 'Login'
-      }
-    ]
-  }
-
-];
-
-const items2 = [
-  {
-    href: '/app/dashboard',
-    icon: BarChartIcon,
-    title: 'Dashboard'
-  },
-  {
-    href: '/app/usuarios',
-    icon: UserPlusIcon,
-    title: 'Usuarios'
-  },
-  {
-    href: '/app/iglesias',
-    icon: HomeIcon,
-    title: 'Iglesias',
-  },
-  {
-    href: '/app/personas',
-    icon: UsersIcon,
-    title: 'Personas'
-  },
-  {
-    href: '/app/notasglobal',
-    icon: FileIcon,
-    title: 'Notas de Personas'
-  },
-  {
-    href: '/app/customers',
-    icon: ListIcon,
-    title: 'Customers'
-  },
-  {
-    href: '/app/products',
-    icon: ShoppingBagIcon,
-    title: 'Products'
-  },
-  {
-    href: '/app/account',
-    icon: UserIcon,
-    title: 'Account'
-  },
-  {
-    href: '/app/settings',
-    icon: SettingsIcon,
-    title: 'Settings'
-  },
-  {
-    href: '/login',
-    icon: LockIcon,
-    title: 'Login'
-  }
-];
 
 const useStyles = makeStyles((theme) => ({
   mobileDrawer: {
-    width: 256
+    width: 280
   },
   desktopDrawer: {
-    width: 256,
+    width: 280,
     top: 64,
     height: 'calc(100% - 64px)'
   },
   avatar: {
     cursor: 'pointer',
-    width: 64,
-    height: 64
+    width: 44,
+    height: 44,
+    marginRight: theme.spacing(2),
+    color: theme.palette.getContrastText(colors.deepOrange[500]),
+    backgroundColor: colors.deepOrange[500],
+  },
+  iglesia: {
+    width: '100%',
+    padding: theme.spacing(2),
+    background: colors.grey[100]
   }
-}));
+}))
 
 const NavBar = ({ onMobileClose, openMobile }) => {
-  const classes = useStyles();
-  const dispatch = useDispatch();
-  const location = useLocation();
-  const [menu, setMenu] = useState([]);
-  /* const [user, setUser] = useState({
-    avatar: '',
-    title: 'Administrador',
-    name: 'Julio V'
-  }); */
-  const user = {
-    avatar: '',
-    title: 'Administrador',
-    name: 'Julio V'
-  }
+  const classes = useStyles()
+  const dispatch = useDispatch()
+  const location = useLocation()
+  const iglesia = useSelector(store => store.general.iglesia)
+  const auth = useSelector(store => store.auth.usuario)
+  const { rol } = auth
 
   useEffect(() => {
     if (openMobile && onMobileClose) {
-      onMobileClose();
+      onMobileClose()
     }
-    setMenu(items);
-    dispatch(cargaMenuAccion(items2));
+    dispatch(cargaMenuAccion(items2))
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.pathname, dispatch]);
+  }, [location.pathname, dispatch])
 
   const content = (
     <Box
@@ -197,40 +71,48 @@ const NavBar = ({ onMobileClose, openMobile }) => {
       display="flex"
       flexDirection="column"
     >
+      <Hidden lgUp>
+        <Box
+          alignItems="center"
+          display="flex"
+          flexDirection="column"
+          pt={2}
+        >
+          <Logo2 />
+        </Box>
+      </Hidden>
       <Box
         alignItems="center"
         display="flex"
         flexDirection="column"
         p={2}
       >
-        <Avatar
-          className={classes.avatar}
-          component={RouterLink}
-          src={user.avatar}
-          to="/app/account"
-        />
-        <Typography
-          className={classes.name}
-          color="textPrimary"
-          variant="h5"
-        >
-          {user.name}
-        </Typography>
-        <Typography
-          color="textSecondary"
-          variant="body2"
-        >
-          {user.title}
-        </Typography>
+
+        <Paper className={classes.iglesia} >
+          <Box
+            alignItems="center"
+            display="flex"
+          >
+            <Avatar
+              className={classes.avatar}
+              src={iglesia?.imagen}
+            >
+              <HomeIcon />
+            </Avatar>
+            <Typography
+              gutterBottom
+              variant="h5">
+              {iglesia?.nombre}
+            </Typography>
+          </Box>
+
+        </Paper>
+
+
       </Box>
       <Divider />
       <Box p={2}>
         <List>
-          <NavItem
-            href='/app/home'
-            title='Home'
-            icon={DiscIcon}
-          />
           <NavItem
             href='/app/dashboard'
             title='Dashboard'
@@ -239,31 +121,36 @@ const NavBar = ({ onMobileClose, openMobile }) => {
         </List>
 
 
-        {menu.map((item) => (
-          <List
-            key={item._id}
-            subheader={
-              <ListSubheader
-                disableGutters
-                disableSticky
+        {navItems.map((item) => (
+          <div key={item._id}>
+            {item.allowedRoles.includes(rol) && (
+              <List
+
+                subheader={
+                  <ListSubheader
+                    disableGutters
+                    disableSticky
+                  >
+                    {item.grupo}
+                  </ListSubheader>
+                }
               >
-                {item.grupo}
-              </ListSubheader>
-            }
-          >
-            {
-              item.items.map((orale) => (
-                <NavItem
-                  href={orale.href}
-                  key={orale.title}
-                  title={orale.title}
-                  icon={orale.icon}
-                />
+                {
+                  item.items.map((orale) => (
+                    <NavItem
+                      href={orale.href}
+                      key={orale.title}
+                      title={orale.title}
+                      icon={orale.icon}
+                    />
 
-              ))
-            }
+                  ))
+                }
 
-          </List>
+              </List>
+            )}
+
+          </div>
         ))}
 
       </Box>

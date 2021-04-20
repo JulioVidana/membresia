@@ -1,8 +1,10 @@
 const router = require('express').Router()
 const Personas = require('../models/personas')
 const ObjectId = require('mongoose').Types.ObjectId
+const requireAdmin = require('../middleware/requireAdmin')
+const cloudinary = require('../utils/cloudinary')
 
-
+//trae personas por iglesia
 router.get('/:id', async (req, res, next) => {
     const { id } = req.params
 
@@ -27,7 +29,7 @@ router.get('/inactivos/:id', async (req, res, next) => {
 
 
 //AGREGAR NUEVA PERSONA
-router.post('/add', async (request, response, next) => {
+router.post('/add', requireAdmin, async (request, response, next) => {
     //console.log(req.body)
     const persona = request.body
     try {
@@ -61,8 +63,9 @@ router.post('/add', async (request, response, next) => {
 
 
 })
+
 //ACTUALIZA DATOS GENERALES DE UNA PERSONA
-router.post('/update', async (request, response, next) => {
+router.post('/update', requireAdmin, async (request, response, next) => {
     try {
         const persona = request.body
         const updatePersona = await Personas.updateOne(
@@ -101,7 +104,7 @@ router.post('/update', async (request, response, next) => {
 })
 
 //TRAE LOS DATOS DE UNA PERSONA EN ESPECÍFICO
-router.route('/persona/:id').get(async (req, res) => {
+router.get('/persona/:id', async (req, res) => {
     const { id } = req.params
     //console.log('id persona', id)
     await Personas.aggregate(
@@ -144,24 +147,24 @@ router.route('/persona/:id').get(async (req, res) => {
         ]
     )
         .then(result => res.json(result))
-        .catch(err => res.status(400).json('Error ' + err))
+        .catch(err => res.status(400).json({ msg: err.message }))
 })
 
-    //ACTUALIZA TIPO DE MIEMBRO
-    / router.route('/tipomiembro/:id').put((request, response, next) => {
-        const { id } = request.params
-        const datos = request.body
+//ACTUALIZA TIPO DE MIEMBRO
+router.put('/tipomiembro/:id', requireAdmin, async (request, response, next) => {
+    const { id } = request.params
+    const datos = request.body
 
-        Personas.findByIdAndUpdate(
-            id,
-            { tipoMiembro: datos._id },
-            { new: true, useFindAndModify: false })
-            .then(() => {
-                response.status(200).end()
-            })
-            .catch(error => next(error))
+    Personas.findByIdAndUpdate(
+        id,
+        { tipoMiembro: datos._id },
+        { new: true, useFindAndModify: false })
+        .then(() => {
+            response.status(200).end()
+        })
+        .catch(error => next(error))
 
-    })
+})
 
 /* router.route('/tipomiembro/:id').put((req, res, next) => {
     const { id } = req.params
@@ -196,7 +199,7 @@ router.route('/persona/:id').get(async (req, res) => {
 
 
 //ESTATUS INACTIVO
-router.route('/estatus/:id').put((request, response, next) => {
+router.put('/estatus/:id', requireAdmin, async (request, response, next) => {
     const { id } = request.params
     const datos = request.body
 
@@ -219,7 +222,7 @@ router.route('/estatus/:id').put((request, response, next) => {
 })
 
 //AGREGA O ACTUALIZA BAUTISMO
-router.route('/bautismo/:id').put((request, response, next) => {
+router.put('/bautismo/:id', requireAdmin, async (request, response, next) => {
     const { id } = request.params
     const datos = request.body
 
@@ -239,14 +242,36 @@ router.route('/bautismo/:id').put((request, response, next) => {
         .catch(error => next(error))
 
 })
+
 //BORRAR USUARIO
-router.route('/borrar/:id').delete(async (request, response) => {
+router.post('/delete/:id', async (request, response, next) => {
     const { id } = request.params
-    const borrar = await Personas.findByIdAndDelete(id)
+    const { rol } = request.user
+    const idImagen = request.body.id
+    const allowedRoles = ['superadmin', 'admin']
+    try {
 
-    if (borrar === null) return response.sendStatus(404)
+        if (!allowedRoles.includes(rol)) {
+            return response.status(400).json({ msg: 'No tienes Permiso de Eliminar' })
+        }
 
-    response.status(204).end()
+        //borrar Imagen
+        if (idImagen !== undefined) {
+            await cloudinary.uploader.destroy(idImagen)
+        }
+
+        //Borra Persona
+        const borrar = await Personas.findByIdAndDelete(id)
+
+        if (borrar === null) return response.sendStatus(404)
+
+        response.status(204).end()
+
+
+    } catch (error) {
+        next(error)
+    }
+
 })
 
 
