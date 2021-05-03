@@ -36,9 +36,10 @@ const PersonasRecientes = ({ className, datos, ...rest }) => {
     const dispatch = useDispatch()
 
     const abrirDetalle = item => {
-        dispatch(cargaPersona(item))
+        dispatch(cargaPersona(item._id))
             .then(() => {
-                navigate('/app/personadetalle');
+                /* navigate('/app/personadetalle'); */
+                navigate(`/app/personas/${item._id}`)
             })
     }
 

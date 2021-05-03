@@ -18,6 +18,7 @@ import AgregarPersona from './views/personas/PersonasView/NuevaPersona'
 import PersonaDetalle from './views/personaDetalle'
 import NotasGlobal from './views/notasGlobal'
 import PersonasView2 from './views/personas/PersonasView/Index2'
+import PersonasLaunch from './views/personas/PersonasView/Launch'
 
 //Object-based Routes de la Versión 6 en lugar de usar la etiqueta  <Route path="/" element={<UsersIndex />} />
 
@@ -35,9 +36,15 @@ const routes = (auth) => [
       { path: 'usuarios', element: auth.usuario?.rol === 'superadmin' ? <UsuariosView /> : <InicioView /> },
       { path: 'iglesias', element: auth.usuario?.rol === 'superadmin' ? <IglesiasView /> : <InicioView /> },
       { path: 'addiglesia', element: <AgregarIglesia /> },
-      { path: 'personas', element: <PersonasView /> },
+      {
+        path: 'personas',
+        element: <PersonasLaunch />,
+        children: [
+          { path: '/', element: <PersonasView /> },
+          { path: ':idpersona', element: <PersonaDetalle /> },
+        ]
+      },
       { path: 'addpersona', element: <AgregarPersona /> },
-      { path: 'personadetalle', element: <PersonaDetalle /> },
       { path: 'notasglobal', element: <NotasGlobal /> },
       { path: 'personas2', element: <PersonasView2 /> },
       { path: '/', element: <Navigate to="/app/home" /> },

@@ -104,6 +104,19 @@ router.post('/update', requireAdmin, async (request, response, next) => {
 })
 
 //TRAE LOS DATOS DE UNA PERSONA EN ESPECÍFICO
+router.get('/persona/:id', async (req, res, next) => {
+    const { id } = req.params
+
+    await Personas.findById(id)
+        .populate('civil')
+        .populate('escolaridad')
+        .populate('tipoMiembro', { iglesia: 0 })
+        .then(result =>
+            res.json(result))
+        .catch(err => next(err))
+})
+
+/* //TRAE LOS DATOS DE UNA PERSONA EN ESPECÍFICO
 router.get('/persona/:id', async (req, res) => {
     const { id } = req.params
     //console.log('id persona', id)
@@ -148,7 +161,7 @@ router.get('/persona/:id', async (req, res) => {
     )
         .then(result => res.json(result))
         .catch(err => res.status(400).json({ msg: err.message }))
-})
+}) */
 
 //ACTUALIZA TIPO DE MIEMBRO
 router.put('/tipomiembro/:id', requireAdmin, async (request, response, next) => {

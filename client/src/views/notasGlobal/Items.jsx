@@ -52,9 +52,10 @@ const Items = ({ nota, setConfirmDialog, confirmDialog, dispatch, setCsvNota, st
 
 
     const abrirDetalle = item => {
-        dispatchRdx(cargaPersona(item))
+        dispatchRdx(cargaPersona(item._id))
             .then(() => {
-                navigate('/app/personadetalle');
+                /* navigate('/app/personadetalle'); */
+                navigate(`/app/personas/${item._id}`)
             })
     }
 

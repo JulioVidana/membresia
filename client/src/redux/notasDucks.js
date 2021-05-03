@@ -9,11 +9,11 @@ const dataInicial = {
     loading: false
 }
 
-const LOADING = 'LOADING_NOTAS'
-const GET_NOTAS = 'GET_NOTAS'
-const GET_NOTAS_GLOBAL = 'GET_NOTAS_GLOBAL'
-const NUEVA_NOTA = 'NUEVA_NOTA'
-const DELETE_NOTA = 'DELETE_NOTA'
+const LOADING = '@notas/loading'
+const GET_NOTAS = '@notas/getNotas'
+const GET_NOTAS_GLOBAL = '@notas/getNotasGlobal'
+const NUEVA_NOTA = '@notas/nuevaNota'
+const DELETE_NOTA = '@notas/deleteNota'
 
 //REDUCER
 export default function notasReducer(state = dataInicial, action) {

@@ -19,6 +19,7 @@ const NotasGloba = ({ notas, categoria }) => {
             <div className='print-wrapper' ref={componentRef}>
                 <div className='header-row'>
                     <h1>Notas</h1>
+                    {/* eslint-disable-next-line */}
                     <a className="print-action-btn" onClick={handlePrint}>Imprimir reporte</a>
                 </div>
                 <dl className='filters'>

@@ -54,18 +54,33 @@ export default function personaDetReducer(state = dataInicial, action) {
     }
 }
 
-//ACCIONES
+/* //ACCIONES
 export const cargaPersona = (datos) => async (dispatch, getState) => {
     dispatch({ type: CARGA_PERSONA, payload: datos })
     datos.familia ? dispatch(traeFamilia(datos.familia)) : dispatch(resetFamilia())
     dispatch(traeNotas(datos._id))
+} */
+
+//ACCIONES
+export const cargaPersona = (idpersona) => async (dispatch, getState) => {
+    await Axios.get(`${backendUrl}/personas/persona/${idpersona}`)
+        .then(result => {
+
+            dispatch({ type: TRAE_PERSONA, payload: result.data })
+            result.data.familia ? dispatch(traeFamilia(result.data.familia)) : dispatch(resetFamilia())
+            dispatch(traeNotas(idpersona))
+        })
+        .catch(err => {
+            dispatch(returnErrors(err.response.data, err.response.status, 'ERROR'));
+        })
+
 }
 
 export const traePersona = (datos) => async (dispatch) => {
-    //console.log('id', datos._id)
     await Axios.get(`${backendUrl}/personas/persona/${datos._id}`)
         .then(result => {
-            dispatch({ type: TRAE_PERSONA, payload: result.data[0] })
+
+            dispatch({ type: TRAE_PERSONA, payload: result.data })
         })
         .catch(err => {
             dispatch(returnErrors(err.response.data, err.response.status, 'ERROR'));

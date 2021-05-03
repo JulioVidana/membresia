@@ -77,9 +77,10 @@ const PeronasView = () => {
 
     const abrirDetalle = item => {
         // console.log(item.row)
-        dispatch(cargaPersona(item.row))
+        dispatch(cargaPersona(item.row._id))
             .then(() => {
-                navigate('/app/personadetalle');
+                /* navigate('/app/personadetalle'); */
+                navigate(`/app/personas/${item.row._id}`)
             })
     }
 

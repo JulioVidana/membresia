@@ -150,9 +150,10 @@ const PeronasView = () => {
     }
 
     const abrirDetalle = item => {
-        dispatch(cargaPersona(item))
+        dispatch(cargaPersona(item._id))
             .then(() => {
-                navigate('/app/personadetalle');
+                /* navigate('/app/personadetalle'); */
+                navigate(`/app/personas/${item._id}`)
             })
     }
 
