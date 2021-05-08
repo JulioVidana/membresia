@@ -7,7 +7,7 @@ const personaSchema = new Schema({
     aPaterno: { type: String, required: true, min: 3, max: 255 },
     aMaterno: { type: String, min: 3, max: 255 },
     nacimiento: { type: Date },
-    grupoEdad: { type: String },
+    grupoEdad: { type: Schema.Types.ObjectId, ref: 'Edade' },
     sexo: { type: String },
     telefono: { type: Number },
     email: { type: String, min: 6, max: 255 },

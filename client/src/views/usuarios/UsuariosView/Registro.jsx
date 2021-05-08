@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { addNotificacion } from 'src/redux/notifyDucks'
 import { obtenerIglesias } from 'src/redux/iglesiasDucks';
 import { agregaUsuario, actualizaUsuario } from 'src/redux/usuariosDucks'
-import * as Yup from 'yup';
-import { Formik } from 'formik';
+import * as Yup from 'yup'
+import { Formik } from 'formik'
 import {
     Box,
     Button,
@@ -15,10 +15,10 @@ import {
     Typography,
     makeStyles,
     Switch
-} from '@material-ui/core';
-import Page from 'src/components/Page';
+} from '@material-ui/core'
+import Page from 'src/components/Page'
 //import { agregaUsuarioAccion, actualizaUsuarioAccion } from 'src/redux/usuariosDucks';
-import { roles } from './data';
+import { roles } from './data'
 
 
 
@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
         paddingBottom: theme.spacing(3),
         paddingTop: theme.spacing(3)
     }
-}));
+}))
 
 
 
@@ -46,13 +46,13 @@ const initialFValues = {
 
 
 const RegistroView = (props) => {
-    const classes = useStyles();
+    const classes = useStyles()
     const dispatch = useDispatch()
-    const [values, setValues] = useState(initialFValues);
+    const [values, setValues] = useState(initialFValues)
     const [editar, setEditar] = useState(false)
-    const iglesias = useSelector(store => store.iglesias.datos);
-    const { setOpenPopup, recordForEdit } = props;
-    const [passSwitch, setPassSwitch] = useState(false);
+    const iglesias = useSelector(store => store.iglesias.datos)
+    const { setOpenPopup, recordForEdit } = props
+    const [passSwitch, setPassSwitch] = useState(false)
 
     //console.log('popupConsole', recordForEdit)
 
@@ -64,9 +64,11 @@ const RegistroView = (props) => {
         fetchData()
 
         if (recordForEdit != null) {
-            setEditar(true);
+            setEditar(true)
             setValues({
-                ...recordForEdit, password: ''
+                ...recordForEdit,
+                password: '',
+                iglesia: recordForEdit.iglesia?._id
             })
         } else {
             setPassSwitch(true)
@@ -76,9 +78,9 @@ const RegistroView = (props) => {
     }, [recordForEdit, dispatch])
 
     const switchChange = (event) => {
-        //console.log('evento', event)
-        setPassSwitch(event.target.checked);
-    };
+        setPassSwitch(event.target.checked)
+    }
+
     return (
         <Page
             className={classes.root}
@@ -113,7 +115,7 @@ const RegistroView = (props) => {
                                     .then(result => {
                                         console.log(result)
                                         dispatch(addNotificacion('Se agregó correctamente', true, 'success'))
-                                        setOpenPopup(false);
+                                        setOpenPopup(false)
                                     })
                         }}
                     >
@@ -265,8 +267,8 @@ const RegistroView = (props) => {
                 </Container>
             </Box>
         </Page >
-    );
-};
+    )
+}
 
 
-export default RegistroView;
+export default RegistroView

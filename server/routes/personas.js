@@ -12,6 +12,7 @@ router.get('/:id', async (req, res, next) => {
         .populate('civil')
         .populate('escolaridad')
         .populate('tipoMiembro', { iglesia: 0 })
+        .populate('grupoEdad', { iglesia: 0 })
         .then(result => res.json(result))
         .catch(err => next(err))
 })
@@ -23,6 +24,7 @@ router.get('/inactivos/:id', async (req, res, next) => {
         .populate('civil')
         .populate('escolaridad')
         .populate('tipoMiembro', { iglesia: 0 })
+        .populate('grupoEdad', { iglesia: 0 })
         .then(result => res.json(result))
         .catch(err => next(err))
 })
@@ -111,6 +113,7 @@ router.get('/persona/:id', async (req, res, next) => {
         .populate('civil')
         .populate('escolaridad')
         .populate('tipoMiembro', { iglesia: 0 })
+        .populate('grupoEdad', { iglesia: 0 })
         .then(result =>
             res.json(result))
         .catch(err => next(err))
@@ -167,6 +170,7 @@ router.get('/persona/:id', async (req, res) => {
 router.put('/tipomiembro/:id', requireAdmin, async (request, response, next) => {
     const { id } = request.params
     const datos = request.body
+    console.log(datos)
 
     Personas.findByIdAndUpdate(
         id,

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { cargaPersona } from 'src/redux/personaDetalleDucks'
-import { obtenerPersonas, obtenerInactivos } from 'src/redux/personasDucks'
+import { obtenerPersonas } from 'src/redux/personasDucks'
 import { obtenerCatalogosPersonas } from 'src/redux/CatalogosPersonasDucks'
 import moment from 'moment'
 import Page from 'src/components/Page'
@@ -16,12 +16,15 @@ import {
     Container,
     Card,
     Avatar,
-    Typography
+    Typography,
+    Hidden
 } from '@material-ui/core'
+
 import PerfectScrollbar from 'react-perfect-scrollbar'
 import getInitials from 'src/utils/getInitials'
 import Tabla from 'src/components/Tabla'
 import Toolbar from './Toolbar'
+import ImportExport from './ImportExport'
 //import data from './data';
 
 
@@ -32,47 +35,17 @@ const useStyles = makeStyles((theme) => ({
         paddingBottom: theme.spacing(3),
         paddingTop: theme.spacing(3)
     },
-    pageContent: {
-        margin: theme.spacing(1),
-        padding: theme.spacing(1)
-    },
-    searchInput: {
-        width: '80%'
-    },
-    newButton: {
-        position: 'absolute',
-        right: '10px'
-    },
     avatar: {
         marginRight: theme.spacing(2)
     },
-    backdrop: {
-        zIndex: theme.zIndex.drawer + 1,
-        color: '#fff',
+    barExport: {
+        marginLeft: theme.spacing(2)
     }
 }))
 
-const menuItems = [
-    { value: 'Todos', label: 'Todos' },
-    { value: 'bautizado', label: 'Bautizado' },
-    { value: 'Miembro', label: 'Miembro' },
-    { value: 'Visita', label: 'Visita' },
-    { value: 'En Proceso', label: 'En Proceso' },
-    { value: 'Adulto', label: 'Adulto' },
-    { value: 'Adolescente', label: 'Adolescente' },
-    { value: 'Niño', label: 'Niño' },
-    { value: 'Hombre', label: 'Hombre' },
-    { value: 'Mujer', label: 'Mujer' },
-    { value: 'Inactivos', label: 'Inactivos' }
 
-]
 
-const headCells = [
-    { id: 'completo', label: 'Nombre' },
-    { id: 'email', label: 'Correo Electrónico' },
-    { id: 'telefono', label: 'Teléfono' },
-    { id: 'createdAt', label: 'Fecha de Registro' }
-]
+
 
 const PeronasView = () => {
     const classes = useStyles()
@@ -82,9 +55,16 @@ const PeronasView = () => {
     const iglesia = useSelector(store => store.general.iglesia)
     const { usuario } = useSelector(store => store.auth)
     const usuariosList = useSelector(store => store.personas.personas)
+    const catalogos = useSelector(store => store.catalogos)
     //const loading = useSelector(store => store.personas.loading)
-    const [sortMenu, setSortMenu] = useState('')
+    const headCells = [
+        { id: 'completo', label: 'Nombre' },
+        { id: 'email', label: 'Correo Electrónico', hidden: true },
+        { id: 'telefono', label: 'Teléfono', hidden: true },
+        { id: 'createdAt', label: 'Fecha de Registro', hidden: true }
+    ]
 
+    const [sortMenu, setSortMenu] = useState('')
     const {
         TblContainer,
         TblHead,
@@ -112,42 +92,7 @@ const PeronasView = () => {
         })
     }
 
-    const handleSortChange = (e, value) => {
-        let filtro = e.target.value
 
-
-        filtro === 'Inactivos' ?
-            dispatch(obtenerInactivos(iglesia))
-            :
-            dispatch(obtenerPersonas(iglesia))
-
-        setSortMenu(filtro)
-        setFilterFn({
-            fn: items => {
-                switch (filtro) {
-                    case 'En Proceso':
-                    case 'Visita':
-                    case 'Miembro':
-                        return items.filter(x => x.tipoMiembro?.tipo.includes(filtro))
-                    case 'bautizado':
-                        return items.filter(x => x.bautismo.activo === true)
-                    case 'Hombre':
-                    case 'Mujer':
-                        return items.filter(x => x.sexo.includes(filtro))
-                    case 'Adolescente':
-                    case 'Adulto':
-                    case 'Niño':
-                        return items.filter(x => x.grupoEdad.includes(filtro))
-                    default:
-                        return items
-                }
-            }
-        })
-
-
-
-
-    }
 
     const abrirDetalle = item => {
         dispatch(cargaPersona(item._id))
@@ -156,6 +101,8 @@ const PeronasView = () => {
                 navigate(`/app/personas/${item._id}`)
             })
     }
+
+
 
     return (
         <Page
@@ -169,6 +116,13 @@ const PeronasView = () => {
                 icono='add'
                 to='/app/addpersona'
             />
+
+            <ImportExport
+                classes={classes}
+                usuariosList={filterFn.fn(usuariosList)}
+                iglesia={iglesia}
+            />
+
             <Container maxWidth={false}>
                 <Box mt={3}>
                     <Card>
@@ -178,8 +132,10 @@ const PeronasView = () => {
                             filterFn={filterFn}
                             handleSearch={handleSearch}
                             sortMenu={sortMenu}
-                            menuItems={menuItems}
-                            handleSortChange={handleSortChange}
+                            iglesia={iglesia}
+                            setSortMenu={setSortMenu}
+                            setFilterFn={setFilterFn}
+                            catalogos={catalogos}
                         />
 
                         <PerfectScrollbar>
@@ -209,11 +165,13 @@ const PeronasView = () => {
                                                         </Typography>
                                                     </Box>
                                                 </TableCell>
-                                                <TableCell>{item.email}</TableCell>
-                                                <TableCell>{item.telefono}</TableCell>
-                                                <TableCell>
-                                                    {moment(item.createdAt).format('DD/MM/YYYY')}
-                                                </TableCell>
+                                                <Hidden xsDown>
+                                                    <TableCell>{item.email}</TableCell>
+                                                    <TableCell>{item.telefono}</TableCell>
+                                                    <TableCell>
+                                                        {moment(item.createdAt).format('DD/MM/YYYY')}
+                                                    </TableCell>
+                                                </Hidden>
                                             </TableRow>)
                                             )
                                         }

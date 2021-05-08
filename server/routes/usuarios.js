@@ -7,8 +7,9 @@ const ObjectId = require('mongoose').Types.ObjectId
 const requireSuperAdmin = require('../middleware/requireSuperAdmin')
 
 
-router.get('/', async (req, res) => {
+router.get('/', requireSuperAdmin, async (req, res) => {
     await Usuarios.find()
+        .populate('iglesia')
         .then(result => res.json(result))
         .catch(err => res.status(400).json('Error: ' + err))
 })
@@ -35,7 +36,7 @@ router.post('/', requireSuperAdmin, async (req, res) => {
 
         await usuario.save()
 
-        const traeUsuarios = await Usuarios.find()
+        const traeUsuarios = await Usuarios.find().populate('iglesia')
         res.json(traeUsuarios)
 
     } catch (error) {
@@ -84,7 +85,7 @@ router.put('/:id', requireSuperAdmin, async (req, res) => {
             nuevosDatos
         )
 
-        const traeUsuarios = await Usuarios.find()
+        const traeUsuarios = await Usuarios.find().populate('iglesia')
         res.json(traeUsuarios)
 
     } catch (error) {
@@ -98,7 +99,7 @@ router.delete('/:id', requireSuperAdmin, async (req, res) => {
 
         await Usuarios.findByIdAndDelete(id)
 
-        const traeUsuarios = await Usuarios.find()
+        const traeUsuarios = await Usuarios.find().populate('iglesia')
         res.json(traeUsuarios)
 
     } catch (error) {

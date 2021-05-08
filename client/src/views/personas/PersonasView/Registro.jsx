@@ -64,7 +64,7 @@ const RegistroView = (props) => {
         nombre: values.nombre,
         aPaterno: values.aPaterno,
         aMaterno: values.aMaterno,
-        grupoEdad: values.grupoEdad,
+        grupoEdad: values.grupoEdad?._id,
         email: values.email,
         telefono: values.telefono,
         ciudad: values.ciudad,
@@ -74,8 +74,8 @@ const RegistroView = (props) => {
         sexo: values.sexo,
         iglesia: values.iglesia,
         oficio: values.oficio,
-        civil: values.civil._id,
-        escolaridad: values.escolaridad._id,
+        civil: values.civil?._id,
+        escolaridad: values.escolaridad?._id,
         nacimiento: values.nacimiento
     }
     //console.log({ initialFValues })
@@ -344,9 +344,9 @@ const RegistroView = (props) => {
                                 {edades.map((option) => (
                                     <option
                                         key={option._id}
-                                        value={option.grupo}
+                                        value={option._id}
                                     >
-                                        {option.grupo}
+                                        {option.tipo}
                                     </option>
                                 ))}
                             </TextField>

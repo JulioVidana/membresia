@@ -1,8 +1,5 @@
 import {
     BarChart as BarChartIcon,
-    Lock as LockIcon,
-    Settings as SettingsIcon,
-    ShoppingBag as ShoppingBagIcon,
     UserPlus as UserPlusIcon,
     Users as UsersIcon,
     Home,
@@ -49,30 +46,16 @@ export const navItems = [
     },
     {
         _id: 3,
-        grupo: 'PLANTILLA',
+        grupo: 'AJUSTES',
         items: [
             {
-                href: '/app/customers',
+                href: '/app/catalogos',
                 icon: ListIcon,
-                title: 'Customers'
-            },
-            {
-                href: '/app/products',
-                icon: ShoppingBagIcon,
-                title: 'Products'
-            },
-            {
-                href: '/app/settings',
-                icon: SettingsIcon,
-                title: 'Settings'
-            },
-            {
-                href: '/login',
-                icon: LockIcon,
-                title: 'Login'
+                title: 'Catálogos',
             }
         ],
-        allowedRoles: ['superadmin']
+        allowedRoles: ['superadmin', 'admin', 'editor']
+
     }
 
 ]
@@ -110,27 +93,9 @@ export const items2 = [
         allowedRoles: ['superadmin', 'admin', 'editor', 'consulta']
     },
     {
-        href: '/app/customers',
+        href: '/app/catalogos',
         icon: ListIcon,
-        title: 'Customers',
-        allowedRoles: ['superadmin']
-    },
-    {
-        href: '/app/products',
-        icon: ShoppingBagIcon,
-        title: 'Products',
-        allowedRoles: ['superadmin']
-    },
-    {
-        href: '/app/settings',
-        icon: SettingsIcon,
-        title: 'Settings',
-        allowedRoles: ['superadmin']
-    },
-    {
-        href: '/login',
-        icon: LockIcon,
-        title: 'Login',
-        allowedRoles: ['superadmin', 'admin', 'editor', 'consulta']
+        title: 'Catálogos',
+        allowedRoles: ['superadmin', 'admin', 'editor']
     }
 ]

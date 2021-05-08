@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import { addNotificacion } from 'src/redux/notifyDucks'
 import {
     makeStyles,
@@ -13,17 +13,16 @@ import {
     Container,
     Card,
     Grid
-} from '@material-ui/core';
-import Page from 'src/components/Page';
-import Titulo from 'src/components/Toolbar';
-import Tabla from 'src/components/Tabla';
-import Controls from 'src/components/controls/Controls';
-import { Search as SearchIcon } from 'react-feather';
-//import AddIcon from '@material-ui/icons/Add';
-import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
-import CloseIcon from '@material-ui/icons/Close';
-import PerfectScrollbar from 'react-perfect-scrollbar';
-import { obtenerIglesias, borraIglesia } from 'src/redux/iglesiasDucks';
+} from '@material-ui/core'
+import Page from 'src/components/Page'
+import Titulo from 'src/components/Toolbar'
+import Tabla from 'src/components/Tabla'
+import Controls from 'src/components/controls/Controls'
+import { Search as SearchIcon } from 'react-feather'
+import EditOutlinedIcon from '@material-ui/icons/EditOutlined'
+import CloseIcon from '@material-ui/icons/Close'
+import PerfectScrollbar from 'react-perfect-scrollbar'
+import { obtenerIglesias, borraIglesia } from 'src/redux/iglesiasDucks'
 import ConfirmDialog from 'src/components/ConfirmDialog'
 
 
@@ -50,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
         bottom: theme.spacing(2),
         right: theme.spacing(2),
     }
-}));
+}))
 
 const headCells = [
     { id: 'nombre', label: 'Nombre' },
@@ -60,13 +59,13 @@ const headCells = [
     { id: 'pais', label: 'País' },
     { id: 'contacto', label: 'Contacto' },
     { id: 'actions', label: 'Actions', disableSorting: true }
-];
+]
 
 const IglesiasView = () => {
-    const classes = useStyles();
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const [filterFn, setFilterFn] = useState({ fn: items => { return items; } });
+    const classes = useStyles()
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const iglesiasList = useSelector(store => store.iglesias.datos)
     const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: '', type: '' })
 
@@ -87,11 +86,11 @@ const IglesiasView = () => {
     }, [dispatch])
 
     const handleSearch = e => {
-        let target = e.target;
+        let target = e.target
         setFilterFn({
             fn: items => {
                 if (target.value === "")
-                    return items;
+                    return items
                 else
                     return items.filter(x => x.nombre.toLowerCase().includes(target.value))
             }
@@ -110,10 +109,10 @@ const IglesiasView = () => {
     return (
         <Page
             className={classes.root}
-            title="Usuarios"
+            title="Catálogo de Iglesias"
         >
             <Titulo
-                title="Catálogos de Iglesias"
+                title="Catálogo de Iglesias"
                 btnText="NUEVA IGLESIA"
                 to="/app/addiglesia"
             />
@@ -204,13 +203,6 @@ const IglesiasView = () => {
 
                     </Card>
                 </Box>
-                {/*  <Fab color="primary"
-                    aria-label="add"
-                    className={classes.fab}
-                    onClick={() => { navigate('/app/addiglesia', { state: { recordForEdit: null } }) }}
-                >
-                    <AddIcon />
-                </Fab> */}
             </Container>
 
             <ConfirmDialog

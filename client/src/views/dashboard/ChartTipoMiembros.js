@@ -26,20 +26,20 @@ const ChartTipoMiembros = ({ keys, values }) => {
             label: 'Tipo de Miembros',
             data: values,
             backgroundColor: [
-                /* colors.indigo[500],
-                  colors.red[600],
-                  colors.orange[600],
-                  colors.grey[800],
-                  colors.green[600],
-                  colors.grey[300] 
-                  */
+                colors.indigo[500],
+                colors.teal[500],
+                colors.blueGrey[500],
+                colors.deepPurple[500],
+                colors.cyan[600],
+                colors.amber[600],
+                colors.grey[300]
             ],
         }],
         labels: keys
     }
 
 
-    keys.map(tipos => {
+    /* keys.map(tipos => {
         switch (tipos) {
             case 'Miembro':
                 return datos.datasets[0].backgroundColor.push(colors.indigo[500])
@@ -52,7 +52,7 @@ const ChartTipoMiembros = ({ keys, values }) => {
             default:
                 return datos.datasets[0].backgroundColor.push(colors.grey[300])
         }
-    })
+    }) */
 
 
 

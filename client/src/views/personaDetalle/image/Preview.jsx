@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { EliminarImagen } from 'src/redux/personaDetalleDucks'
 import {
@@ -12,7 +12,7 @@ import ConfirmDialog from 'src/components/ConfirmDialog'
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        width: 400
+        maxWidth: 400
     },
     espacio: {
         marginTop: theme.spacing(3),
@@ -21,7 +21,8 @@ const useStyles = makeStyles((theme) => ({
     btnAlerta: {
         color: theme.palette.error.main,
     },
-}));
+}))
+
 const Preview = ({ imagenDB, setOpenPopup, notif, setImagenDB }) => {
     const classes = useStyles()
     const dispatch = useDispatch()

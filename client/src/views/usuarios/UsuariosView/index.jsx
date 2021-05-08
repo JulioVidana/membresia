@@ -73,7 +73,7 @@ const headCells = [
     { id: 'nombre', label: 'Nombre' },
     { id: 'email', label: 'Email' },
     { id: 'rol', label: 'Rol' },
-    { id: 'empresa', label: 'Empresa' },
+    { id: 'iglesia', label: 'Iglesia' },
     { id: 'actions', label: 'Actions', disableSorting: true }
 ]
 
@@ -213,7 +213,7 @@ const UsuariosView = () => {
                                                         item.rol
                                                     }
                                                 </TableCell>
-                                                <TableCell>{item.empresa}</TableCell>
+                                                <TableCell>{item.iglesia?.nombre}</TableCell>
                                                 <TableCell>
                                                     <Controls.ActionButton
                                                         color="secondary"

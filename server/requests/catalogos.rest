@@ -1,25 +1,61 @@
+ @baseUrl = http://localhost:3001/api/catalogos
+
 ### Get CATALOGOS GENERALES
-GET http://localhost:3001/api/catalogos/escolaridad
+GET http://localhost:3001/api/catalogosglobal/escolaridad
 ###
-GET http://localhost:3001/api/catalogos/edocivil
+GET http://localhost:3001/api/catalogosglobal/edocivil
 ###
-GET http://localhost:3001/api/catalogos/edades
+GET http://localhost:3001/api/catalogosglobal/edades
 
 
-### TRAE catalogo de TIPO DE MIEMBROS x iglesia
-GET http://localhost:3001/api/catalogos/tipomiembros/6024878b19e804be07b07462
+### CATALOGOS DINÁMICOS
+GET {{baseUrl}}/6024878b19e804be07b07462
 
-### AGREGA nuevo TIPO DE MIEMBRO
-POST http://localhost:3001/api/catalogos/tipomiembros
+### AGREGA CATALOGOS
+POST {{baseUrl}}
 Content-Type: application/json
 
 {
-    "tipo": "En Proceso",
-    "iglesia": "6024878b19e804be07b07462"
+    "iglesia": "6024878b19e804be07b07462",
+    "catalogos":[
+        {
+            "id": 0,
+            "nombre": "Tipos de Miembros",
+            "items":[
+                {"tipo":"Miembro"},
+                {"tipo":"Visita"},
+                {"tipo":"En Proceso"},
+                {"tipo":"VIP"}
+            ]
+
+        },
+        {
+            "id": 1,
+            "nombre": "Tipos de Ministerios",
+            "items":[
+                {"tipo":"Alabanza"},
+                {"tipo":"Maestros"},
+                {"tipo":"Evangelismo"},
+                {"tipo":"VIP"}
+            ]
+
+        },
+        {
+            "id": 2,
+            "nombre": "Grupo Edades",
+            "items":[
+                {"tipo":"Adulto"},
+                {"tipo":"Adolescente"},
+                {"tipo":"Niño"}
+            ]
+
+        }
+    ]
 }
 
+
 ### ACTUALIZA  TIPO DE MIEMBRO
-PUT http://localhost:3001/api/catalogos/tipomiembros/604f9f01de3e5916a4d030ef
+PUT {{baseUrl}}
 Content-Type: application/json
 
 {

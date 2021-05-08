@@ -6,7 +6,8 @@ import {
     TableRow,
     makeStyles,
     TablePagination,
-    TableSortLabel
+    TableSortLabel,
+    Hidden
 } from '@material-ui/core'
 
 
@@ -55,17 +56,20 @@ const Tabla = (records, headCells, filterFn) => {
             <TableRow>
                 {
                     headCells.map(headCell => (
-                        <TableCell key={headCell.id}
-                            sortDirection={orderBy === headCell.id ? order : false}>
-                            {headCell.disableSorting ? headCell.label :
-                                <TableSortLabel
-                                    active={orderBy === headCell.id}
-                                    direction={orderBy === headCell.id ? order : 'asc'}
-                                    onClick={() => { handleSortRequest(headCell.id) }}>
-                                    {headCell.label}
-                                </TableSortLabel>
-                            }
-                        </TableCell>))
+                        <Hidden xsDown={headCell.hidden} key={headCell.id}>
+                            <TableCell key={headCell.id} align={headCell.align} className={headCell.className}
+                                sortDirection={orderBy === headCell.id ? order : false}>
+                                {headCell.disableSorting ? headCell.label :
+                                    <TableSortLabel
+                                        active={orderBy === headCell.id}
+                                        direction={orderBy === headCell.id ? order : 'asc'}
+                                        onClick={() => { handleSortRequest(headCell.id) }}>
+                                        {headCell.label}
+                                    </TableSortLabel>
+                                }
+                            </TableCell>
+                        </Hidden>
+                    ))
                 }
             </TableRow>
         </TableHead>)

@@ -1,0 +1,30 @@
+ @baseUrl = http://localhost:3001/api/tiposmiembros
+
+ ### TRAE LISTA DE TIPO MIEMBROS PPOR IGLESIA
+GET {{baseUrl}}/6024878b19e804be07b07462
+
+### INSERTA NUEVO TIPO DE MIEMBRO
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+    "tipo": "Lider",
+    "iglesia": "6024878b19e804be07b07462"
+}
+
+### ACTUALIZA TIPO DE MIEMBRO
+PUT {{baseUrl}}/6094234f3f7540cc7f28a95a
+Content-Type: application/json
+
+{
+    "tipo": "Lider",
+    "iglesia": "6024878b19e804be07b07462"
+}
+
+### BORRA TIPO DE MIEMBRO
+DELETE {{baseUrl}}/609427671d346cd0e310dafe
+Content-Type: application/json
+
+{
+    "iglesia": "6024878b19e804be07b07462"
+}

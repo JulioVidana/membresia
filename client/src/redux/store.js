@@ -16,6 +16,7 @@ import familiasReducer from './familiasDucks'
 import notasReducer from './notasDucks'
 import authReducer from './authDucks'
 import dashBoardReducer from './dasboardDucks'
+import catalogosCustomReducer from './catalogosCustomDucks'
 
 const rootReducer = combineReducers({
     auth: authReducer,
@@ -29,7 +30,8 @@ const rootReducer = combineReducers({
     usuarios: usuariosReducer,
     notificacion: notifyReducer,
     error: erroresReducer,
-    dashboard: dashBoardReducer
+    dashboard: dashBoardReducer,
+    catalogosCustom: catalogosCustomReducer
 
 })
 

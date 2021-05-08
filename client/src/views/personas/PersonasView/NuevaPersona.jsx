@@ -1,5 +1,6 @@
-import React from 'react';
-import { useSelector } from 'react-redux'
+import { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { obtenerCatalogosPersonas } from 'src/redux/CatalogosPersonasDucks'
 import { addNotificacion } from 'src/redux/notifyDucks'
 import {
     Container,
@@ -8,9 +9,9 @@ import {
     CardHeader,
     CardContent,
     Divider
-} from '@material-ui/core';
-import Page from 'src/components/Page';
-import Registro from './Registro';
+} from '@material-ui/core'
+import Page from 'src/components/Page'
+import Registro from './Registro'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -24,11 +25,20 @@ const useStyles = makeStyles((theme) => ({
 
 
 const NuevaPersona = () => {
-    const classes = useStyles();
+    const classes = useStyles()
+    const dispatch = useDispatch()
     //const [selectedDate, handleDateChange] = useState(new Date());
-    const catalogos = useSelector(store => store.catalogos);
+    const catalogos = useSelector(store => store.catalogos)
     const { generos, edoCivil, grupoEdades, escolaridad } = catalogos
-    const iglesia = useSelector(store => store.general.iglesia);
+    const iglesia = useSelector(store => store.general.iglesia)
+
+    useEffect(() => {
+        const fetchData = () => {
+            dispatch(obtenerCatalogosPersonas())
+        }
+        fetchData()
+    }, [dispatch])
+
 
     const initialFValues = {
         _id: 0,
@@ -79,4 +89,4 @@ const NuevaPersona = () => {
     );
 };
 
-export default NuevaPersona;
+export default NuevaPersona

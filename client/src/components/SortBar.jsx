@@ -1,5 +1,3 @@
-import React from 'react'
-
 import {
     FormControl,
     InputLabel,
@@ -10,7 +8,7 @@ import {
 import SortIcon from '@material-ui/icons/Sort'
 
 
-const sortBar = ({ sortBy, handleSortChange, menuItems, label, size }) => {
+const sortBar = ({ sortBy, handleSortChange, menuItems, label, size, icono = true }) => {
     return (
         <FormControl variant="outlined" fullWidth size={size || 'medium'}>
             <InputLabel id="sort-label">filtrar {label}</InputLabel>
@@ -20,6 +18,7 @@ const sortBar = ({ sortBy, handleSortChange, menuItems, label, size }) => {
                 onChange={handleSortChange}
                 label={`Sort ${label} By`}
                 startAdornment={
+                    icono &&
                     <InputAdornment position="start">
                         <SortIcon
                             color="primary"

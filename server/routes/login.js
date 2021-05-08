@@ -32,6 +32,7 @@ loginRouter.post('/', async (request, response, next) => {
             id: user._id,
             email: user.email,
             rol: user.rol,
+            iglesia: user.iglesia._id,
             iss: 'api.iglesiapp'
         }
 
