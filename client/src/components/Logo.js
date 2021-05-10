@@ -8,19 +8,31 @@ const useStyles = makeStyles((theme) => ({
   logoText: {
     color: '#fff',
     marginLeft: 10
+  },
+  logo: {
+    width: '25%'
+  },
+  logo2: {
+    width: '45%'
   }
 }))
 
-export const Logo2 = () => {
-  //const classes = useStyles()
+export const Logo2 = (props) => {
+  const classes = useStyles()
   return (
     <div>
       <Box
         display="flex"
         alignItems="center"
-        justifyContent="flex-end"
+        justifyContent="center"
       >
-        <Typography variant="h5">IGLESIAPP</Typography>
+        <img
+          className={classes.logo2}
+          alt="Logo"
+          src="/static/logo2.png"
+          {...props}
+        />
+        {/* <Typography variant="h5">IGLESIAPP</Typography> */}
 
       </Box>
     </div>
@@ -35,14 +47,14 @@ const Logo = (props) => {
       <Box
         display="flex"
         alignItems="center"
-        justifyContent="flex-end"
       >
         <img
+          className={classes.logo}
           alt="Logo"
-          src="/static/logo.svg"
+          src="/static/logo.png"
           {...props}
         />
-        <Typography className={classes.logoText} variant="h5">IGLESIAPP</Typography>
+        {/* <Typography className={classes.logoText} variant="h5">IGLESIAPP</Typography> */}
 
       </Box>
     </div>

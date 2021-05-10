@@ -1,12 +1,12 @@
-import React from 'react';
 import {
   Container,
   Grid,
   makeStyles
-} from '@material-ui/core';
-import Page from 'src/components/Page';
-import Profile from './Profile';
-import ProfileDetails from './ProfileDetails';
+} from '@material-ui/core'
+import Page from 'src/components/Page'
+import Profile from './Profile'
+import ProfileDetails from './ProfileDetails'
+import { useSelector } from 'react-redux'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -15,15 +15,16 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(3),
     paddingTop: theme.spacing(3)
   }
-}));
+}))
 
 const Account = () => {
   const classes = useStyles();
+  const usuario = useSelector(store => store.auth.usuario)
 
   return (
     <Page
       className={classes.root}
-      title="Account"
+      title="Mi perfil"
     >
       <Container maxWidth="lg">
         <Grid
@@ -36,7 +37,7 @@ const Account = () => {
             md={6}
             xs={12}
           >
-            <Profile />
+            <Profile usuario={usuario} />
           </Grid>
           <Grid
             item
@@ -44,12 +45,12 @@ const Account = () => {
             md={6}
             xs={12}
           >
-            <ProfileDetails />
+            <ProfileDetails usuario={usuario} />
           </Grid>
         </Grid>
       </Container>
     </Page>
-  );
-};
+  )
+}
 
-export default Account;
+export default Account

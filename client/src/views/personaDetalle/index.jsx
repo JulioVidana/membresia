@@ -145,7 +145,7 @@ const PersonaDetalle = () => {
                         aria-label="simple tabs example">
                         <Tab label="GENERAL" {...a11yProps(0)} />
                         <Tab label="NOTAS" {...a11yProps(1)} />
-                        <Tab label="ACTIVIDAD" {...a11yProps(2)} />
+                        {/* <Tab label="ACTIVIDAD" {...a11yProps(2)} /> */}
                     </Tabs>
                     <Divider />
                     <TabPanel value={value} index={0}>

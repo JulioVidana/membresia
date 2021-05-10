@@ -54,8 +54,8 @@ const LoginView = (props) => {
             <Formik
               initialValues={initialFValues}
               validationSchema={Yup.object().shape({
-                email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-                password: Yup.string().max(255).required('Password is required')
+                email: Yup.string().email('Must be a valid email').max(255).required('Correo electrónico es requerido'),
+                password: Yup.string().max(255).required('Contraseña es requerida')
               })}
               onSubmit={values =>
                 dispatch(login(values))
@@ -95,7 +95,7 @@ const LoginView = (props) => {
                     error={Boolean(touched.email && errors.email)}
                     fullWidth
                     helperText={touched.email && errors.email}
-                    label="Email Address"
+                    label="Correo Electrónico"
                     margin="normal"
                     name="email"
                     onBlur={handleBlur}
@@ -108,7 +108,7 @@ const LoginView = (props) => {
                     error={Boolean(touched.password && errors.password)}
                     fullWidth
                     helperText={touched.password && errors.password}
-                    label="Password"
+                    label="Contraseña"
                     margin="normal"
                     name="password"
                     onBlur={handleBlur}

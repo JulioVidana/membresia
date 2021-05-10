@@ -1,7 +1,5 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import moment from 'moment';
+import PropTypes from 'prop-types'
+import clsx from 'clsx'
 import {
   Avatar,
   Box,
@@ -12,16 +10,7 @@ import {
   Divider,
   Typography,
   makeStyles
-} from '@material-ui/core';
-
-const user = {
-  avatar: '/static/images/avatars/avatar_6.png',
-  city: 'Los Angeles',
-  country: 'USA',
-  jobTitle: 'Senior Developer',
-  name: 'Katarina Smith',
-  timezone: 'GTM-7'
-};
+} from '@material-ui/core'
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -29,10 +18,10 @@ const useStyles = makeStyles(() => ({
     height: 100,
     width: 100
   }
-}));
+}))
 
-const Profile = ({ className, ...rest }) => {
-  const classes = useStyles();
+const Profile = ({ className, usuario, ...rest }) => {
+  const classes = useStyles()
 
   return (
     <Card
@@ -47,27 +36,20 @@ const Profile = ({ className, ...rest }) => {
         >
           <Avatar
             className={classes.avatar}
-            src={user.avatar}
+            src={usuario.imagen}
           />
           <Typography
             color="textPrimary"
             gutterBottom
             variant="h3"
           >
-            {user.name}
+            {usuario.nombre}
           </Typography>
           <Typography
             color="textSecondary"
             variant="body1"
           >
-            {`${user.city} ${user.country}`}
-          </Typography>
-          <Typography
-            className={classes.dateText}
-            color="textSecondary"
-            variant="body1"
-          >
-            {`${moment().format('hh:mm A')} ${user.timezone}`}
+            {usuario.rol}
           </Typography>
         </Box>
       </CardContent>
@@ -78,7 +60,7 @@ const Profile = ({ className, ...rest }) => {
           fullWidth
           variant="text"
         >
-          Upload picture
+          Subir Imagen
         </Button>
       </CardActions>
     </Card>
@@ -89,4 +71,4 @@ Profile.propTypes = {
   className: PropTypes.string
 };
 
-export default Profile;
+export default Profile

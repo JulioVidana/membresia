@@ -123,7 +123,7 @@ const EdicionView = () => {
     return (
         <Page
             className={classes.root}
-            title="Catalogo de Tipos de Miembros"
+            title={TIPO_CATALOGO[idcatalogo]}
         >
             <Titulo
                 title={TIPO_CATALOGO[idcatalogo]}
