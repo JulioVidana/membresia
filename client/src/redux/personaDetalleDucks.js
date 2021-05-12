@@ -34,12 +34,13 @@ export default function personaDetReducer(state = dataInicial, action) {
         case TRAE_PERSONA:
         case CARGA_PERSONA:
             return { ...state, persona: action.payload }
+        case ADD_INACTIVO:
+            return { ...state, loading: false }
         case CAMBIA_IMAGEN:
         case ELIMINAR_IMAGEN:
         case SUBIR_IMAGEN:
         case ADD_BAUTISMO:
         case BORRAR_PERSONA:
-        case ADD_INACTIVO:
         case ADD_TIPOMIEMBRO:
             return { ...state, ...action.payload, loading: false }
         case ERR_CAMBIA_IMAGEN:
@@ -110,7 +111,7 @@ export const cambiaEstatus = (datos) => async (dispatch, getState) => {
 
             Axios.get(`${backendUrl}/personas/persona/${persona._id}`)
                 .then(result => {
-                    dispatch({ type: TRAE_PERSONA, payload: result.data[0] })
+                    dispatch({ type: TRAE_PERSONA, payload: result.data })
                 })
         })
         .catch(err => {

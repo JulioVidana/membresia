@@ -1,7 +1,7 @@
 import Axios from 'axios'
 import backendUrl from '../utils/backendUrl'
 import { returnErrors } from './erroresDucks'
-
+import { addNotificacion } from './notifyDucks'
 
 const dataInicial = {
     familia: {},
@@ -69,6 +69,7 @@ export const agregaFamilia = (datos) => async (dispatch, getState) => {
     await Axios.post(`${backendUrl}/familias`, datos)
         .then(result => {
             dispatch({ type: POST_FAMILIA, payload: result.data })
+            dispatch(addNotificacion('Se agregó Familia', true, 'success'))
         })
         .catch(err => {
             dispatch(
@@ -84,16 +85,22 @@ export const actualizaFamilia = (datos) => async (dispatch, getState) => {
     const { _id } = getState().familias.familia
     const persona = getState().personaDetalle.persona
 
+    //console.log(datos)
+
     await Axios.put(`${backendUrl}/familias/${_id}`, datos)
         .then(result => {
             //check si todavía tiene familia la persona 
             Axios.get(`${backendUrl}/familias/persona/${persona._id}`)
                 .then(res => {
-                    res.data
-                        ?
+                    if (res.data) {
                         dispatch({ type: PUT_FAMILIA, payload: result.data })
-                        :
+                        dispatch(addNotificacion('Se actualizó Familia', true, 'success'))
+
+                    } else {
                         dispatch({ type: RESET_FAMILIA })
+                        dispatch(addNotificacion('Se actualizó Familia', true, 'success'))
+                    }
+
                 })
 
         })

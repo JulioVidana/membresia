@@ -17,6 +17,19 @@ router.get('/:id', async (req, res, next) => {
         .catch(err => next(err))
 })
 
+//todas incluyendo los inactivos
+router.get('/todas/:id', async (req, res, next) => {
+    const { id } = req.params
+
+    await Personas.find({ iglesia: id }).sort('-createdAt')
+        .populate('civil')
+        .populate('escolaridad')
+        .populate('tipoMiembro', { iglesia: 0 })
+        .populate('grupoEdad', { iglesia: 0 })
+        .then(result => res.json(result))
+        .catch(err => next(err))
+})
+
 router.get('/inactivos/:id', async (req, res, next) => {
     const { id } = req.params
 

@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { obtenerCatalogosPersonas } from 'src/redux/CatalogosPersonasDucks'
 import { cargaPersona } from 'src/redux/personaDetalleDucks'
+import { obtenerPersonasTodas } from 'src/redux/personasDucks'
 import { addNotificacion } from 'src/redux/notifyDucks'
 import {
     Container,
@@ -18,7 +19,6 @@ import PropTypes from 'prop-types'
 import Page from 'src/components/Page'
 import Profile from './Profile'
 import ProfileDetails from './ProfileDetails'
-import Famila from './familia/FamiliaCard'
 import Notas from './notas/Notas'
 import Actividad from './actividad/Actividad'
 import Titulo from 'src/components/Toolbar'
@@ -28,6 +28,7 @@ import Estatus from './ajustes/Estatus'
 import Bautismo from './ajustes/Bautismo'
 import Imagen from './image/Imagen'
 import RegistroFamilia from './familia/index'
+import Famila from './familia/FamiliaCard'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -92,6 +93,7 @@ const PersonaDetalle = () => {
     const familia = useSelector(store => store.familias.familia)
     const notas = useSelector(store => store.notas.notas)
     const usuario = useSelector(store => store.auth.usuario)
+    const iglesia = useSelector(store => store.general.iglesia)
     const [openPopup, setOpenPopup] = useState(false)
     const [openPopupEs, setOpenPopupEs] = useState(false)
     const [openPopupBa, setOpenPopupBa] = useState(false)
@@ -115,10 +117,11 @@ const PersonaDetalle = () => {
         const fetchData = () => {
             dispatch(obtenerCatalogosPersonas())
             dispatch(cargaPersona(idpersona))
+            dispatch(obtenerPersonasTodas(iglesia))
 
         }
         fetchData()
-    }, [dispatch, idpersona])
+    }, [dispatch, idpersona, iglesia])
 
 
     return (

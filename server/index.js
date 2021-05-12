@@ -1,9 +1,10 @@
+require('dotenv').config()
+require('./utils/db.config')//conexión MongoDB
+
 const express = require('express')
 const app = express()
-require('dotenv').config()
 const bodyParser = require('body-parser')
 const cors = require('cors')
-const mongoose = require('mongoose')
 const handleErrors = require('./middleware/handleErrors')
 const notFound = require('./middleware/notFound')
 const cookieParser = require('cookie-parser')
@@ -23,11 +24,6 @@ const tiposMiembros = require('./routes/tiposMiembros')
 const grupoEdades = require('./routes/grupoEdades')
 const ministerios = require('./routes/ministerios')
 
-
-//conexión base de datos MONGODB LOCAL
-mongoose.connect('mongodb://localhost:27017/membresia', { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log('Base de datos conectada'))
-    .catch(e => console.log('error db:', e))
 
 //capturar Body
 var corsOptions = {

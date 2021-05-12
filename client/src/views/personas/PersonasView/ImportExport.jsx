@@ -23,7 +23,7 @@ const ImportExport = ({ classes, usuariosList, iglesia }) => {
             Oficio: x.oficio,
             Estado_Civil: x.civil?.estado,
             Escolaridad: x.escolaridad?.escolaridad,
-            Grupo_Edad: x.grupoEdad,
+            Grupo_Edad: x.grupoEdad?.tipo,
             Tipo_Miembro: x.tipoMiembro?.tipo,
             Bautizado: x.bautismo.activo ? 'SI' : 'NO',
             Fecha_Bautismo: x.bautismo.activo && moment(x.bautismo.fecha).locale('es').format('l'),

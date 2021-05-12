@@ -36,6 +36,22 @@ router.post('/', requireAdmin, async (req, res, next) => {
             personas: datos.personas
         })
 
+
+        //CHECK SI AL MENOS UNA PERSONA PERTENECE A OTRA FAMILIA
+        const personas = datos.personas
+        for (let i = 0; i < personas.length; i++) {
+            const tieneFam = await Familias.find({ personas: personas[i] })
+
+            if (tieneFam.length > 0) {
+                res.status(401).json({
+                    msg: 'Una persona ya pertenece a otra familia '
+                })
+                return
+            }
+
+        }
+
+
         const saveFamilia = await newFamilia.save()
 
         await Personas.updateMany(
@@ -51,6 +67,8 @@ router.post('/', requireAdmin, async (req, res, next) => {
             })
 
 
+
+
     } catch (error) {
         next(error)
     }
@@ -62,6 +80,22 @@ router.put('/:id', requireAdmin, async (req, res, next) => {
     const datos = req.body
 
     try {
+
+
+        //CHECK SI AL MENOS UNA PERSONA PERTENECE A OTRA FAMILIA
+        const personas = datos.personas
+        for (let i = 0; i < personas.length; i++) {
+            const tieneFam = await Familias.find({ _id: { $ne: id }, personas: personas[i] })
+
+            if (tieneFam.length > 0) {
+                res.status(401).json({
+                    msg: 'Una persona ya pertenece a otra familia '
+                })
+                return
+            }
+
+        }
+
 
         await Personas.updateMany(
             { familia: ObjectId(id) },

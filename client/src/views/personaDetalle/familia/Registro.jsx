@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { agregaFamilia, eliminaFamilia, actualizaFamilia } from 'src/redux/familiasDucks'
 import * as Yup from 'yup'
@@ -16,7 +16,6 @@ import HouseIcon from '@material-ui/icons/Home';
 import GroupIcon from '@material-ui/icons/Group';
 import ConfirmDialog from 'src/components/ConfirmDialog'
 
-
 const Registro = ({
     setOpenPopup,
     personaData,
@@ -25,7 +24,8 @@ const Registro = ({
     values,
     classes,
     cancelar,
-    notif
+    notif,
+    familiaStore
 }) => {
 
     const dispatch = useDispatch()
@@ -34,12 +34,13 @@ const Registro = ({
         return _id === id
     })
 
+
     const onDelete = () => {
         setConfirmDialog({
             ...confirmDialog,
             isOpen: false
         })
-        dispatch(eliminaFamilia(personaData.familia))
+        dispatch(eliminaFamilia(familiaStore._id))
             .then(() => {
                 dispatch(notif('Se borró Familia', true, 'success'))
                 setOpenPopup(false)
@@ -58,17 +59,16 @@ const Registro = ({
                     })
                 }
                 onSubmit={(values) => {
-                    //console.log({ values })
                     editar ?
                         dispatch(actualizaFamilia(values))
-                            .then(() => {
-                                dispatch(notif('Se actualizó Familia', true, 'success'))
+                            .then((response) => {
+                                //console.log(response)
                                 setOpenPopup(false)
                             })
                         :
                         dispatch(agregaFamilia(values))
                             .then(() => {
-                                dispatch(notif('Se agregó Familia', true, 'success'))
+                                //dispatch(notif('Se agregó Familia', true, 'success'))
                                 setOpenPopup(false)
                             })
                 }}
@@ -114,10 +114,12 @@ const Registro = ({
                                 editar ?
                                     values.personas.map(({ _id }) => buscaPersona(_id))
                                     :
-                                    [personaData]
+                                    [buscaPersona(personaData._id)]
                                     || ""
                             }
-                            onChange={(e, value) => setFieldValue("personas", value.map(({ _id }) => _id))}
+                            onChange={(e, value) => setFieldValue("personas", value.map((person) => person))
+                            }
+                            //onChange={(e, value) => setFieldValue("personas", value.map(({ _id }) => _id))}
                             //onChange={(e, value) => setFieldValue("personas", value)}
                             getOptionLabel={(option) => option?.completo}
                             renderInput={(params) => (
@@ -162,8 +164,7 @@ const Registro = ({
                                         onClick={() => {
                                             setConfirmDialog({
                                                 isOpen: true,
-                                                title: '¿Estas seguro de eliminar Imagen?',
-                                                subTitle: 'Una vez que se elimina la imagen, la única forma de recuperarla es volver a cargarla.',
+                                                title: '¿Estas seguro de eliminar Familia?',
                                                 type: 'alerta',
                                                 onConfirm: () => { onDelete() }
                                             })

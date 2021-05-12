@@ -59,6 +59,7 @@ const FamiliaAgrega = ({ setOpenPopup, personaData, notif, personasList, familia
                             classes={classes}
                             setOpenPopup={setOpenPopup}
                             editar={Object.keys(familia).length !== 0 ? true : false}
+                            familiaStore={familia}
                         />
                         :
                         <SinRegistro

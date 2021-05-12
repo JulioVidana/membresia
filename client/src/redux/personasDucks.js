@@ -57,6 +57,21 @@ export const obtenerPersonas = (iglesia) => async (dispatch, getState) => {
 
 }
 
+//Trae todo el listado junto con las personas inactivas 
+export const obtenerPersonasTodas = (iglesia) => async (dispatch, getState) => {
+    dispatch({ type: PERSONAS_LOADING })
+    Axios.get(`${backendUrl}/personas/todas/${iglesia._id}`)
+        .then(result => {
+            dispatch({ type: OBTENER_PERSONAS, payload: result.data })
+        })
+        .catch(err => {
+            dispatch(returnErrors(err.response.data, err.response.status, 'ERROR_OBTENER_PERSONAS'))
+            dispatch({ type: ERROR_OBTENER_PERSONAS })
+
+        })
+
+}
+
 export const agregaPersona = (datos) => async (dispatch, getState) => {
     //dispatch({ type: PERSONAS_LOADING })
     Axios.post(`${backendUrl}/personas/add`, datos)
