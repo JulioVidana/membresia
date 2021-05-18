@@ -90,7 +90,7 @@ export const traeNotasGlobal = (idIglesia) => async (dispatch, getState) => {
 }
 
 export const borraNotaGlobal = (idNota) => async (dispatch, getState) => {
-    dispatch({ type: LOADING })
+    //dispatch({ type: LOADING })
     const idIglesia = getState().general.iglesia._id
 
     Axios.delete(`${backendUrl}/notas/${idNota}`)

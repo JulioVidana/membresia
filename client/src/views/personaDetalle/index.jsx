@@ -131,7 +131,7 @@ const PersonaDetalle = () => {
         >
             <Titulo
                 title="Detalle Persona"
-                btnType={usuario.rol === 'consulta' ? 'no' : 'edit'}
+                btnType={usuario?.rol === 'consulta' ? 'no' : 'edit'}
                 btnText="EDITAR"
                 icono='edit'
                 onClick={() => { openInPopup() }}

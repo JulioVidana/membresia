@@ -69,7 +69,6 @@ const Items = ({ nota, setConfirmDialog, confirmDialog, dispatch, setCsvNota, st
                 dispatchRdx(addNotificacion(`SE BORRÓ NOTA`, true, 'warning'))
                 dispatch({ type: 'SEARCH_INPUT', payload: '' })
                 dispatch({ type: 'SEARCH_DATA', payload: [] })
-                setCsvNota(stateData)
             })
     }
 

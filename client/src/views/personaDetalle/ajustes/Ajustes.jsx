@@ -62,11 +62,11 @@ const Ajustes = ({ catalogoMiembros, idMiembro, idUsuario, setOpenPopupEs, setOp
     const [tipo, setTipo] = useState(!idMiembro ? {} : tipoMiembro)
     const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: '', type: '' })
 
-    const handleClickListItem = (event) => {
+    const handleClickListMiembro = (event) => {
         setAnchorEl(event.currentTarget)
     }
 
-    const handleMenuItemClick = (event, valor) => {
+    const handleTipoMiembro = (event, valor) => {
         setTipo(valor)
         dispatch(actualizaTipoMiembro(idUsuario, valor))
             .then(() => {
@@ -120,8 +120,8 @@ const Ajustes = ({ catalogoMiembros, idMiembro, idUsuario, setOpenPopupEs, setOp
                 <Grid
                     item
                     xs={12}
-                    md={7}
-                    lg={7}
+                    md={12}
+                    lg={12}
                 >
                     <Inactivo
                         estatus={estatus}
@@ -134,7 +134,7 @@ const Ajustes = ({ catalogoMiembros, idMiembro, idUsuario, setOpenPopupEs, setOp
 
             <Grid
                 item
-                lg={3}
+                lg={4}
             >
                 <Paper variant="outlined" >
                     <List
@@ -147,7 +147,7 @@ const Ajustes = ({ catalogoMiembros, idMiembro, idUsuario, setOpenPopupEs, setOp
                             aria-haspopup="true"
                             aria-controls="lock-menu"
                             aria-label="when device is locked"
-                            onClick={handleClickListItem}
+                            onClick={handleClickListMiembro}
                         >
                             <ListItemIcon className={classes.listaIcon}>
                                 <PersonOutlineIcon />
@@ -168,7 +168,7 @@ const Ajustes = ({ catalogoMiembros, idMiembro, idUsuario, setOpenPopupEs, setOp
                             <MenuItem
                                 key={option._id}
                                 selected={option._id === tipo?._id}
-                                onClick={(event) => handleMenuItemClick(event, option)}
+                                onClick={(event) => handleTipoMiembro(event, option)}
                             >
                                 {option.tipo}
                             </MenuItem>

@@ -39,7 +39,9 @@ const rootReducer = combineReducers({
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 export default function generateStore() {
+    //comentar esta linea al subir al servidor
     const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)))
+    //DEScomentar esta linea al subir al servidor
     //const store = createStore(rootReducer, applyMiddleware(thunk))
 
     return store;

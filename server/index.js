@@ -27,7 +27,7 @@ const ministerios = require('./routes/ministerios')
 
 //capturar Body
 var corsOptions = {
-    origin: '*', // Reemplazar con dominio donde estará el frontend
+    origin: process.env.FRONTEND_APP_URL, // Reemplazar con dominio donde estará el frontend '*'
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
 app.use(cors(corsOptions))
@@ -36,6 +36,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cookieParser())
 
 //route middelware
+app.get('/', (req, res) => res.send('Iglesiapp API'))
 app.use('/api/login', loginRoutes)
 app.use(requireAuth)//protegiendo rutas
 app.use('/api/iglesias', iglesiasRoutes)
@@ -49,9 +50,6 @@ app.use('/api/rptpersonas', rptPersonas)
 app.use('/api/tiposmiembros', tiposMiembros)
 app.use('/api/grupoedades', grupoEdades)
 app.use('/api/tiposministerios', ministerios)
-app.get('/', (req, res) => {
-    res.send('Iglesiapp API')
-})
 app.use(notFound)
 app.use(handleErrors)
 

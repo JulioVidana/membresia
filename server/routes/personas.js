@@ -183,7 +183,6 @@ router.get('/persona/:id', async (req, res) => {
 router.put('/tipomiembro/:id', requireAdmin, async (request, response, next) => {
     const { id } = request.params
     const datos = request.body
-    console.log(datos)
 
     Personas.findByIdAndUpdate(
         id,

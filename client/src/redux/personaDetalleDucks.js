@@ -90,9 +90,17 @@ export const traePersona = (datos) => async (dispatch) => {
 
 export const actualizaTipoMiembro = (id, datos) => async (dispatch, getState) => {
     //dispatch({ type: PERSONAS_LOADING })
+    const { persona } = getState().personaDetalle
+
     Axios.put(`${backendUrl}/personas/tipomiembro/${id}`, datos)
         .then(result => {
             dispatch({ type: ADD_TIPOMIEMBRO, payload: result.data })
+
+            Axios.get(`${backendUrl}/personas/persona/${persona._id}`)
+                .then(result => {
+                    dispatch({ type: TRAE_PERSONA, payload: result.data })
+                })
+
         })
         .catch(err => {
             dispatch({ type: ERROR_AGREGA_TIPOMIEMBRO })
@@ -130,7 +138,7 @@ export const addBautismo = (datos) => async (dispatch, getState) => {
 
             Axios.get(`${backendUrl}/personas/persona/${persona._id}`)
                 .then(result => {
-                    dispatch({ type: TRAE_PERSONA, payload: result.data[0] })
+                    dispatch({ type: TRAE_PERSONA, payload: result.data })
                 })
 
         })
@@ -167,7 +175,7 @@ export const subirImagen = (imagen) => async (dispatch, getState) => {
 
             Axios.get(`${backendUrl}/personas/persona/${persona._id}`)
                 .then(result => {
-                    dispatch({ type: TRAE_PERSONA, payload: result.data[0] })
+                    dispatch({ type: TRAE_PERSONA, payload: result.data })
                 })
         })
         .catch(err => {
@@ -186,7 +194,7 @@ export const EliminarImagen = (imagen) => async (dispatch, getState) => {
 
             Axios.get(`${backendUrl}/personas/persona/${persona._id}`)
                 .then(result => {
-                    dispatch({ type: TRAE_PERSONA, payload: result.data[0] })
+                    dispatch({ type: TRAE_PERSONA, payload: result.data })
                 })
         })
         .catch(err => {
@@ -205,7 +213,7 @@ export const cambiarImagen = (imagen) => async (dispatch, getState) => {
 
             Axios.get(`${backendUrl}/personas/persona/${persona._id}`)
                 .then(result => {
-                    dispatch({ type: TRAE_PERSONA, payload: result.data[0] })
+                    dispatch({ type: TRAE_PERSONA, payload: result.data })
                 })
         })
         .catch(err => {

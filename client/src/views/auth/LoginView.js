@@ -35,7 +35,6 @@ const LoginView = (props) => {
   const dispatch = useDispatch()
   const classes = useStyles()
 
-
   return (
     <>
       {isAuthenticated && <Navigate to="/app/home" />}
@@ -133,6 +132,7 @@ const LoginView = (props) => {
             </Formik>
           </Container>
         </Box>
+
       </Page>
     </>
   );
