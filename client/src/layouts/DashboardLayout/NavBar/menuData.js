@@ -4,7 +4,9 @@ import {
     Users as UsersIcon,
     Home,
     List as ListIcon,
-    FileText as FileIcon
+    FileText as FileIcon,
+    Sliders as SlidersIcon,
+    Settings as SettingsIcon,
 } from 'react-feather'
 
 
@@ -12,6 +14,7 @@ export const navItems = [
     {
         _id: 1,
         grupo: 'ADMINISTRACIÓN',
+        icon: SettingsIcon,
         items: [
             {
                 href: '/app/usuarios',
@@ -29,6 +32,7 @@ export const navItems = [
     {
         _id: 2,
         grupo: 'PERSONAS',
+        icon: UsersIcon,
         items: [
             {
                 href: '/app/personas',
@@ -47,6 +51,7 @@ export const navItems = [
     {
         _id: 3,
         grupo: 'AJUSTES',
+        icon: SlidersIcon,
         items: [
             {
                 href: '/app/catalogos',
@@ -61,7 +66,7 @@ export const navItems = [
 ]
 
 
-export const items2 = [
+export const botonesItems = [
     {
         href: '/app/dashboard',
         icon: BarChartIcon,

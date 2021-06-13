@@ -1,5 +1,5 @@
-//import { createStore, combineReducers, applyMiddleware } from 'redux';
-import { createStore, combineReducers, compose, applyMiddleware } from 'redux';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+//import { createStore, combineReducers, compose, applyMiddleware } from 'redux';
 
 import thunk from 'redux-thunk';
 
@@ -36,13 +36,13 @@ const rootReducer = combineReducers({
 })
 
 //extensión de google chrome para visualizar la tienda en navegador
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+//const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 export default function generateStore() {
-    //comentar esta linea al subir al servidor
-    const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)))
+    //COMENTAR esta linea al subir al servidor
+    //const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)))
     //DEScomentar esta linea al subir al servidor
-    //const store = createStore(rootReducer, applyMiddleware(thunk))
+    const store = createStore(rootReducer, applyMiddleware(thunk))
 
     return store;
 }

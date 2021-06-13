@@ -145,7 +145,7 @@ const NotasTotal = ({ notas, notif }) => {
                                             color="textSecondary"
                                             gutterBottom
                                             variant="caption">
-                                            {`${moment(item.fecha).locale('es-mx').format('LL')} por ${item.createdBy.nombre}`}
+                                            {`${moment(item.fecha).locale('es-mx').format('LL')} por ${item.createdBy?.nombre}`}
                                         </Typography>
                                     </Grid>
                                     <Grid

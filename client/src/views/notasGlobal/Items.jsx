@@ -144,7 +144,7 @@ const Items = ({ nota, setConfirmDialog, confirmDialog, dispatch, setCsvNota, st
                         color="textSecondary"
                         gutterBottom
                         variant="caption">
-                        {`${moment(nota.fecha).format('LL')} por ${nota.createdBy.nombre}`}
+                        {`${moment(nota.fecha).format('LL')} por ${nota.createdBy?.nombre}`}
                     </Typography>
                 </Grid>
                 <Grid

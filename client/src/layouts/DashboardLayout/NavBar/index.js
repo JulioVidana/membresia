@@ -12,18 +12,17 @@ import {
   List,
   Typography,
   makeStyles,
-  ListSubheader,
   Paper,
   colors
 } from '@material-ui/core'
+import HomeIcon from '@material-ui/icons/Home'
 import {
   BarChart as BarChartIcon
 } from 'react-feather'
-import HomeIcon from '@material-ui/icons/Home'
 import NavItem from './NavItem'
-import { Logo2 } from 'src/components/Logo'
-import { navItems, items2 } from './menuData'
-
+import Logo from 'src/components/Logo'
+import { navItems, botonesItems } from './menuData'
+import NavCollapes from './NavCollapse'
 
 const useStyles = makeStyles((theme) => ({
   mobileDrawer: {
@@ -40,9 +39,9 @@ const useStyles = makeStyles((theme) => ({
     height: 44,
     marginRight: theme.spacing(2),
     color: theme.palette.getContrastText(colors.deepOrange[500]),
-    backgroundColor: colors.deepOrange[500],
+    backgroundColor: colors.deepOrange[500]
   },
-  iglesia: {
+  info: {
     width: '100%',
     padding: theme.spacing(2),
     background: colors.grey[100]
@@ -53,7 +52,6 @@ const NavBar = ({ onMobileClose, openMobile }) => {
   const classes = useStyles()
   const dispatch = useDispatch()
   const location = useLocation()
-  const iglesia = useSelector(store => store.general.iglesia)
   const auth = useSelector(store => store.auth.usuario)
   const { rol } = auth
 
@@ -61,9 +59,10 @@ const NavBar = ({ onMobileClose, openMobile }) => {
     if (openMobile && onMobileClose) {
       onMobileClose()
     }
-    dispatch(cargaMenuAccion(items2))
+    dispatch(cargaMenuAccion(botonesItems))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname, dispatch])
+
 
   const content = (
     <Box
@@ -78,7 +77,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
           flexDirection="column"
           pt={2}
         >
-          <Logo2 />
+          <Logo />
         </Box>
       </Hidden>
       <Box
@@ -87,27 +86,25 @@ const NavBar = ({ onMobileClose, openMobile }) => {
         flexDirection="column"
         p={2}
       >
-
-        <Paper className={classes.iglesia} >
+        <Paper className={classes.info} >
           <Box
             alignItems="center"
             display="flex"
           >
             <Avatar
               className={classes.avatar}
-              src={iglesia?.imagen}
+              src=""
             >
               <HomeIcon />
             </Avatar>
             <Typography
               gutterBottom
               variant="h5">
-              {iglesia?.nombre}
+              {'Info de sistema'}
             </Typography>
           </Box>
 
         </Paper>
-
 
       </Box>
       <Divider />
@@ -120,43 +117,18 @@ const NavBar = ({ onMobileClose, openMobile }) => {
           />
         </List>
 
-
         {navItems.map((item) => (
           <div key={item._id}>
             {item.allowedRoles.includes(rol) && (
-              <List
 
-                subheader={
-                  <ListSubheader
-                    disableGutters
-                    disableSticky
-                  >
-                    {item.grupo}
-                  </ListSubheader>
-                }
-              >
-                {
-                  item.items.map((orale) => (
-                    <NavItem
-                      href={orale.href}
-                      key={orale.title}
-                      title={orale.title}
-                      icon={orale.icon}
-                    />
-
-                  ))
-                }
-
-              </List>
+              <NavCollapes item={item} icon={item.icon} />
             )}
-
           </div>
         ))}
-
       </Box>
 
     </Box>
-  );
+  )
 
   return (
     <>
@@ -182,17 +154,17 @@ const NavBar = ({ onMobileClose, openMobile }) => {
         </Drawer>
       </Hidden>
     </>
-  );
-};
+  )
+}
 
 NavBar.propTypes = {
   onMobileClose: PropTypes.func,
   openMobile: PropTypes.bool
-};
+}
 
 NavBar.defaultProps = {
   onMobileClose: () => { },
   openMobile: false
-};
+}
 
-export default NavBar;
+export default NavBar

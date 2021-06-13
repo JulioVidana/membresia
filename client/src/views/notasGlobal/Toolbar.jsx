@@ -46,7 +46,7 @@ const Toolbar = ({ className, notas, handleInput, filtroChange, sortMenu, setSor
             Nota: x.nota,
             Categoria: x.categoria,
             Fecha: moment(x.fecha).locale('es').format('L'),
-            Autor: x.createdBy.nombre
+            Autor: x.createdBy?.nombre
         }
         return nuevo
     })
