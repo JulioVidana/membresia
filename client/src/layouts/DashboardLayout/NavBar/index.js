@@ -20,7 +20,7 @@ import {
   BarChart as BarChartIcon
 } from 'react-feather'
 import NavItem from './NavItem'
-import Logo from 'src/components/Logo'
+import { Logo2 } from 'src/components/Logo'
 import { navItems, botonesItems } from './menuData'
 import NavCollapes from './NavCollapse'
 
@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.getContrastText(colors.deepOrange[500]),
     backgroundColor: colors.deepOrange[500]
   },
-  info: {
+  iglesia: {
     width: '100%',
     padding: theme.spacing(2),
     background: colors.grey[100]
@@ -52,6 +52,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
   const classes = useStyles()
   const dispatch = useDispatch()
   const location = useLocation()
+  const iglesia = useSelector(store => store.general.iglesia)
   const auth = useSelector(store => store.auth.usuario)
   const { rol } = auth
 
@@ -77,7 +78,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
           flexDirection="column"
           pt={2}
         >
-          <Logo />
+          <Logo2 />
         </Box>
       </Hidden>
       <Box
@@ -86,21 +87,21 @@ const NavBar = ({ onMobileClose, openMobile }) => {
         flexDirection="column"
         p={2}
       >
-        <Paper className={classes.info} >
+        <Paper className={classes.iglesia} >
           <Box
             alignItems="center"
             display="flex"
           >
             <Avatar
               className={classes.avatar}
-              src=""
+              src={iglesia.imagen?.url}
             >
               <HomeIcon />
             </Avatar>
             <Typography
               gutterBottom
               variant="h5">
-              {'Info de sistema'}
+              {iglesia?.nombre}
             </Typography>
           </Box>
 

@@ -7,7 +7,7 @@ import {
 } from '@material-ui/core'
 import ImageIcon from '@material-ui/icons/Image'
 
-const Edit = ({ files, setEditor }) => {
+const ImagenEditor = ({ files, setEditor }) => {
 
     const [scale, setScale] = React.useState(1.2);
 
@@ -51,4 +51,4 @@ const Edit = ({ files, setEditor }) => {
     )
 }
 
-export default Edit
+export default ImagenEditor

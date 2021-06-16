@@ -195,7 +195,7 @@ const UsuariosView = () => {
                                                     >
                                                         <Avatar
                                                             className={classes.avatar}
-                                                            src={item.img}
+                                                            src={item.imagen?.url}
                                                         >
                                                             {getInitials(item.nombre)}
                                                         </Avatar>

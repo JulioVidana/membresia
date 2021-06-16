@@ -8,7 +8,10 @@ const usuarioSchema = new Schema({
     activo: { type: Boolean, default: true },
     rol: { type: String },
     iglesia: { type: Schema.Types.ObjectId, ref: 'Iglesia' },
-    imagen: { type: String }
+    imagen: {
+        url: String,
+        id: String
+    }
 })
 
 module.exports = model('Usuario', usuarioSchema)

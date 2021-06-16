@@ -12,7 +12,10 @@ import {
     Box,
     Container,
     Card,
-    Grid
+    Grid,
+    Avatar,
+    Typography,
+    colors
 } from '@material-ui/core'
 import Page from 'src/components/Page'
 import Titulo from 'src/components/Toolbar'
@@ -24,6 +27,7 @@ import CloseIcon from '@material-ui/icons/Close'
 import PerfectScrollbar from 'react-perfect-scrollbar'
 import { obtenerIglesias, borraIglesia } from 'src/redux/iglesiasDucks'
 import ConfirmDialog from 'src/components/ConfirmDialog'
+import getInitials from 'src/utils/getInitials'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -48,6 +52,11 @@ const useStyles = makeStyles((theme) => ({
         position: 'absolute',
         bottom: theme.spacing(2),
         right: theme.spacing(2),
+    },
+    avatar: {
+        marginRight: theme.spacing(2),
+        color: theme.palette.getContrastText(colors.deepOrange[500]),
+        backgroundColor: colors.deepOrange[500],
     }
 }))
 
@@ -114,7 +123,7 @@ const IglesiasView = () => {
             <Titulo
                 title="Catálogo de Iglesias"
                 btnText="NUEVA IGLESIA"
-                to="/app/addiglesia"
+                to="/app/detalleiglesia"
             />
             <Container maxWidth={false}>
                 <Box mt={3}>
@@ -163,7 +172,25 @@ const IglesiasView = () => {
                                         {
                                             recordsAfterPagingAndSorting().map(item =>
                                             (<TableRow key={item._id} >
-                                                <TableCell>{item.nombre}</TableCell>
+                                                <TableCell>
+                                                    <Box
+                                                        alignItems="center"
+                                                        display="flex"
+                                                    >
+                                                        <Avatar
+                                                            className={classes.avatar}
+                                                            src={item.imagen?.url}
+                                                        >
+                                                            {getInitials(item.nombre)}
+                                                        </Avatar>
+                                                        <Typography
+                                                            color="textPrimary"
+                                                            variant="body1"
+                                                        >
+                                                            {item.nombre}
+                                                        </Typography>
+                                                    </Box>
+                                                </TableCell>
                                                 <TableCell>{item.cobertura}</TableCell>
                                                 <TableCell>{item.pastor}</TableCell>
                                                 <TableCell>{item.ciudad}</TableCell>
@@ -172,7 +199,7 @@ const IglesiasView = () => {
                                                 <TableCell>
                                                     <Controls.ActionButton
                                                         color="secondary"
-                                                        onClick={() => { navigate('/app/addiglesia', { state: { recordForEdit: item } }) }}
+                                                        onClick={() => { navigate('/app/detalleiglesia', { state: { recordForEdit: item } }) }}
                                                     >
                                                         <EditOutlinedIcon fontSize="small" />
                                                     </Controls.ActionButton>

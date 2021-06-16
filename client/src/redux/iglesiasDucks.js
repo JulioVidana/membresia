@@ -18,8 +18,12 @@ const AGREGAR_IGLESIA = '@iglesias/Agregar'
 const REGISTRO_ERROR = '@iglesias/Error'
 const ACTUALIZA_IGLESIA = '@iglesias/Actualizar'
 const BORRA_IGLESIA = '@iglesias/Borrar'
-
-
+const SUBIR_LOGO = '@iglesias/uploadLogo'
+const CAMBIA_LOGO = '@iglesias/updateLogo'
+const ELIMINAR_LOGO = '@iglesias/deleteLogo'
+const ERR_SUBIR_LOGO = '@iglesias/error/uploadLogo'
+const ERR_ELIMINAR_LOGO = '@iglesias/error/deleteLogo'
+const ERR_CAMBIA_LOGO = '@iglesias/error/updateLogo'
 
 //  REDUCER
 export default function iglesiasReducer(state = dataInicial, action) {
@@ -32,6 +36,9 @@ export default function iglesiasReducer(state = dataInicial, action) {
         case BORRA_IGLESIA:
         case ACTUALIZA_IGLESIA:
             return { ...state, datos: action.payload, loading: false, regis: true }
+        case SUBIR_LOGO:
+        case CAMBIA_LOGO:
+        case ELIMINAR_LOGO:
         case REGISTRO_ERROR:
             return { ...state, loading: false, regis: false }
         default:
@@ -99,5 +106,47 @@ export const borraIglesia = (datos) => async (dispatch, getState) => {
             dispatch({ type: REGISTRO_ERROR })
         })
 
+
+}
+
+export const subirLogo = (imagen, idIglesia) => async (dispatch, getState) => {
+
+    Axios.post(`${backendUrl}/iglesias/logo/${idIglesia}`, imagen)
+        .then(result => {
+            dispatch({ type: SUBIR_LOGO, payload: result.data })
+
+        })
+        .catch(err => {
+            dispatch({ type: ERR_SUBIR_LOGO })
+            dispatch(returnErrors(err.response.data, err.response.status, 'ERR_SUBIR_IMAGEN'))
+        })
+
+}
+
+export const eliminarLogo = (imagen, idIglesia) => async (dispatch, getState) => {
+
+    Axios.post(`${backendUrl}/iglesias/logo/borrar/${idIglesia}`, imagen)
+        .then(result => {
+            dispatch({ type: ELIMINAR_LOGO, payload: result.data })
+
+        })
+        .catch(err => {
+            dispatch({ type: ERR_ELIMINAR_LOGO })
+            dispatch(returnErrors(err.response.data, err.response.status, 'ERR_ELIMINAR_IMAGEN'))
+        })
+
+}
+
+export const cambiarLogo = (imagen, idIglesia) => async (dispatch, getState) => {
+
+    Axios.put(`${backendUrl}/iglesias/logo/${idIglesia}`, imagen)
+        .then(result => {
+            dispatch({ type: CAMBIA_LOGO, payload: result.data })
+
+        })
+        .catch(err => {
+            dispatch({ type: ERR_CAMBIA_LOGO })
+            dispatch(returnErrors(err.response.data, err.response.status, 'ERR_CAMBIA_IMAGEN'))
+        })
 
 }

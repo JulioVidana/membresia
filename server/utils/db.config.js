@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 const { MONGO_CONNECTION_STRING, MONGO_DB_LOCAL } = process.env
 
-const connectionString = MONGO_CONNECTION_STRING
+const connectionString = MONGO_DB_LOCAL
 
 // conexión a mongodb
 mongoose.connect(connectionString, {

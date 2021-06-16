@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react'
 import { useDispatch } from 'react-redux'
-import { agregarIglesia, actualizaIglesia } from 'src/redux/iglesiasDucks';
+import { agregarIglesia, actualizaIglesia } from 'src/redux/iglesiasDucks'
 import { addNotificacion } from 'src/redux/notifyDucks'
-import { NavLink, useNavigate, useLocation } from 'react-router-dom';
-import * as Yup from 'yup';
-import { Formik } from 'formik';
-import NumberFormat from 'react-number-format';
-import PropTypes from 'prop-types';
+import { NavLink, useNavigate } from 'react-router-dom'
+import * as Yup from 'yup'
+import { Formik } from 'formik'
+import NumberFormat from 'react-number-format'
+import PropTypes from 'prop-types'
 import {
     Box,
     Button,
@@ -16,8 +16,8 @@ import {
     CardHeader,
     Divider,
     Grid
-} from '@material-ui/core';
-import BackspaceIcon from '@material-ui/icons/Backspace';
+} from '@material-ui/core'
+import BackspaceIcon from '@material-ui/icons/Backspace'
 
 function NumberFormatCustom(props) {
     const { inputRef, onChange, ...other } = props;
@@ -44,41 +44,13 @@ NumberFormatCustom.propTypes = {
     inputRef: PropTypes.func.isRequired,
     name: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
-};
-
-const initialFValues = {
-    _id: 0,
-    pastor: '',
-    nombre: '',
-    cobertura: '',
-    ciudad: '',
-    pais: '',
-    contacto: '',
-    msg: null
 }
 
-const RegistroView = (props) => {
+const RegistroView = ({ editar, values }) => {
     const dispatch = useDispatch()
-    const [values, setValues] = useState(initialFValues);
-    const [editar, setEditar] = useState(false)
-    const location = useLocation();
-    const navigate = useNavigate();
-
-    //console.log('datos', location)
+    const navigate = useNavigate()
 
 
-    useEffect(() => {
-
-        if (location.state != null) {
-            if (location.state.recordForEdit != null)
-                setEditar(true);
-            setValues({
-                ...location.state.recordForEdit
-            })
-        }
-
-    }, [location.state])
-    // console.log({ values })
     return (
 
         <Formik
@@ -253,7 +225,7 @@ const RegistroView = (props) => {
                             <Grid
                                 item
                                 md={3}
-                                xs={12}
+                                xs={4}
                             >
                                 <Box
                                     display="flex"
@@ -273,8 +245,8 @@ const RegistroView = (props) => {
                             </Grid>
                             <Grid
                                 item
-                                md={1}
-                                xs={12}
+                                md={2}
+                                xs={2}
                             >
                                 <Box
                                     display="flex"
@@ -299,8 +271,8 @@ const RegistroView = (props) => {
             )}
         </Formik>
 
-    );
-};
+    )
+}
 
 
-export default RegistroView;
+export default RegistroView

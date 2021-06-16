@@ -20,7 +20,7 @@ const useStyles = makeStyles(() => ({
   }
 }))
 
-const Profile = ({ className, usuario, ...rest }) => {
+const DetalleImagen = ({ className, imagen, title, subTitle, setOpenPopup, ...rest }) => {
   const classes = useStyles()
 
   return (
@@ -36,20 +36,20 @@ const Profile = ({ className, usuario, ...rest }) => {
         >
           <Avatar
             className={classes.avatar}
-            src={usuario.imagen}
+            src={imagen}
           />
           <Typography
             color="textPrimary"
             gutterBottom
             variant="h3"
           >
-            {usuario.nombre}
+            {title}
           </Typography>
           <Typography
             color="textSecondary"
             variant="body1"
           >
-            {usuario.rol}
+            {subTitle}
           </Typography>
         </Box>
       </CardContent>
@@ -59,16 +59,17 @@ const Profile = ({ className, usuario, ...rest }) => {
           color="primary"
           fullWidth
           variant="text"
+          onClick={() => { setOpenPopup(true) }}
         >
           Subir Imagen
         </Button>
       </CardActions>
     </Card>
-  );
-};
+  )
+}
 
-Profile.propTypes = {
+DetalleImagen.propTypes = {
   className: PropTypes.string
-};
+}
 
-export default Profile
+export default DetalleImagen

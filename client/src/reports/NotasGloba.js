@@ -50,7 +50,7 @@ const NotasGloba = ({ notas, categoria }) => {
                                                     </span>
                                                 </span>
                                                 <span className='author'>
-                                                    {`${moment(item.fecha).format('LL')} por ${item.createdBy.nombre}`}
+                                                    {`${moment(item.fecha).format('LL')} por ${item.createdBy?.nombre}`}
                                                 </span>
                                             </span>
 

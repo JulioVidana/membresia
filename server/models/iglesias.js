@@ -8,7 +8,11 @@ const iglesiaSchema = new Schema({
     ciudad: { type: String, required: true, min: 3, max: 255 },
     pastor: { type: String, required: true, min: 3, max: 255 },
     contacto: { type: String },
-    activo: { type: Boolean, default: true }
+    activo: { type: Boolean, default: true },
+    imagen: {
+        url: String,
+        id: String
+    }
 })
 
 module.exports = model('Iglesia', iglesiaSchema)

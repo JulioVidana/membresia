@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { subirImagen, cambiarImagen, EliminarImagen } from 'src/redux/personaDetalleDucks'
+import { subirImagen, cambiarImagen, EliminarImagen } from 'src/redux/usuariosDucks'
 import {
     Box,
     makeStyles,
@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-const Imagen = ({ setOpenPopup, imagen, notif }) => {
+const Imagen = ({ setOpenPopup, imagen, notif, idUsuario }) => {
     const classes = useStyles()
     const dispatch = useDispatch()
     const [editor, setEditor] = useState(null)
@@ -44,7 +44,6 @@ const Imagen = ({ setOpenPopup, imagen, notif }) => {
         setOpenPopup(false)
         //setFiles([])
     }
-
     useEffect(() => () => {
         // Make sure to revoke the data uris to avoid memory leaks
         files.forEach(file => URL.revokeObjectURL(file.preview));
@@ -182,10 +181,12 @@ const Imagen = ({ setOpenPopup, imagen, notif }) => {
                     </Grid>
                 </div>
             }
+
             <ConfirmDialog
                 confirmDialog={confirmDialog}
                 setConfirmDialog={setConfirmDialog}
             />
+
         </Box>
 
     )

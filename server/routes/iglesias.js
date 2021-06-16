@@ -6,6 +6,8 @@ const Ministerios = require('../models/ministerios')
 const Personas = require('../models/personas')
 const ObjectId = require('mongoose').Types.ObjectId
 const requireSuperAdmin = require('../middleware/requireSuperAdmin')
+const cloudinary = require('../utils/cloudinary')
+const upload = require('../utils/multer')
 
 router.get('/', requireSuperAdmin, async (req, res) => {
     await Iglesias.find()
@@ -114,6 +116,88 @@ router.delete('/:id', requireSuperAdmin, async (req, res) => {
     } catch (error) {
         res.status(400).json({ msg: error.message })
     }
+})
+
+
+//SUBIR LOGO A CLOUDINARY
+router.post('/logo/:id', requireSuperAdmin, upload.single('imagen'), async (req, res, next) => {
+    const { id } = req.params
+    try {
+
+        const result = await cloudinary.uploader.upload(req.file.path, { folder: 'iglesias/logos/' })
+
+        Iglesias.findByIdAndUpdate(
+            id,
+            {
+                imagen: {
+                    url: result.secure_url,
+                    id: result.public_id
+                }
+            },
+            { new: true, useFindAndModify: false })
+            .then(() => {
+                res.status(200).end()
+            })
+            .catch(error => next(error))
+
+
+    } catch (error) {
+        next(error)
+    }
+
+})
+
+//CAMBIAR LOGO A CLOUDINARY
+router.put('/logo/:id', requireSuperAdmin, upload.single('imagen'), async (req, res, next) => {
+    const { id } = req.params
+    try {
+        let iglesia = await Iglesias.findById(id)
+        // Delete image from cloudinary
+        await cloudinary.uploader.destroy(iglesia.imagen.id)
+        // Upload image to cloudinary
+        const result = await cloudinary.uploader.upload(req.file.path, { folder: 'iglesias/logos/' })
+
+        Iglesias.findByIdAndUpdate(
+            id,
+            {
+                imagen: {
+                    url: result.secure_url,
+                    id: result.public_id
+                }
+            },
+            { new: true, useFindAndModify: false })
+            .then(() => {
+                res.status(200).end()
+            })
+            .catch(error => next(error))
+
+
+    } catch (error) {
+        next(error)
+    }
+
+})
+//BORRAR LOGO
+router.post('/logo/borrar/:id', requireSuperAdmin, async (req, res, next) => {
+    const { id } = req.params
+    try {
+        // Delete image from cloudinary
+        await cloudinary.uploader.destroy(req.body.id)
+        await Iglesias.findByIdAndUpdate(
+            id,
+            {
+                $unset: { imagen: '' }
+            },
+            { new: true, useFindAndModify: false })
+            .then(() => {
+                res.status(200).end()
+            })
+            .catch(error => next(error))
+    } catch (error) {
+        next(error)
+    }
+
+
 })
 
 

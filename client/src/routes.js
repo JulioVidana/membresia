@@ -9,7 +9,7 @@ import LoginView from 'src/views/auth/LoginView'
 import NotFoundView from 'src/views/errors/NotFoundView'
 import UsuariosView from './views/usuarios/UsuariosView'
 import IglesiasView from './views/iglesias/IglesiasView'
-import AgregarIglesia from './views/iglesias/IglesiasView/NuevaIglesias'
+import DetalleIglesia from './views/iglesias/IglesiasView/Detalle'
 import PersonasView from './views/personas/PersonasView'
 import AgregarPersona from './views/personas/PersonasView/NuevaPersona'
 import PersonaDetalle from './views/personaDetalle'
@@ -32,7 +32,7 @@ const routes = (auth) => [
       { path: 'dashboard', element: <DashboardView /> },
       { path: 'usuarios', element: auth.usuario?.rol === 'superadmin' ? <UsuariosView /> : <InicioView /> },
       { path: 'iglesias', element: auth.usuario?.rol === 'superadmin' ? <IglesiasView /> : <InicioView /> },
-      { path: 'addiglesia', element: <AgregarIglesia /> },
+      { path: 'detalleiglesia', element: <DetalleIglesia /> },
       {
         path: 'personas',
         element: <PersonasLaunch />,

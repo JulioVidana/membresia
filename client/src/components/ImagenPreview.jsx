@@ -1,6 +1,3 @@
-import { useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { EliminarImagen } from 'src/redux/personaDetalleDucks'
 import {
     Box,
     Grid,
@@ -8,7 +5,6 @@ import {
     Divider,
     makeStyles
 } from '@material-ui/core'
-import ConfirmDialog from 'src/components/ConfirmDialog'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -23,22 +19,15 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-const Preview = ({ imagenDB, setOpenPopup, notif, setImagenDB }) => {
+const ImagenPreview = ({
+    imagenDB,
+    setOpenPopup,
+    notif,
+    setImagenDB,
+    onDelete,
+    setConfirmDialog
+}) => {
     const classes = useStyles()
-    const dispatch = useDispatch()
-    const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: '', type: '' })
-
-    const onDelete = () => {
-        setConfirmDialog({
-            ...confirmDialog,
-            isOpen: false
-        })
-        dispatch(EliminarImagen(imagenDB))
-            .then(() => {
-                dispatch(notif('Se borró imagen', true, 'success'))
-                setOpenPopup(false)
-            })
-    }
 
     const cambiarImagen = () => {
         setImagenDB(undefined)
@@ -68,17 +57,15 @@ const Preview = ({ imagenDB, setOpenPopup, notif, setImagenDB }) => {
                 <Button
                     color='primary'
                     onClick={() => cambiarImagen()}
-                >Cambiar Imagen</Button>
+                >
+                    Cambiar Imagen
+                </Button>
 
 
             </Grid>
 
-            <ConfirmDialog
-                confirmDialog={confirmDialog}
-                setConfirmDialog={setConfirmDialog}
-            />
         </Box>
     )
 }
 
-export default Preview
+export default ImagenPreview

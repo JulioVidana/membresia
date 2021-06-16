@@ -5,7 +5,8 @@ const bcrypt = require('bcrypt')
 Joi.objectId = require('joi-objectid')(Joi)
 const ObjectId = require('mongoose').Types.ObjectId
 const requireSuperAdmin = require('../middleware/requireSuperAdmin')
-
+const cloudinary = require('../utils/cloudinary')
+const upload = require('../utils/multer')
 
 router.get('/', requireSuperAdmin, async (req, res) => {
     await Usuarios.find()
@@ -105,6 +106,87 @@ router.delete('/:id', requireSuperAdmin, async (req, res) => {
     } catch (error) {
         res.status(400).json({ msg: error.message })
     }
+})
+
+//SUBIR IMAGEN A CLOUDINARY
+router.post('/imagen/:id', upload.single('imagen'), async (req, res, next) => {
+    const { id } = req.params
+    try {
+
+        const result = await cloudinary.uploader.upload(req.file.path, { folder: 'usuarios/avatars/' })
+
+        Usuarios.findByIdAndUpdate(
+            id,
+            {
+                imagen: {
+                    url: result.secure_url,
+                    id: result.public_id
+                }
+            },
+            { new: true, useFindAndModify: false })
+            .then(() => {
+                res.status(200).end()
+            })
+            .catch(error => next(error))
+
+
+    } catch (error) {
+        next(error)
+    }
+
+})
+
+//CAMBIAR IMAGEN A CLOUDINARY
+router.put('/imagen/:id', upload.single('imagen'), async (req, res, next) => {
+    const { id } = req.params
+    try {
+        let usuario = await Usuarios.findById(id)
+        // Delete image from cloudinary
+        await cloudinary.uploader.destroy(usuario.imagen.id)
+        // Upload image to cloudinary
+        const result = await cloudinary.uploader.upload(req.file.path, { folder: 'usuarios/avatars/' })
+
+        Usuarios.findByIdAndUpdate(
+            id,
+            {
+                imagen: {
+                    url: result.secure_url,
+                    id: result.public_id
+                }
+            },
+            { new: true, useFindAndModify: false })
+            .then(() => {
+                res.status(200).end()
+            })
+            .catch(error => next(error))
+
+
+    } catch (error) {
+        next(error)
+    }
+
+})
+//BORRAR IMAGEN
+router.post('/imagen/borrar/:id', async (req, res, next) => {
+    const { id } = req.params
+    try {
+        // Delete image from cloudinary
+        await cloudinary.uploader.destroy(req.body.id)
+        await Usuarios.findByIdAndUpdate(
+            id,
+            {
+                $unset: { imagen: '' }
+            },
+            { new: true, useFindAndModify: false })
+            .then(() => {
+                res.status(200).end()
+            })
+            .catch(error => next(error))
+    } catch (error) {
+        next(error)
+    }
+
+
 })
 
 module.exports = router

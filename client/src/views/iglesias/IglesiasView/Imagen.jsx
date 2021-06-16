@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { subirImagen, cambiarImagen, EliminarImagen } from 'src/redux/personaDetalleDucks'
+import { subirLogo, cambiarLogo, eliminarLogo } from 'src/redux/iglesiasDucks'
+import { useNavigate } from 'react-router-dom'
 import {
     Box,
     makeStyles,
@@ -32,19 +33,19 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-const Imagen = ({ setOpenPopup, imagen, notif }) => {
+const Imagen = ({ setOpenPopup, imagen, notif, idIglesia }) => {
     const classes = useStyles()
     const dispatch = useDispatch()
     const [editor, setEditor] = useState(null)
     const [imagenDB, setImagenDB] = useState(imagen)
     const [files, setFiles] = useState([]);
+    const navigate = useNavigate()
     const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: '', type: '' })
 
     const cancelar = () => {
         setOpenPopup(false)
         //setFiles([])
     }
-
     useEffect(() => () => {
         // Make sure to revoke the data uris to avoid memory leaks
         files.forEach(file => URL.revokeObjectURL(file.preview));
@@ -57,18 +58,20 @@ const Imagen = ({ setOpenPopup, imagen, notif }) => {
             const data = new FormData()
             data.append("imagen", blob, "filename.jpg")
             if (imagen === undefined) {
-                dispatch(subirImagen(data))
+                dispatch(subirLogo(data, idIglesia))
                     .then(() => {
                         cancelar()
-                        dispatch(notif('Se agregó Imagen', true, 'success'))
+                        dispatch(notif('Se agregó Logo', true, 'success'))
+                        navigate('/app/iglesias')
 
                     })
             }
             else {
-                dispatch(cambiarImagen(data))
+                dispatch(cambiarLogo(data, idIglesia))
                     .then(() => {
                         cancelar()
-                        dispatch(notif('Se cambió Imagen', true, 'success'))
+                        dispatch(notif('Se cambió Logo', true, 'success'))
+                        navigate('/app/iglesias')
 
                     })
             }
@@ -83,10 +86,11 @@ const Imagen = ({ setOpenPopup, imagen, notif }) => {
             ...confirmDialog,
             isOpen: false
         })
-        dispatch(EliminarImagen(imagenDB))
+        dispatch(eliminarLogo(imagenDB, idIglesia))
             .then(() => {
                 dispatch(notif('Se borró imagen', true, 'success'))
                 setOpenPopup(false)
+                navigate('/app/iglesias')
             })
     }
 
@@ -182,10 +186,12 @@ const Imagen = ({ setOpenPopup, imagen, notif }) => {
                     </Grid>
                 </div>
             }
+
             <ConfirmDialog
                 confirmDialog={confirmDialog}
                 setConfirmDialog={setConfirmDialog}
             />
+
         </Box>
 
     )

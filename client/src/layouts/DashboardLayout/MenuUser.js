@@ -74,7 +74,7 @@ const MenuUser = (props) => {
             >
                 <Avatar
                     className={classes.avatar}
-                    src={usuario?.avatar}
+                    src={usuario.imagen?.url}
                 />
             </Button>
             <Popper open={openMenu} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
