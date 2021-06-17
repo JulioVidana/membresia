@@ -105,13 +105,13 @@ const UsuariosView = () => {
     }, [dispatch])
 
     const handleSearch = e => {
-        let target = e.target;
+        let target = e.target.value.toLowerCase()
         setFilterFn({
             fn: items => {
-                if (target.value === "")
-                    return items;
+                if (target === "")
+                    return items
                 else
-                    return items.filter(x => x.nombre.toLowerCase().includes(target.value))
+                    return items.filter(x => x.nombre.toLowerCase().includes(target))
             }
         })
     }

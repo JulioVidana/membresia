@@ -81,13 +81,13 @@ const PeronasView = () => {
     }, [dispatch, iglesia])
 
     const handleSearch = e => {
-        let target = e.target
+        let target = e.target.value.toLowerCase()
         setFilterFn({
             fn: items => {
-                if (target.value === "")
+                if (target === "")
                     return items
                 else
-                    return items.filter(x => x.completo.toLowerCase().includes(target.value))
+                    return items.filter(x => x.completo.toLowerCase().includes(target))
             }
         })
     }

@@ -8,7 +8,6 @@ import {
     TableCell,
     TableRow,
     InputAdornment,
-    SvgIcon,
     Box,
     Container,
     Card,
@@ -21,13 +20,13 @@ import Page from 'src/components/Page'
 import Titulo from 'src/components/Toolbar'
 import Tabla from 'src/components/Tabla'
 import Controls from 'src/components/controls/Controls'
-import { Search as SearchIcon } from 'react-feather'
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined'
 import CloseIcon from '@material-ui/icons/Close'
 import PerfectScrollbar from 'react-perfect-scrollbar'
 import { obtenerIglesias, borraIglesia } from 'src/redux/iglesiasDucks'
 import ConfirmDialog from 'src/components/ConfirmDialog'
 import getInitials from 'src/utils/getInitials'
+import SearchIcon from '@material-ui/icons/Search'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -83,8 +82,7 @@ const IglesiasView = () => {
         TblHead,
         TblPagination,
         recordsAfterPagingAndSorting
-    } = Tabla(iglesiasList, headCells, filterFn);
-
+    } = Tabla(iglesiasList, headCells, filterFn)
 
     useEffect(() => {
         const fetchData = () => {
@@ -95,13 +93,13 @@ const IglesiasView = () => {
     }, [dispatch])
 
     const handleSearch = e => {
-        let target = e.target
+        let target = e.target.value.toLowerCase()
         setFilterFn({
             fn: items => {
-                if (target.value === "")
+                if (target === "")
                     return items
                 else
-                    return items.filter(x => x.nombre.toLowerCase().includes(target.value))
+                    return items.filter(x => x.nombre.toLowerCase().includes(target))
             }
         })
     }
@@ -146,16 +144,11 @@ const IglesiasView = () => {
                                         InputProps={{
                                             startAdornment: (
                                                 <InputAdornment position="start">
-                                                    <SvgIcon
-                                                        fontSize="small"
-                                                        color="action"
-                                                    >
-                                                        <SearchIcon />
-                                                    </SvgIcon>
+                                                    <SearchIcon color="primary" />
                                                 </InputAdornment>
                                             )
                                         }}
-                                        onChange={handleSearch}
+                                        onInput={e => handleSearch(e)}
                                     />
                                 </Grid>
                                 <Grid>
