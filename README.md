@@ -1,5 +1,5 @@
 # SISTEMA MEMBRESIA PARA IGLESIAS
-App para llevar la gestión de las persoonas que pertenecen a la iglesia local
+App para llevar la gestión de las persoonas que pertenecen a la iglesia local.
 
 ## App
 
