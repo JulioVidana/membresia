@@ -12,7 +12,8 @@ import {
 } from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
 import Logo from 'src/components/Logo'
-import UserMenu from './MenuUser'
+import UserMenu from 'src/components/TopBar/UserOptions'
+
 const useStyles = makeStyles(() => ({
   root: {}
 }))

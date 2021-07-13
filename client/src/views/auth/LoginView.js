@@ -9,7 +9,9 @@ import {
   Container,
   TextField,
   Typography,
-  makeStyles
+  makeStyles,
+  Backdrop,
+  CircularProgress
 } from '@material-ui/core'
 import Page from 'src/components/Page'
 import { login } from 'src/redux/authDucks'
@@ -21,6 +23,10 @@ const useStyles = makeStyles((theme) => ({
     height: '100%',
     paddingBottom: theme.spacing(3),
     paddingTop: theme.spacing(3)
+  },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff',
   }
 }))
 
@@ -31,7 +37,7 @@ const initialFValues = {
 }
 
 const LoginView = (props) => {
-  const { isAuthenticated } = props
+  const { isAuthenticated, loading } = props
   const dispatch = useDispatch()
   const classes = useStyles()
 
@@ -76,7 +82,7 @@ const LoginView = (props) => {
                       variant="h2"
                     >
                       Iniciar Sesión
-                  </Typography>
+                    </Typography>
                   </Box>
 
                   <Box
@@ -88,7 +94,7 @@ const LoginView = (props) => {
                       variant="body1"
                     >
                       Escribe tu usuario y contraseña para acceder al sistema
-                  </Typography>
+                    </Typography>
                   </Box>
                   <TextField
                     error={Boolean(touched.email && errors.email)}
@@ -125,19 +131,22 @@ const LoginView = (props) => {
                       variant="contained"
                     >
                       Enviar
-                  </Button>
+                    </Button>
                   </Box>
                 </form>
               )}
             </Formik>
           </Container>
         </Box>
-
+        <Backdrop className={classes.backdrop} open={loading} >
+          <CircularProgress color="inherit" />
+        </Backdrop>
       </Page>
     </>
   );
 };
 const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated
+  isAuthenticated: state.auth.isAuthenticated,
+  loading: state.auth.loading
 })
 export default connect(mapStateToProps, { login })(LoginView);

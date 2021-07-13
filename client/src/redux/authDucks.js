@@ -37,7 +37,7 @@ const LOGOUT_SUCCESS = "@login/logoutSuccess"
 export default function authReducer(state = dataInicial, action) {
     switch (action.type) {
         case LOADING:
-            return { ...state, loading: false }
+            return { ...state, loading: true }
         case LOADED:
             return { ...state, isAuthenticated: true, loading: false, usuario: action.payload }
         case LOGIN_SUCCESS:
